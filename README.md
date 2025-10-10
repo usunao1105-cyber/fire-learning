@@ -98,6 +98,12 @@ e-Learning119
       <a href="lesson3/index.html" target="_blank">学習する</a>
     </div>
 
+    <!-- 教材４ -->
+    <div class="lesson-card">
+      <div class="lesson-title">救急活動対策</div>
+      <a href="lesson4/index.html" target="_blank">学習する</a>
+    </div>
+    
     <!-- 教材を増やすときはこのブロックを複製して編集 -->
     <!--
     <div class="lesson-card">
