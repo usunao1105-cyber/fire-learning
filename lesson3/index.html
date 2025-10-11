@@ -23,8 +23,9 @@ lesson3/index.html
 
         /* Slide Container */
         .slide {
-            width: 100%;
-            height: 100%;
+            width: 95vw; /* Use viewport width for better scaling */
+            height: auto; /* Height will be set by aspect-ratio */
+            aspect-ratio: 4 / 3; /* Enforce 4:3 landscape ratio */
             max-width: 1024px;
             max-height: 768px; /* 4:3 Aspect Ratio */
             background-color: white;
@@ -222,6 +223,59 @@ lesson3/index.html
             vertical-align: middle;
         }
 
+        /* --- New Navigation Arrow Styles --- */
+        .nav-arrow {
+            position: fixed; /* Position relative to the browser window */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 1000;
+            user-select: none; /* Prevents selecting the arrow text */
+        }
+        .nav-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .nav-arrow.prev {
+            left: 20px;
+        }
+        .nav-arrow.next {
+            right: 20px;
+        }
+
+        /* --- New Auto-Read Toggle Styles --- */
+        .auto-read-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            user-select: none;
+        }
+        .auto-read-toggle input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        .auto-read-toggle label {
+            cursor: pointer;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -229,6 +283,16 @@ lesson3/index.html
     </style>
 </head>
 <body>
+
+    <!-- New Navigation Arrows -->
+    <div class="nav-arrow prev" id="prev-btn">‹</div>
+    <div class="nav-arrow next" id="next-btn">›</div>
+
+    <!-- New Auto-Read Toggle -->
+    <div class="auto-read-toggle">
+        <input type="checkbox" id="auto-read-checkbox">
+        <label for="auto-read-checkbox">自動読み上げ</label>
+    </div>
 
     <!-- Slide 1: Title -->
     <div class="slide active">
@@ -646,10 +710,17 @@ lesson3/index.html
     const kytLoader = document.getElementById('kyt-loader');
     const readAloudBtns = document.querySelectorAll('.read-aloud-btn');
 
+    // --- Navigation Elements ---
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    // --- New Auto-Read Checkbox ---
+    const autoReadCheckbox = document.getElementById('auto-read-checkbox');
+
     // --- Audio Playback State ---
     let currentAudio = null;
 
-    // --- Slide Navigation ---
+    // --- Slide Navigation Functions ---
     function showSlide(index) {
         slides.forEach((slide, i) => {
             slide.classList.toggle('active', i === index);
@@ -657,22 +728,22 @@ lesson3/index.html
     }
 
     function nextSlide() {
+        if (currentAudio) { currentAudio.pause(); } // Stop audio on slide change
         currentSlide = (currentSlide + 1) % slides.length;
         showSlide(currentSlide);
+        if (autoReadCheckbox.checked) {
+            autoReadAloud(currentSlide);
+        }
     }
 
     function prevSlide() {
+        if (currentAudio) { currentAudio.pause(); } // Stop audio on slide change
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         showSlide(currentSlide);
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
-            nextSlide();
-        } else if (e.key === 'ArrowLeft') {
-            prevSlide();
+        if (autoReadCheckbox.checked) {
+            autoReadAloud(currentSlide);
         }
-    });
+    }
 
     // --- API Helper with Exponential Backoff ---
     async function fetchWithBackoff(url, options, maxRetries = 5) {
@@ -739,10 +810,10 @@ lesson3/index.html
         return new Blob([view], { type: 'audio/wav' });
     }
 
-    async function handleReadAloud(event) {
-        const button = event.currentTarget;
-        if (button.classList.contains('loading')) return;
+    async function executeTTS(button) {
+        if (!button || button.classList.contains('loading')) return;
 
+        // Stop any currently playing audio before starting a new one
         if (currentAudio) {
             currentAudio.pause();
             currentAudio = null;
@@ -750,6 +821,8 @@ lesson3/index.html
 
         const slideId = button.dataset.slideId;
         const slideElement = slides[parseInt(slideId, 10) - 1];
+        if (!slideElement) return;
+
         const textElements = slideElement.querySelectorAll('h1, h2, h3, p, li, th, td');
         let textToRead = Array.from(textElements).map(el => el.textContent.trim()).join('. ');
 
@@ -784,7 +857,16 @@ lesson3/index.html
                 
                 currentAudio = new Audio(audioUrl);
                 currentAudio.play();
-                currentAudio.onended = () => button.classList.remove('loading');
+                // When audio finishes, remove loading state
+                currentAudio.onended = () => {
+                    button.classList.remove('loading');
+                    currentAudio = null; // Clear the reference
+                };
+                // If playback fails, also clean up
+                currentAudio.onerror = () => {
+                     button.classList.remove('loading');
+                     currentAudio = null;
+                }
             } else {
                 throw new Error("Invalid audio data in API response.");
             }
@@ -792,6 +874,19 @@ lesson3/index.html
             console.error("Error with Text-to-Speech API:", error);
             alert("音声の生成中にエラーが発生しました。"); // Simple error feedback
             button.classList.remove('loading');
+        }
+    }
+    
+    // This wrapper is needed because addEventListener expects a function that receives an event object.
+    function handleReadAloudClick(event) {
+        executeTTS(event.currentTarget);
+    }
+
+    // New function to trigger TTS automatically
+    function autoReadAloud(slideIndex) {
+        const targetButton = document.querySelector(`.read-aloud-btn[data-slide-id="${slideIndex + 1}"]`);
+        if (targetButton) {
+            executeTTS(targetButton);
         }
     }
 
@@ -841,17 +936,41 @@ lesson3/index.html
         }
     }
 
-    // --- Event Listeners ---
+    // --- Event Listeners Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault(); // Prevent space from scrolling page
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Click Navigation
+        if(prevBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+        }
+        if(nextBtn) {
+            nextBtn.addEventListener('click', nextSlide);
+        }
+
+        // Gemini Feature Buttons
         if (generateKytBtn) {
             generateKytBtn.addEventListener('click', handleGenerateKyt);
         }
         readAloudBtns.forEach(btn => {
-            btn.addEventListener('click', handleReadAloud);
+            btn.addEventListener('click', handleReadAloudClick);
         });
-        showSlide(0); // Show the first slide initially
+
+        // Show the first slide initially
+        showSlide(0);
     });
 </script>
 
 </body>
 </html>
+
+
