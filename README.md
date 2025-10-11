@@ -82,13 +82,13 @@ e-Learning119
   <main>
     <!-- 教材1 -->
     <div class="lesson-card">
-      <div class="lesson-title">救助活動における安全管理</div>
+      <div class="lesson-title">原子力災害をテストする</div>
       <a href="lesson1/index.html" target="_blank">学習する</a>
     </div>
 
     <!-- 教材2 -->
     <div class="lesson-card">
-      <div class="lesson-title">火災現場でのリスク評価</div>
+      <div class="lesson-title">原子力座学</div>
       <a href="lesson2/index.html" target="_blank">学習する</a>
     </div>
 
