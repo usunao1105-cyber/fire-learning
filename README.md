@@ -94,7 +94,7 @@ e-Learning119
 
     <!-- 教材3 -->
     <div class="lesson-card">
-      <div class="lesson-title">感染防止対策 基礎講座</div>
+      <div class="lesson-title">振動工具 基礎講座</div>
       <a href="lesson3/index.html" target="_blank">学習する</a>
     </div>
 
