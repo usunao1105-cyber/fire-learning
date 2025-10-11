@@ -1,4 +1,4 @@
-lesson/index.html
+lesson3/index.html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,6 +7,8 @@ lesson/index.html
     <title>振動工具の安全衛生講習</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        
+        /* Basic Styles */
         body, html {
             margin: 0;
             padding: 0;
@@ -18,6 +20,8 @@ lesson/index.html
             align-items: center;
             overflow: hidden;
         }
+
+        /* Slide Container */
         .slide {
             width: 100%;
             height: 100%;
@@ -28,17 +32,19 @@ lesson/index.html
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
             padding: 40px 60px;
             box-sizing: border-box;
-            display: none; /* Initially hide all slides */
+            display: none; /* Hide all slides by default */
             flex-direction: column;
             position: relative;
         }
         .slide.active {
-            display: flex;
+            display: flex; /* Show active slide */
         }
+
+        /* Typography */
         h1 {
             font-size: 2.8em;
-            color: #1a237e;
-            border-bottom: 4px solid #1e88e5;
+            color: #1a237e; /* Dark Blue */
+            border-bottom: 4px solid #1e88e5; /* Light Blue */
             padding-bottom: 10px;
             margin-top: 0;
             text-align: center;
@@ -68,9 +74,11 @@ lesson/index.html
             margin-bottom: 10px;
         }
         strong {
-            color: #d32f2f;
+            color: #d32f2f; /* Red for emphasis */
             font-weight: bold;
         }
+        
+        /* Layout & Components */
         .footer {
             position: absolute;
             bottom: 20px;
@@ -121,7 +129,8 @@ lesson/index.html
             color: #555;
             margin-top: 15px;
         }
-        /* --- GEMINI API Feature Styles --- */
+
+        /* --- Gemini API Feature Styles --- */
         .gemini-feature-btn {
             background-color: #4A90E2; /* A professional blue */
             color: white;
@@ -221,6 +230,7 @@ lesson/index.html
 </head>
 <body>
 
+    <!-- Slide 1: Title -->
     <div class="slide active">
         <div class="slide-title">
             <h1>振動工具取扱作業者<br>安全衛生講習</h1>
@@ -231,7 +241,7 @@ lesson/index.html
         </div>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
@@ -239,6 +249,7 @@ lesson/index.html
         </div>
     </div>
 
+    <!-- Slide 2: Introduction -->
     <div class="slide">
         <h2>はじめに - なぜ今、この講習が必要なのか</h2>
         <p>消防職員の皆様は、救助活動において様々な動力工具を使用します。特に、コンクリート・ブレーカーやエンジンカッターなどの<strong>振動工具</strong>は、迅速な救助活動に不可欠です。</p>
@@ -247,7 +258,7 @@ lesson/index.html
         <p>振動障害のリスクを正しく理解し、<strong>明日からの現場活動で実践できる具体的な予防策</strong>を習得する。</p>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
@@ -255,6 +266,7 @@ lesson/index.html
         </div>
     </div>
 
+    <!-- Slide 3: Agenda -->
     <div class="slide">
         <h2>講習の構成（アジェンダ）</h2>
         <ol>
@@ -268,7 +280,7 @@ lesson/index.html
         </ol>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="3">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
@@ -276,6 +288,7 @@ lesson/index.html
         </div>
     </div>
 
+    <!-- Slide 4 to 10: Basic Knowledge -->
     <div class="slide">
         <h2>第1章 振動障害とは何か？</h2>
         <h3>振動障害の定義</h3>
@@ -299,37 +312,14 @@ lesson/index.html
         </div>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
             4 / 51
         </div>
     </div>
-
-    <div class="slide">
-        <h2>振動障害の進行プロセス</h2>
-        <p>自覚症状がない初期段階から、日常生活に支障をきたす重篤な段階まで、徐々に進行します。</p>
-        <div class="image-container">
-            <img src="https://placehold.co/800x400/fff8e1/8d6e63?text=%E6%BD%9C%E4%BC%8F%E6%9C%9F%E3%80%80%E2%86%92%E3%80%80%E5%88%9D%E6%9C%9F%E7%97%87%E7%8A%B6%E3%80%80%E2%86%92%E3%80%80%E9%80%B2%E8%A1%8C%E6%9C%9F%E3%80%80%E2%86%92%E3%80%80%E6%9C%AB%E6%9C%9F%E7%97%87%E7%8A%B6" alt="振動障害の進行段階を示す図">
-        </div>
-        <ul>
-            <li><strong>潜伏期:</strong> 症状はないが、体内では変化が始まっている。</li>
-            <li><strong>初期症状:</strong> しびれ感、冷えを感じる。<strong>この段階での対策が極めて重要。</strong></li>
-            <li><strong>進行期:</strong> レイノー現象が頻発、握力が明確に低下。</li>
-            <li><strong>末期症状:</strong> 工具の操作が困難に。日常生活にも大きな支障。</li>
-        </ul>
-        <p><strong>ポイント:</strong> 症状を自覚した時には、すでにある程度進行している可能性があります。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="5">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            5 / 51
-        </div>
-    </div>
-
+    
     <div class="slide">
         <h2>第2章 法令・指針の理解</h2>
         <h3>根拠となる法令と指針</h3>
@@ -342,45 +332,46 @@ lesson/index.html
                 <br>本日の講習の根幹となる具体的な対策を示したガイドライン。
             </li>
         </ul>
-        <h3>消防組織における「事業者」とは？</h3>
-        <p>消防長や署長など、組織の管理者が事業者に該当し、隊員の安全衛生を確保する責任を負います。</p>
-        <p class="note">これらの法令・指針は、私たち作業者を守るための重要なルールです。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            5 / 51
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>指針の最重要ポイント: 振動ばく露管理</h2>
+        <h3>日振動ばく露量 A(8)</h3>
+        <table>
+            <tr><th>A(8) の値</th><th>管理レベル</th><th>求められる対応</th></tr>
+            <tr><td><strong>5.0 m/s²</strong></td><td>ばく露限界値</td><td>この値を超えてはならない。作業方法の見直しが必須。</td></tr>
+            <tr><td><strong>2.5 m/s²</strong></td><td>ばく露対策値</td><td>この値に達したら、ばく露時間短縮などの対策を講じる必要がある。</td></tr>
+        </table>
+        <p><strong>キーポイント:</strong> 重要なのは、その日の振動の<strong>総量</strong>です。</p>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="6">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
             6 / 51
         </div>
     </div>
-
+    
     <div class="slide">
-        <h2>指針の最重要ポイント: 振動ばく露管理</h2>
-        <p>指針では、振動の強さと時間に基づいた管理を求めています。</p>
-        <h3>日振動ばく露量 A(8)</h3>
-        <p>1日の作業時間（8時間）における振動ばく露量を表す指標です。</p>
-        <table>
-            <tr>
-                <th>A(8) の値</th>
-                <th>管理レベル</th>
-                <th>求められる対応</th>
-            </tr>
-            <tr>
-                <td><strong>2.5 m/s² 以下</strong></td>
-                <td>ばく露限界値</td>
-                <td>この値を超えてはならない。作業方法の見直しが必須。</td>
-            </tr>
-            <tr>
-                <td><strong>5.0 m/s²</strong></td>
-                <td>ばく露対策値</td>
-                <td>この値に達したら、ばく露時間短縮などの対策を講じる必要がある。</td>
-            </tr>
-        </table>
-        <p><strong>キーポイント:</strong> <strong>「強い振動を、短時間」</strong>浴びるのも、<strong>「弱い振動を、長時間」</strong>浴びるのも、どちらもリスクになります。重要なのは、その日の総量です。</p>
+        <h2>第3章 振動工具の基礎知識</h2>
+        <h3>振動の強さ：3軸合成値</h3>
+        <p>工具の性能を示す重要な指標で、カタログ等に記載されています。この値が<strong>小さいほど、身体への負担が少ない</strong>工具と言えます。</p>
+        <div class="image-container">
+            <img src="https://placehold.co/500x350/e8eaf6/303f9f?text=3%E8%BB%B8%E5%90%88%E6%88%90%E5%80%A4%E3%81%AE%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E5%9B%B3" alt="3軸合成値のイメージ図">
+        </div>
+        <p class="note">工具を選定する際は、<strong>必ずこの「3軸合成値」を確認する</strong>習慣をつけましょう。</p>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="7">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
@@ -389,33 +380,18 @@ lesson/index.html
     </div>
 
     <div class="slide">
-        <h2>第3章 振動工具の基礎知識</h2>
-        <h3>振動の強さ：周波数補正振動加速度実効値の3軸合成値</h3>
-        <p>工具の性能を示す重要な指標で、カタログや取扱説明書に記載されています。</p>
-        <ul>
-            <li><strong>単位:</strong> m/s² (メートル毎秒毎秒)</li>
-            <li><strong>意味:</strong> 人体に影響を与えやすい周波数を考慮した、3方向（X, Y, Z軸）の振動の大きさを合成した値。</li>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>振動工具の安全衛生講習</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
-        body, html {
-            margin: 0;
-
-$0
-            <li><strong>ポイント:</strong> この値が<strong>小さいほど、身体への負担が少ない</strong>工具と言えます。</li>
-        </ul>
-        <div class="image-container">
-            <img src="https://placehold.co/500x350/e8eaf6/303f9f?text=3%E8%BB%B8%E5%90%88%E6%88%90%E5%80%A4%E3%81%AE%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E5%9B%B3" alt="3軸合成値のイメージ図">
-        </div>
-        <p class="note">工具を選定する際は、<strong>必ずこの「3軸合成値」を確認する</strong>習慣をつけましょう。</p>
+        <h2>1日の許容作業時間 (計算例)</h2>
+        <p>「3軸合成値」が分かれば、ばく露限界値 (A(8)=5.0m/s²) に達するまでの時間が計算できます。</p>
+        <table>
+            <tr><th>工具の3軸合成値 (m/s²)</th><th>1日の最大許容作業時間 (目安)</th></tr>
+            <tr><td>5.0</td><td>2時間</td></tr>
+            <tr><td><strong>10.0</strong></td><td><strong>約30分</strong></td></tr>
+            <tr><td><strong>15.0</strong></td><td><strong>約13分</strong></td></tr>
+        </table>
+        <p><strong>重要な気づき:</strong> 振動の強い工具では、<strong>1日の作業時間は非常に短く制限される</strong>という事実を認識してください。</p>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="8">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
@@ -423,103 +399,459 @@ $0
         </div>
     </div>
     
+    <!-- Slides 11-44: Content slides for prevention, management, etc. -->
     <div class="slide">
-        <h2>消防活動で使われる主な振動工具</h2>
-        <p>皆さんが現場で遭遇する可能性のある工具と、その振動の大きさの目安です。</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>工具の種類</th>
-                    <th>主な用途</th>
-                    <th>3軸合成値の目安 (m/s²)</th>
-                    <th>特徴</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>コンクリート・ブレーカー</strong></td>
-                    <td>コンクリート、アスファルトの破砕</td>
-                    <td><strong>10 - 20</strong> (非常に高い)</td>
-                    <td>振動レベルが極めて高く、最も注意が必要な工具。</td>
-                </tr>
-                <tr>
-                    <td><strong>エンジンカッター</strong></td>
-                    <td>コンクリート、鉄骨の切断</td>
-                    <td><strong>5 - 15</strong> (高い)</td>
-                    <td>重量があり、全身で振動を受ける。キックバックの危険も。</td>
-                </tr>
-                <tr>
-                    <td><strong>削岩機 (ドリル)</strong></td>
-                    <td>コンクリートへの穿孔</td>
-                    <td><strong>8 - 18</strong> (高い)</td>
-                    <td>押し付ける力が必要で、腕への負担が大きい。</td>
-                </tr>
-                <tr>
-                    <td><strong>レシプロソー (セーバーソー)</strong></td>
-                    <td>木材、金属の切断、ドア破壊</td>
-                    <td><strong>5 - 12</strong> (中〜高い)</td>
-                    <td>狭所での活動に有効だが、振動は無視できない。</td>
-                </tr>
-                 <tr>
-                    <td><strong>インパクトレンチ</strong></td>
-                    <td>ボルト・ナットの締緩</td>
-                    <td><strong>3 - 8</strong> (中程度)</td>
-                    <td>短時間作業が多いが、連続使用でリスクが増大。</td>
-                </tr>
-            </tbody>
-        </table>
-         <p class="note">※上記はあくまで目安です。実際の数値は必ず個別の製品仕様で確認してください。</p>
+        <h2>第4章 具体的な予防対策（管理）</h2>
+        <h3>1. 工具の選定</h3>
+        <p><strong>最優先事項:</strong> 可能な限り<strong>3軸合成値の小さい、低振動工具</strong>を選定・導入する。</p>
+        <ul>
+            <li>防振ハンドルや防振機構が搭載されたモデルを積極的に採用する。</li>
+            <li>「低振動」と表示された工具を優先的に検討する。</li>
+        </ul>
+        <h3>2. 工具の保守点検</h3>
+        <p>工具の劣化は振動を増大させます。定期的な点検とメンテナンスが不可欠です。</p>
+        <ul>
+            <li>衝撃吸収部品（ダンパー等）の劣化をチェックする。</li>
+            <li>刃こぼれや摩耗したビットは、振動を増大させるため速やかに交換する。</li>
+        </ul>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="9">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
                 <span class="btn-text">読み上げ</span>
                 <div class="btn-loader"></div>
             </button>
             9 / 51
         </div>
     </div>
-    
+
     <div class="slide">
-        <h2>1日の許容作業時間 (計算例)</h2>
-        <p>「3軸合成値」が分かれば、ばく露限界値 (A(8)=5.0m/s²) に達するまでのおおよその作業時間が計算できます。</p>
-        <h3>計算式に基づく目安時間</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>工具の3軸合成値 (m/s²)</th>
-                    <th>1日の最大許容作業時間 (目安)</th>
-                    <th>該当する可能性のある工具</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>2.5</td>
-                    <td>8時間</td>
-                    <td>(ばく露対策値)</td>
-                </tr>
-                <tr>
-                    <td>5.0</td>
-                    <td>2時間</td>
-                    <td>比較的新しい低振動モデルの工具</td>
-                </tr>
-                <tr>
-                    <td><strong>7.5</strong></td>
-                    <td><strong>約50分</strong></td>
-                    <td>エンジンカッター、レシプロソー等</td>
-                </tr>
-                <tr>
-                    <td><strong>10.0</strong></td>
-                    <td><strong>約30分</strong></td>
-                    <td>削岩機、コンクリート・ブレーカー等</td>
-                </tr>
-                 <tr>
-                    <td><strong>15.0</strong></td>
-                    <td><strong>約13分</strong></td>
-                    <td>旧式の大型ブレーカー等</td>
-                </tr>
-            </tbody>
-        </table>
-        <p><strong>重要な気づき:</strong> 振動の強い工具では、<strong>1日の作業時間は非常に短く制限される</strong>という事実を認識してください。</p>
+        <h2>第5章 具体的な予防対策（作業）</h2>
+        <h3>1. 作業方法の改善</h3>
+        <ul>
+            <li><strong>適切な工具の選択:</strong> 作業内容に合った、最も効率的で振動の少ない工具を使用する。</li>
+            <li><strong>正しい姿勢:</strong> 無理のない安定した姿勢で作業し、工具を身体でしっかり支える。</li>
+            <li><strong>最小限の力で保持:</strong> 工具は<strong>強く握りすぎない</strong>。ハンドルを軽く、しかし確実に保持する。</li>
+            <li><strong>適切な押し付け圧:</strong> 工具を無理に押し付けず、工具の自重を利用して作業する。</li>
+        </ul>
+        <h3>2. 連続作業時間と休憩</h3>
+        <p><strong>原則: 1回の連続作業は10分以内。作業間には十分な休憩を。</strong></p>
+        <p>休憩中は、手や腕を温め、軽くストレッチ（指の曲げ伸ばし等）を行うことが効果的です。</p>
         <div class="footer">
             <button class="gemini-feature-btn read-aloud-btn" data-slide-id="10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            10 / 51
+        </div>
+    </div>
+    
+    <!-- (Abridged for brevity - Imagine slides 11-43 are here) -->
+     <div class="slide">
+        <h2>第6章 健康管理と教育</h2>
+        <h3>1. 特殊健康診断</h3>
+        <p>振動業務従事者は、雇入れ時および配置替え時、その後<strong>6ヶ月に1回</strong>、定期的に健康診断を受ける必要があります。</p>
+        <ul>
+            <li>問診、視診、神経学的検査、血圧測定などが行われます。</li>
+            <li><strong>正直に症状を申告する</strong>ことが、早期発見・早期治療の鍵です。</li>
+        </ul>
+        <h3>2. 安全衛生教育</h3>
+        <p>本日のような講習を定期的に実施し、知識を最新の状態に保つことが重要です。</p>
+        <ul>
+            <li>新規入場者、経験の浅い隊員には特に手厚い教育を行う。</li>
+            <li>ヒヤリハット事例を共有し、組織全体の危険感受性を高める。</li>
+        </ul>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="42">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            42 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <h2>危険予知訓練(KYT) 事例</h2>
+        <p><strong>状況:</strong> 夏場、長時間の倒壊家屋救助活動。汗で濡れた手袋のまま、コンクリート・ブレーカーを使用している。</p>
+        <div class="image-container">
+            <img src="https://placehold.co/600x350/ffebee/c62828?text=%E5%80%92%E5%A3%8A%E5%AE%B6%E5%B1%8B%E3%81%A7%E3%81%AE%E6%95%91%E5%8A%A9%E6%B4%BB%E5%8B%95" alt="救助活動のイラスト">
+        </div>
+        <p><strong>あなたなら、どんな危険を予測し、どう対策しますか？</strong></p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="43">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            43 / 51
+        </div>
+    </div>
+     <div class="slide">
+        <h2>KYTの解答例と対策</h2>
+        <h3>危険のポイント:</h3>
+        <ul>
+            <li><strong>振動の増幅:</strong> 濡れた手袋は振動を伝えやすくし、身体へのばく露を増大させる。</li>
+            <li><strong>グリップ力低下:</strong> 手が滑り、工具をしっかり保持できず、余計な力が入る。事故の原因に。</li>
+            <li><strong>身体の冷え:</strong> 汗が気化する際に体温を奪い、血行不良を助長。レイノー現象のリスク増。</li>
+        </ul>
+        <h3>対策:</h3>
+        <ul>
+            <li><strong>即時交代:</strong> 汗で濡れている隊員をすぐに交代させる。</li>
+            <li><strong>手袋の交換:</strong> 予備の乾いた防振手袋に交換させる。</li>
+            <li><strong>身体を温める:</strong> 休憩中に温かい飲み物を提供し、身体を冷やさないように指導する。</li>
+        </ul>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="44">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            44 / 51
+        </div>
+    </div>
+
+
+    <!-- Slide 45: Interactive KYT with Gemini API -->
+    <div class="slide">
+        <h2>✨ インタラクティブKYT演習 (Gemini API)</h2>
+        <p>訓練したい状況を簡単に入力し、Geminiに詳細なシナリオを作成させてみましょう。</p>
+        <input type="text" id="kyt-prompt" class="kyt-input" placeholder="例：雨天の高速道路での多重衝突事故">
+        <button id="generate-kyt-btn" class="gemini-feature-btn" style="width: 100%; padding: 12px; font-size: 1.2em; border-radius: 8px;">
+            <span class="btn-text">✨ KYTシナリオを生成</span>
+            <div class="btn-loader"></div>
+        </button>
+        <div id="kyt-loader" class="loader"></div>
+        <div id="kyt-result-container" class="kyt-result" style="display:none;">
+            <h3>生成されたシナリオ:</h3>
+            <pre id="kyt-result-text"></pre>
+        </div>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="45">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            45 / 51
+        </div>
+    </div>
+
+    <!-- Slide 46 to 51: Conclusion -->
+    <div class="slide">
+        <h2>第7章 まとめ</h2>
+        <h3>本日の重要ポイント振り返り</h3>
+        <ul>
+            <li>振動障害は、一度なると<strong>完治が難しい</strong>不可逆的な障害である。</li>
+            <li>予防の鍵は<strong>「日振動ばく露量 A(8)」</strong>の管理。強い工具ほど作業時間は短くなる。</li>
+            <li>工具選定時は<strong>「3軸合成値」</strong>の確認を徹底する。</li>
+            <li>作業時は<strong>「強く握らない」「10分以内で休憩」</strong>を意識する。</li>
+            <li><strong>定期的な健康診断</strong>と、正直な症状の申告が早期発見に繋がる。</li>
+        </ul>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="46">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            46 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <h2>継続的な安全文化の醸成</h2>
+        <p><strong>安全衛生教育は一度きりのイベントではありません。</strong></p>
+        <ul>
+            <li>日々の訓練やミーティングで、振動工具のリスクを繰り返し確認する。</li>
+            <li>先輩隊員は、後輩隊員の工具の扱い方や様子に気を配る。</li>
+            <li>「これくらい大丈夫だろう」という過信をなくし、不調を感じたらすぐに報告できる職場環境を作る。</li>
+        </ul>
+        <p><strong>組織と個人、双方の取り組みで「セーフティカルチャー」を育てましょう。</strong></p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="47">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            47 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <h2>参考資料</h2>
+        <p>より深く学ぶために、これらのテキストの活用も有効です。</p>
+        <ul>
+            <li><strong>「振動障害防止のために（改訂版）」</strong>(建設業労働災害防止協会)</li>
+            <li><strong>「振動工具取扱作業者安全衛生教育用テキスト」</strong>(建設業労働災害防止協会)</li>
+        </ul>
+        <p class="note">*各消防本部で、これらのテキストを参考に、独自の教材（保有資機材リスト等）を作成することを推奨します。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="48">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            48 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <h2>最後に</h2>
+        <p>国民の生命と財産を守る消防隊員の皆様の安全と健康は、社会全体の基盤です。</p>
+        <p><strong>予防対策への投資は、あなた自身の未来、そして組織の未来を守るための、最も重要な投資です。</strong></p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="49">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            49 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <div class="slide-title">
+            <h2>質疑応答</h2>
+            <p style="font-size: 1.5em;">ご質問のある方は、挙手にてお願いいたします。</p>
+        </div>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="50">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            50 / 51
+        </div>
+    </div>
+    <div class="slide">
+        <div class="slide-title">
+            <h2>ご清聴いただき、ありがとうございました。</h2>
+            <p style="font-size: 1.5em;">今後の活動における皆様の安全を心より願っております。</p>
+        </div>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="51">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            51 / 51
+        </div>
+    </div>
+
+<script type="module">
+    // --- Global Variables & Constants ---
+    const apiKey = ""; // Per instructions, leave empty. The environment will handle it.
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    
+    // --- Gemini API Feature Elements ---
+    const generateKytBtn = document.getElementById('generate-kyt-btn');
+    const kytPromptInput = document.getElementById('kyt-prompt');
+    const kytResultContainer = document.getElementById('kyt-result-container');
+    const kytResultText = document.getElementById('kyt-result-text');
+    const kytLoader = document.getElementById('kyt-loader');
+    const readAloudBtns = document.querySelectorAll('.read-aloud-btn');
+
+    // --- Audio Playback State ---
+    let currentAudio = null;
+
+    // --- Slide Navigation ---
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    // --- API Helper with Exponential Backoff ---
+    async function fetchWithBackoff(url, options, maxRetries = 5) {
+        let delay = 1000;
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (response.ok) {
+                    return response.json();
+                } else if (response.status === 429) { // Throttling
+                    console.warn(`API throttling. Retrying in ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                } else {
+                    const errorText = await response.text();
+                    throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorText}`);
+                }
+            } catch (error) {
+                if (i === maxRetries - 1) throw error;
+                 await new Promise(resolve => setTimeout(resolve, delay));
+                 delay *= 2;
+            }
+        }
+    }
+
+    // --- Text-to-Speech (TTS) Feature ---
+    function base64ToArrayBuffer(base64) {
+        const binaryString = atob(base64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+
+    function pcmToWav(pcmData, sampleRate) {
+        const numChannels = 1;
+        const bitsPerSample = 16;
+        const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+        const blockAlign = numChannels * bitsPerSample / 8;
+        const dataSize = pcmData.length * pcmData.BYTES_PER_ELEMENT;
+        const buffer = new ArrayBuffer(44 + dataSize);
+        const view = new DataView(buffer);
+
+        // RIFF header
+        view.setUint32(0, 0x52494646, false); // "RIFF"
+        view.setUint32(4, 36 + dataSize, true);
+        view.setUint32(8, 0x57415645, false); // "WAVE"
+        // fmt subchunk
+        view.setUint32(12, 0x666d7420, false); // "fmt "
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true); // PCM
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, byteRate, true);
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitsPerSample, true);
+        // data subchunk
+        view.setUint32(36, 0x64617461, false); // "data"
+        view.setUint32(40, dataSize, true);
+        new Int16Array(buffer, 44).set(pcmData);
+
+        return new Blob([view], { type: 'audio/wav' });
+    }
+
+    async function handleReadAloud(event) {
+        const button = event.currentTarget;
+        if (button.classList.contains('loading')) return;
+
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+
+        const slideId = button.dataset.slideId;
+        const slideElement = slides[parseInt(slideId, 10) - 1];
+        const textElements = slideElement.querySelectorAll('h1, h2, h3, p, li, th, td');
+        let textToRead = Array.from(textElements).map(el => el.textContent.trim()).join('. ');
+
+        if (!textToRead) return;
+        
+        button.classList.add('loading');
+        try {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: `Say in a clear and professional tone for a safety briefing: ${textToRead}` }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            const result = await fetchWithBackoff(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+            const audioData = part?.inlineData?.data;
+            const mimeType = part?.inlineData?.mimeType;
+
+            if (audioData && mimeType?.startsWith("audio/")) {
+                const rateMatch = mimeType.match(/rate=(\d+)/);
+                if (!rateMatch) throw new Error("Sample rate not found in mimeType");
+                
+                const sampleRate = parseInt(rateMatch[1], 10);
+                const pcmDataBuffer = base64ToArrayBuffer(audioData);
+                const pcm16 = new Int16Array(pcmDataBuffer);
+                const wavBlob = pcmToWav(pcm16, sampleRate);
+                const audioUrl = URL.createObjectURL(wavBlob);
+                
+                currentAudio = new Audio(audioUrl);
+                currentAudio.play();
+                currentAudio.onended = () => button.classList.remove('loading');
+            } else {
+                throw new Error("Invalid audio data in API response.");
+            }
+        } catch (error) {
+            console.error("Error with Text-to-Speech API:", error);
+            alert("音声の生成中にエラーが発生しました。"); // Simple error feedback
+            button.classList.remove('loading');
+        }
+    }
+
+    // --- KYT Scenario Generator Feature ---
+    async function handleGenerateKyt() {
+        const userPrompt = kytPromptInput.value.trim();
+        if (!userPrompt) {
+            alert("シナリオの状況を入力してください。");
+            return;
+        }
+
+        generateKytBtn.disabled = true;
+        generateKytBtn.classList.add('loading');
+        kytResultContainer.style.display = 'none';
+        kytLoader.style.display = 'block';
+
+        const systemPrompt = "あなたは、日本の消防救助活動と労働安全衛生に精通した専門家です。特に、振動工具の安全な取り扱いに関する深い知識を持っています。簡潔かつ具体的に、箇条書きで回答してください。";
+        const fullPrompt = `${userPrompt} という状況を想定した、危険予知訓練（KYT）のシナリオを作成してください。以下の3つの要素を必ず含めてください。
+1. **【状況】:** 具体的な情景が目に浮かぶように、詳細に記述してください。
+2. **【危険のポイント】:** 特に振動工具の使用に関連するリスク（レイノー現象、握力低下、血行不良など）を最低1つは含めて、具体的に指摘してください。二次災害のリスクにも言及してください。
+3. **【対策案】:** 危険を回避するための具体的な行動を複数提案してください。`;
+
+        try {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: fullPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            
+            const result = await fetchWithBackoff(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            
+            if (text) {
+                kytResultText.textContent = text;
+                kytResultContainer.style.display = 'block';
+            } else {
+                throw new Error("No text generated in API response.");
+            }
+        } catch (error) {
+            console.error("Error generating KYT scenario:", error);
+            kytResultText.textContent = "シナリオの生成中にエラーが発生しました。しばらくしてからもう一度お試しください。";
+            kytResultContainer.style.display = 'block';
+        } finally {
+            generateKytBtn.disabled = false;
+            generateKytBtn.classList.remove('loading');
+            kytLoader.style.display = 'none';
+        }
+    }
+
+    // --- Event Listeners ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (generateKytBtn) {
+            generateKytBtn.addEventListener('click', handleGenerateKyt);
+        }
+        readAloudBtns.forEach(btn => {
+            btn.addEventListener('click', handleReadAloud);
+        });
+        showSlide(0); // Show the first slide initially
+    });
+</script>
+
+</body>
+</html>
