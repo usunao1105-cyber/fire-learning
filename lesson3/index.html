@@ -4,972 +4,522 @@ lesson/index.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>消防業務における振動工具安全衛生講習</title>
+    <title>振動工具の安全衛生講習</title>
     <style>
-        body {
-            font-family: 'Meiryo', 'Hiragino Kaku Gothic ProN', 'MS PGothic', sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        body, html {
             margin: 0;
-            padding: 20px;
-        }
-       .slide {
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin: 20px auto;
-            padding: 40px;
-            width: 90%;
-            max-width: 1024px;
-            height: 576px; /* 16:9 Aspect Ratio */
+            padding: 0;
+            height: 100%;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f2f5;
             display: flex;
-            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .slide {
+            width: 100%;
+            height: 100%;
+            max-width: 1024px;
+            max-height: 768px; /* 4:3 Aspect Ratio */
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 40px 60px;
+            box-sizing: border-box;
+            display: none; /* Initially hide all slides */
+            flex-direction: column;
             position: relative;
         }
-       .slide-title {
-            text-align: center;
+        .slide.active {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
         }
         h1 {
             font-size: 2.8em;
             color: #1a237e;
-            margin-bottom: 20px;
+            border-bottom: 4px solid #1e88e5;
+            padding-bottom: 10px;
+            margin-top: 0;
+            text-align: center;
         }
         h2 {
             font-size: 2.2em;
             color: #0d47a1;
-            border-bottom: 3px solid #1e88e5;
-            padding-bottom: 10px;
             margin-top: 0;
+            margin-bottom: 30px;
         }
         h3 {
             font-size: 1.6em;
-            color: #0277bd;
+            color: #1565c0;
+            border-left: 5px solid #64b5f6;
+            padding-left: 15px;
             margin-top: 20px;
         }
-        p, ul, ol {
+        p, li {
             font-size: 1.2em;
             line-height: 1.8;
+            color: #333;
         }
         ul, ol {
-            padding-left: 40px;
+            padding-left: 30px;
         }
         li {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         strong {
             color: #d32f2f;
+            font-weight: bold;
         }
-       .footer {
+        .footer {
             position: absolute;
             bottom: 20px;
             right: 40px;
-            font-size: 1em;
+            font-size: 1.2em;
             color: #777;
         }
-       .image-placeholder {
-            width: 80%;
-            height: 200px;
-            background-color: #e0e0e0;
-            border: 1px dashed #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto;
-            font-size: 1em;
-            color: #666;
+        .slide-title {
             text-align: center;
+            margin: auto;
+        }
+        .two-column {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+        }
+        .column {
+            flex: 1;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 1em;
         }
         th, td {
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
+            font-size: 1em;
         }
         th {
-            background-color: #1e88e5;
-            color: white;
+            background-color: #e3f2fd;
+            font-weight: bold;
+            color: #0d47a1;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-       .formula {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #eee;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 1.2em;
+        .image-container {
             text-align: center;
             margin: 20px 0;
         }
-       .note {
+        .image-container img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .note {
             font-size: 0.9em;
             color: #555;
             margin-top: 15px;
+        }
+        /* --- GEMINI API Feature Styles --- */
+        .gemini-feature-btn {
+            background-color: #4A90E2; /* A professional blue */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .gemini-feature-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            background-color: #357ABD;
+        }
+        .gemini-feature-btn:disabled, .gemini-feature-btn.loading {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .gemini-feature-btn .btn-text {
+            display: inline-block;
+        }
+        .gemini-feature-btn .btn-loader {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .gemini-feature-btn.loading .btn-text { display: none; }
+        .gemini-feature-btn.loading .btn-loader { display: block; }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none; /* Hidden by default */
+        }
+
+        .kyt-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .kyt-result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 5px solid #1e88e5;
+            text-align: left;
+            max-height: 280px;
+            overflow-y: auto;
+            border-radius: 0 8px 8px 0;
+        }
+        .kyt-result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            font-size: 1em;
+            margin: 0;
+        }
+        .footer .read-aloud-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+        .read-aloud-btn svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="slide">
+    <div class="slide active">
         <div class="slide-title">
-            <div class="image-placeholder">【イメージ】消防庁のロゴや振動工具の写真</div>
-            <h1>消防業務における振動工具の安全な取扱いと振動障害予防</h1>
-            <p style="font-size: 1.5em;">〜隊員の健康とキャリアを守るために〜</p>
+            <h1>振動工具取扱作業者<br>安全衛生講習</h1>
+            <p style="font-size: 1.5em; color: #555;">消防職員向け特別講習</p>
+            <p><strong>主催:</strong> 厚生労働省・建設業労働災害防止協会</p>
             <p><strong>講習日時:</strong> 202X年XX月XX日</p>
             <p><strong>講師:</strong> 厚生労働省 労働基準局 安全衛生部 （氏名）</p>
         </div>
-        <div class="footer">1 / 50</div>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            1 / 51
+        </div>
     </div>
 
     <div class="slide">
-        <h2>本日の講習の目的</h2>
-        <h3>なぜ、今この講習が必要なのか？</h3>
-        <ul>
-            <li><strong>消防業務の特殊性:</strong> 救助現場は予測不可能。緊急性が高く、標準的な安全管理が困難な場合がある。</li>
-            <li><strong>振動障害は「静かなる脅威」:</strong> 自覚症状なく進行し、気づいた時には回復が困難。</li>
-            <li><strong>キャリアを終わらせるリスク:</strong> 握力低下やしびれは、消防隊員としての職務遂行能力を根本から揺るがす。</li>
-        </ul>
+        <h2>はじめに - なぜ今、この講習が必要なのか</h2>
+        <p>消防職員の皆様は、救助活動において様々な動力工具を使用します。特に、コンクリート・ブレーカーやエンジンカッターなどの<strong>振動工具</strong>は、迅速な救助活動に不可欠です。</p>
+        <p>しかし、その利便性の裏には、<strong>「振動障害」</strong>という深刻な健康リスクが潜んでいます。この障害は一度発症すると完治が難しく、皆様の選手生命、ひいては日常生活にまで影響を及ぼす可能性があります。</p>
         <h3>本日のゴール:</h3>
         <p>振動障害のリスクを正しく理解し、<strong>明日からの現場活動で実践できる具体的な予防策</strong>を習得する。</p>
-        <div class="footer">2 / 50</div>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            2 / 51
+        </div>
     </div>
 
     <div class="slide">
         <h2>講習の構成（アジェンダ）</h2>
         <ol>
-            <li><strong>振動障害の理解</strong> — あなたのキャリアへの脅威</li>
-            <li><strong>ルールを知る</strong> — なぜ対策が必要なのか（法令・指針）</li>
-            <li><strong>予防の三本柱</strong> — 具体的な予防策（三大管理）</li>
-            <li><strong>リスクの数値化</strong> — 科学的根拠に基づく管理手法</li>
-            <li><strong>早期発見と事後措置</strong> — 健康管理の徹底</li>
-            <li><strong>現場での応用</strong> — 救助活動における戦術的判断</li>
+            <li><strong>振動障害とは何か？</strong> — 見えざる敵の正体</li>
+            <li><strong>法令・指針の理解</strong> — 私たちを守るルール</li>
+            <li><strong>振動工具の基礎知識</strong> — 敵を知り己を知る</li>
+            <li><strong>具体的な予防対策（管理）</strong> — 組織としてやるべきこと</li>
+            <li><strong>具体的な予防対策（作業）</strong> — 個人で実践すべきこと</li>
+            <li><strong>健康管理と教育</strong> — 早期発見と知識の定着</li>
             <li><strong>まとめ</strong> — 継続的な安全文化の醸成</li>
         </ol>
-        <div class="footer">3 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第1章 振動障害の理解</h2>
-        <h3>1.1 振動障害とは？</h3>
-        <p>手持ち振動工具（エンジンカッター、コンクリートブレーカー等）の長期間使用により、<strong>手や腕に発生する健康障害の総称</strong>です [1]。</p>
-        <ul>
-            <li>別名: <strong>白ろう病</strong> [2, 3]</li>
-            <li>法律で定められた<strong>「業務上疾病（職業病）」</strong>です [4]。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】様々な振動工具のイラスト</div>
-        <div class="footer">4 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>障害の三主徴① 末梢循環障害</h2>
-        <h3>レイノー現象（白ろう病）</h3>
-        <ul>
-            <li>寒さや冷水などをきっかけに、手指の血管が収縮し、血流が途絶えます [2, 5]。</li>
-            <li>指がろうそくのように真っ白になります [6]。</li>
-            <li>回復時にしびれや、ずきずきとした痛みを伴うことがあります [5]。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】レイノー現象を発症した手の写真またはイラスト</div>
-        <p><strong>この症状は、振動障害の最も特徴的なサインです。</strong></p>
-        <div class="footer">5 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>障害の三主徴② 末梢神経障害</h2>
-        <h3>しびれ・感覚の鈍化</h3>
-        <ul>
-            <li>振動が神経に直接ダメージを与えます [1, 7]。</li>
-            <li><strong>症状:</strong>
-                <ul>
-                    <li>手指のしびれ、ピリピリ感</li>
-                    <li>触覚、痛覚、温度覚の低下</li>
-                </ul>
-            </li>
-            <li><strong>進行すると…</strong>
-                <ul>
-                    <li>細かい作業が困難になる</li>
-                    <li>熱いものに気づかず火傷しやすくなる</li>
-                    <li>救助資機材の精密な操作に支障が出る</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="image-placeholder">【イメージ】神経がダメージを受けるイメージ図</div>
-        <div class="footer">6 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>障害の三主徴③ 運動器障害</h2>
-        <h3>筋力・関節への影響</h3>
-        <ul>
-            <li>手、手首、肘、肩などの関節痛、筋肉痛 [4, 1]。</li>
-            <li><strong>特に深刻なのは「握力の低下」</strong>
-                <ul>
-                    <li>高圧放水時のホース保持</li>
-                    <li>要救助者を抱えての梯子昇降</li>
-                    <li>重量資機材の確実な操作</li>
-                </ul>
-            </li>
-        </ul>
-        <p><strong>これらの活動の安全性を著しく損なう危険性があります。</strong></p>
-        <div class="image-placeholder">【イメージ】握力計のイラストと低下していくグラフ</div>
-        <div class="footer">7 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>振動障害の三主徴（まとめ）</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>障害の系統</th>
-                    <th>主な症状</th>
-                    <th>消防業務への影響</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>末梢循環障害</strong></td>
-                    <td>レイノー現象、冷え</td>
-                    <td>寒冷環境下での活動能力低下</td>
-                </tr>
-                <tr>
-                    <td><strong>末梢神経障害</strong></td>
-                    <td>しびれ、感覚鈍化</td>
-                    <td>資機材の精密操作、危険察知能力の低下</td>
-                </tr>
-                <tr>
-                    <td><strong>運動器障害</strong></td>
-                    <td>関節痛、握力低下</td>
-                    <td>ホース保持、要救助者搬送など基本動作の困難化</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="footer">8 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>発症のメカニズムと増悪因子</h2>
-        <p>主たる原因: 振動工具から伝わる物理的な<strong>振動エネルギー</strong> [7]</p>
-        <h3>リスクを高める要因（増悪因子）:</h3>
-        <div class="image-placeholder">【イメージ】寒冷、騒音、喫煙のアイコンを並べた図</div>
-        <ul>
-            <li><strong>ばく露条件:</strong> 振動の強さ、使用時間、従事期間 [1]</li>
-            <li><strong>環境条件:</strong>
-                <ul>
-                    <li><strong>寒冷:</strong> 血管を収縮させ、レイノー現象を誘発 [1, 7]</li>
-                    <li><strong>騒音:</strong> 90dB(A)を超える騒音はリスクを高める [1, 8]</li>
-                </ul>
-            </li>
-            <li><strong>個人的因子:</strong>
-                <ul>
-                    <li><strong>喫煙:</strong> ニコチンが血管を収縮させ、血行を悪化させる重大なリスク因子 [1]</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="footer">9 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>労働災害としての位置づけ</h2>
-        <ul>
-            <li>振動障害は、業務が原因で発症する疾病として<strong>労災保険の給付対象</strong>となります [4, 3]。</li>
-            <li><strong>事業主（消防機関）の責任:</strong>
-                <ul>
-                    <li>隊員の安全と健康を確保する<strong>「安全配慮義務」</strong>がある。</li>
-                    <li>予防策を怠り、隊員が振動障害を発症した場合、<strong>損害賠償責任</strong>を問われる可能性がある。</li>
-                </ul>
-            </li>
-        </ul>
-        <p><strong>予防対策の徹底は、隊員を守るだけでなく、組織を守る上でも不可欠です。</strong></p>
-        <div class="footer">10 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第2章 ルールを知る</h2>
-        <h3>2.1 根拠法令：労働安全衛生法</h3>
-        <p>振動障害予防対策は、この法律に基づいています。</p>
-        <ul>
-            <li><strong>安全衛生教育の義務（第59条）</strong>
-                <ul>
-                    <li>危険又は有害な業務に就かせる際に、安全衛生のための教育を行う義務 [9, 10]。</li>
-                </ul>
-            </li>
-            <li><strong>特殊健康診断の義務（第66条）</strong>
-                <ul>
-                    <li>法令で定める有害業務に従事する労働者に、特殊健康診断を実施する義務 [11, 12]。</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="footer">11 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>国が示す具体的なルール</h2>
-        <h3>MHLW指針（厚生労働省通達）</h3>
-        <p><strong>「チェーンソー以外の振動工具の取扱い業務に係わる振動障害予防対策指針」</strong> [8, 13]</p>
-        <p>これが、我々が守るべき具体的な対策の基準です。</p>
-        <h3>指針が求める6つの柱:</h3>
-        <ol>
-            <li>適切な振動工具の選定</li>
-            <li><strong>作業時間管理</strong>の徹底</li>
-            <li>作業方法の改善</li>
-            <li>保護具の適切な使用</li>
-            <li><strong>健康管理</strong>（特殊健康診断）</li>
-            <li><strong>安全衛生教育</strong>の実施</li>
-        </ol>
-        <div class="footer">12 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>対象となる振動工具</h2>
-        <p><strong>消防業務でよく使うこれらの工具が対象です</strong> [8, 14]</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>分類</th>
-                    <th>工具名</th>
-                    <th>使用例</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>打撃機構</td>
-                    <td>コンクリートブレーカー、電動ハンマー</td>
-                    <td>倒壊家屋の壁・床の破壊</td>
-                </tr>
-                <tr>
-                    <td>内燃機関</td>
-                    <td><strong>エンジンカッター</strong></td>
-                    <td>車両・鉄扉の切断</td>
-                </tr>
-                <tr>
-                    <td>回転工具</td>
-                    <td>グラインダー、サンダー</td>
-                    <td>金属部分の切断・研削</td>
-                </tr>
-                <tr>
-                    <td>締付工具</td>
-                    <td>インパクトレンチ</td>
-                    <td>車両事故でのボルト取り外し</td>
-                </tr>
-                <tr>
-                    <td>往復動工具</td>
-                    <td>レシプロソー（セーバーソー）</td>
-                    <td>車両ボディ、木材の切断</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="image-placeholder">【イメージ】上記工具の写真を並べたもの</div>
-        <div class="footer">13 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>「特別教育」と「安全衛生教育」</h2>
-        <p><strong>法律上の位置づけは異なりますが、重要性は同じです。</strong></p>
-        <ul>
-            <li><strong>特別教育</strong>
-                <ul>
-                    <li>法律で<strong>実施が義務付け</strong>られている教育（例: チェーンソー） [9, 15]。</li>
-                    <li>未実施は<strong>罰則対象</strong>。</li>
-                </ul>
-            </li>
-            <li><strong>安全衛生教育</strong>
-                <ul>
-                    <li>国が<strong>実施を強く推奨・指導</strong>している教育 [14, 16]。</li>
-                    <li><strong>本日の講習対象の工具はこちらに該当</strong> [13, 17]。</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="footer">14 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>なぜ「推奨」でも実施義務があるのか？</h2>
-        <h3>安全配慮義務</h3>
-        <ul>
-            <li>事業主（消防機関）は、労働者（隊員）の安全と健康に配慮する包括的な義務を負っています。</li>
-            <li>国が「危険性がある」と指摘し、具体的な教育内容まで示している以上、その教育を実施することは<strong>「当然講ずべき措置」</strong>と解釈されます。</li>
-            <li>教育を怠って災害が発生すれば、<strong>安全配慮義務違反</strong>を問われます。</li>
-        </ul>
-        <p><strong>結論: 「安全衛生教育」は、事実上、義務的な措置と認識し、必ず実施しなければなりません。</strong></p>
-        <div class="footer">15 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第3章 予防の三本柱</h2>
-        <h3>振動障害予防の三大管理策</h3>
-        <p>これらは<strong>一つのシステム</strong>として機能します。どれか一つでも欠けると、予防効果は著しく低下します。</p>
-        <div class="image-placeholder">【イメージ】「作業環境管理」「作業管理」「健康管理」の3つが互いに支えあう三角形の図</div>
-        <p class="note">*本資料では「作業管理」を「作業時間管理」と「作業方法の管理」に分けて解説します。</p>
-        <div class="footer">16 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>①作業環境管理 — 工具の選定</h2>
-        <p><strong>予防の第一歩は、振動の小さい工具を選ぶこと</strong> [8]。</p>
-        <h3>選定のポイント:</h3>
-        <ul>
-            <li><strong>低振動:</strong> メーカー公表の<strong>「3軸合成値」</strong>が小さいもの</li>
-            <li><strong>防振機能:</strong> 防振ハンドルなどが付いているもの</li>
-            <li><strong>軽量:</strong> 身体への負担が少ないもの</li>
-            <li><strong>適切な設計:</strong> 無理のない姿勢で操作できるもの</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】低振動を謳った最新の工具と、旧式の工具を比較する写真</div>
-        <div class="footer">17 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>①作業環境管理 — 点検・整備</h2>
-        <p><strong>工具は使ううちに劣化し、振動が大きくなります。</strong></p>
-        <ul>
-            <li><strong>振動工具管理責任者</strong>を指名する [18]。</li>
-            <li>定期的に点検・整備を行い、<strong>記録</strong>を残す [3, 18]。
-                <ul>
-                    <li>防振材の劣化</li>
-                    <li>部品の緩み</li>
-                    <li>刃先の摩耗</li>
-                </ul>
-            </li>
-            <li><strong>使用前点検</strong>を習慣化する。</li>
-        </ul>
-        <p><strong>最高の状態を維持することが、隊員を守ります。</strong></p>
-        <div class="footer">18 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>②作業時間管理 — ばく露時間の管理</h2>
-        <p><strong>振動を浴びる総量を管理することが、予防の核心です。</strong></p>
-        <ul>
-            <li><strong>原則:</strong> 1日の振動ばく露時間は<strong>2時間以内</strong>とする [19, 8]。</li>
-            <li class="note">これは、後述する計算上の限界時間が2時間を超える場合でも適用される、重要な安全基準です。</li>
-            <li>振動業務のない日を設けるなど、作業計画を工夫する。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】時計のイラストと「1日2時間以内」の文字</div>
-        <div class="footer">19 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>②作業時間管理 — 連続作業と休止</h2>
-        <p><strong>長時間の連続作業は、血行不良や筋疲労を増大させます。</strong></p>
-        <ul>
-            <li><strong>一連続の作業時間</strong>の上限を守り、間に<strong>休止時間</strong>を設ける [18]。
-                <ul>
-                    <li><strong>一般の工具:</strong> <strong>30分</strong>作業 → <strong>5分以上</strong>休憩</li>
-                    <li><strong>高振動工具:</strong> <strong>10分</strong>作業 → 休憩</li>
-                </ul>
-            </li>
-        </ul>
-        <h3>救助活動への応用:</h3>
-        <p>高振動工具を使う際は、<strong>短時間で積極的に隊員を交代させるローテーション制</strong>を導入する。</p>
-        <div class="footer">20 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>③作業方法の管理 — 正しい姿勢と操作</h2>
-        <p><strong>使い方次第で、身体が受ける振動は大きく変わります。</strong></p>
-        <ul>
-            <li><strong>握り方:</strong> 強く握りしめず、確実に保持できる力で [19, 8]。</li>
-            <li><strong>力の加え方:</strong> 工具を強く押し付けず、機械の自重を利用する [3, 8]。</li>
-            <li><strong>姿勢:</strong> 肩や肘が突っ張らない、楽な姿勢を保つ [3]。</li>
-            <li><strong>たがね等:</strong> 手で直接保持せず、補助具を使う [19, 8]。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】正しい姿勢と悪い姿勢の比較イラスト</div>
-        <div class="footer">21 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>③作業方法の管理 — 保護具の着用</h2>
-        <ul>
-            <li><strong>防振手袋:</strong>
-                <ul>
-                    <li>JIS T 8114適合品など、軟質で厚手のものを着用する [3, 8]。</li>
-                    <li>ただし、<strong>防振手袋は万能ではない</strong>ことを理解する。</li>
-                </ul>
-            </li>
-            <li><strong>防音保護具:</strong>
-                <ul>
-                    <li>90dB(A)以上の騒音を伴う作業では、<strong>耳栓やイヤーマフを必ず使用</strong>する [8]。</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="image-placeholder">【イメージ】防振手袋とイヤーマフの写真</div>
-        <div class="footer">22 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>③作業方法の管理 — 体操の実施</h2>
-        <p><strong>血行を促進し、筋肉の緊張をほぐすことが重要です。</strong></p>
-        <ul>
-            <li><strong>作業開始前</strong>と<strong>作業終了後</strong>に、ストレッチや体操を行う [8]。</li>
-            <li>手、腕、肩、腰などを中心に。</li>
-            <li>作業中にも随時行うことが望ましい。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】ストレッチをしている人のイラスト</div>
-        <div class="footer">23 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第4章 リスクの数値化</h2>
-        <h3>4.1 なぜ数値管理が必要か？</h3>
-        <ul>
-            <li>「気をつけろ」といった精神論だけでは事故は防げない。</li>
-            <li><strong>客観的な数値</strong>に基づいてリスクを評価し、管理することで、<strong>科学的根拠のある予防</strong>が可能になる。</li>
-        </ul>
-        <p><strong>中心となる指標が「日振動ばく露量 A(8)」です。</strong></p>
-        <div class="footer">24 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>キーワード① 3軸合成値 (a<sub>hv</sub>)</h2>
-        <p><strong>「周波数補正振動加速度実効値の3軸合成値」</strong></p>
-        <ul>
-            <li>工具が発生する<strong>振動の強さ</strong>を、人体への影響を考慮して評価した数値 [20]。</li>
-            <li>単位: m/s<sup>2</sup></li>
-            <li><strong>この数値が大きいほど、ハイリスクな工具</strong>と言える。</li>
-            <li>工具の取扱説明書やメーカーのウェブサイトで確認できる [8, 21, 22]。</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】3軸(X, Y, Z)の振動を示す図</div>
-        <div class="footer">25 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>キーワード② 日振動ばく露量 A(8)</h2>
-        <ul>
-            <li>工具の<strong>振動の強さ (a<sub>hv</sub>)</strong> と <strong>1日の使用時間 (T)</strong> から算出される、8時間あたりの等価な振動ばく露量 [23]。</li>
-            <li><strong>その日の振動ばく露の総量</strong>を示す指標。</li>
-        </ul>
-        <h3>計算式:</h3>
-        <div class="formula">
-            A(8) = a<sub>hv</sub> &times; &radic;(T/8)
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            3 / 51
         </div>
-        <p class="note">(T = 1日の総ばく露時間)</p>
-        <div class="footer">26 / 50</div>
     </div>
 
     <div class="slide">
-        <h2>A(8) の計算例</h2>
-        <p><strong>例: a<sub>hv</sub>が 10 m/s<sup>2</sup> の工具を1日2時間使用した場合</strong></p>
-        <div class="formula">
-            A(8) = 10 &times; &radic;(2/8)<br>
-            A(8) = 10 &times; &radic;(0.25)<br>
-            A(8) = 10 &times; 0.5 = 5.0 m/s<sup>2</sup>
+        <h2>第1章 振動障害とは何か？</h2>
+        <h3>振動障害の定義</h3>
+        <p>振動工具から発生する振動に、手や腕などを介して長時間ばく露されることによって生じる、末梢循環障害、末梢神経障害、運動器（骨・関節系）障害の総称です。</p>
+        <div class="two-column">
+            <div class="column">
+                <h3>主な症状</h3>
+                <ul>
+                    <li><strong>レイノー現象:</strong> 指が冷たくなると白くなる（蒼白化）。</li>
+                    <li><strong>しびれ・感覚の鈍化:</strong> 指先の感覚が鈍くなる、触っても分かりにくい。</li>
+                    <li><strong>握力の低下:</strong> 物を掴む力が弱くなる、工具を落としやすくなる。</li>
+                    <li><strong>関節痛・筋肉痛:</strong> 肘や手首、肩などに痛みを感じる。</li>
+                </ul>
+            </div>
+            <div class="column">
+                <div class="image-container">
+                    <img src="https://placehold.co/400x300/e0f7fa/006064?text=%E3%83%AC%E3%82%A4%E3%83%8E%E3%83%BC%E7%8F%BE%E8%B1%A1%E3%81%AE%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8" alt="レイノー現象のイメージ図">
+                    <p class="note">指先が血の気を失い、真っ白になるレイノー現象</p>
+                </div>
+            </div>
         </div>
-        <p class="note">*計算には、厚生労働省が提供するウェブ上の計算ツールやノモグラム（換算図）も活用できます [22, 24, 25]。</p>
-        <div class="footer">27 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>守るべき2つの基準値</h2>
-        <p>A(8) の評価には、2つの重要な基準値があります [18]。</p>
-        <ul>
-            <li><strong>日振動ばく露限界値: 5.0 m/s<sup>2</sup></strong>
-                <ul>
-                    <li><strong>絶対に超えてはならない上限値。</strong></li>
-                    <li>これを超える作業計画は認められない [8, 24]。</li>
-                </ul>
-            </li>
-            <li><strong>日振動ばく露対策値: 2.5 m/s<sup>2</sup></strong>
-                <ul>
-                    <li>これを超える場合は、<strong>振動を減らすための積極的な対策</strong>（低振動工具への変更、時間短縮など）を講じる必要がある。</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="image-placeholder">【イメージ】信号機のイラスト（赤: 5.0、黄: 2.5）</div>
-        <div class="footer">28 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>現場での現実的な活用法</h2>
-        <p><strong>混乱した救助現場で、指揮官が複雑な計算を行うのは非現実的です。</strong></p>
-        <p>A(8)システムの真価は<strong>「事前の戦略的プランニング」</strong>にあります。</p>
-        <h3>平時にやっておくべきこと:</h3>
-        <ol>
-            <li>保有する全振動工具の<strong>最大許容ばく露時間 (T<sub>L</sub>)</strong> を算出しておく。</li>
-            <li>T<sub>L</sub> に基づき、工具を<strong>リスクレベルで分類</strong>する。</li>
-            <li>リスクレベルに応じた<strong>標準作業手順（SOP）</strong>を策定する。</li>
-        </ol>
-        <div class="footer">29 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>最大許容ばく露時間 (T<sub>L</sub>) の計算</h2>
-        <p><strong>T<sub>L</sub> とは、日振動ばく露限界値 (A(8)=5.0 m/s<sup>2</sup>) に達するまでの最大使用時間のことです。</strong></p>
-        <h3>計算式:</h3>
-        <div class="formula">
-            T<sub>L</sub> (時間) = 200 / (a<sub>hv</sub>)<sup>2</sup>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            4 / 51
         </div>
-        <p class="note">* このT<sub>L</sub>を計算することで、各工具の客観的な危険度が分かります [26, 27]。</p>
-        <div class="footer">30 / 50</div>
     </div>
 
     <div class="slide">
-        <h2>【重要】保有資機材のリスク階層化（例）</h2>
-        <p><strong>各消防本部で、保有する資機材のリストを作成してください。</strong></p>
+        <h2>振動障害の進行プロセス</h2>
+        <p>自覚症状がない初期段階から、日常生活に支障をきたす重篤な段階まで、徐々に進行します。</p>
+        <div class="image-container">
+            <img src="https://placehold.co/800x400/fff8e1/8d6e63?text=%E6%BD%9C%E4%BC%8F%E6%9C%9F%E3%80%80%E2%86%92%E3%80%80%E5%88%9D%E6%9C%9F%E7%97%87%E7%8A%B6%E3%80%80%E2%86%92%E3%80%80%E9%80%B2%E8%A1%8C%E6%9C%9F%E3%80%80%E2%86%92%E3%80%80%E6%9C%AB%E6%9C%9F%E7%97%87%E7%8A%B6" alt="振動障害の進行段階を示す図">
+        </div>
+        <ul>
+            <li><strong>潜伏期:</strong> 症状はないが、体内では変化が始まっている。</li>
+            <li><strong>初期症状:</strong> しびれ感、冷えを感じる。<strong>この段階での対策が極めて重要。</strong></li>
+            <li><strong>進行期:</strong> レイノー現象が頻発、握力が明確に低下。</li>
+            <li><strong>末期症状:</strong> 工具の操作が困難に。日常生活にも大きな支障。</li>
+        </ul>
+        <p><strong>ポイント:</strong> 症状を自覚した時には、すでにある程度進行している可能性があります。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            5 / 51
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>第2章 法令・指針の理解</h2>
+        <h3>根拠となる法令と指針</h3>
+        <p>事業者は、労働者の安全と健康を守る義務があります。これは法令で定められています。</p>
+        <ul>
+            <li><strong>労働安全衛生法 第22条:</strong>
+                <br>事業者は、振動等による労働者の健康障害を防止するため、必要な措置を講じなければならない。
+            </li>
+            <li><strong>「チェーンソー以外の振動工具の取扱い業務に係る振動障害予防対策指針」（平成21年 基発0710第2号）:</strong>
+                <br>本日の講習の根幹となる具体的な対策を示したガイドライン。
+            </li>
+        </ul>
+        <h3>消防組織における「事業者」とは？</h3>
+        <p>消防長や署長など、組織の管理者が事業者に該当し、隊員の安全衛生を確保する責任を負います。</p>
+        <p class="note">これらの法令・指針は、私たち作業者を守るための重要なルールです。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            6 / 51
+        </div>
+    </div>
+
+    <div class="slide">
+        <h2>指針の最重要ポイント: 振動ばく露管理</h2>
+        <p>指針では、振動の強さと時間に基づいた管理を求めています。</p>
+        <h3>日振動ばく露量 A(8)</h3>
+        <p>1日の作業時間（8時間）における振動ばく露量を表す指標です。</p>
         <table>
-            <thead>
-                <tr>
-                    <th>工具の例</th>
-                    <th>a<sub>hv</sub> (m/s<sup>2</sup>)</th>
-                    <th>T<sub>L</sub> (分)</th>
-                    <th>リスク階層</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>コンクリートブレーカー (旧式)</td>
-                    <td>19.8 [28]</td>
-                    <td>31分</td>
-                    <td><strong>Tier 1 (高)</strong></td>
-                </tr>
-                <tr>
-                    <td>レシプロソー (中型)</td>
-                    <td>15.5 [29]</td>
-                    <td>50分</td>
-                    <td><strong>Tier 1 (高)</strong></td>
-                </tr>
-                <tr>
-                    <td>コンクリートブレーカー (防振型)</td>
-                    <td>11.5 [28]</td>
-                    <td>91分</td>
-                    <td><strong>Tier 2 (中)</strong></td>
-                </tr>
-                <tr>
-                    <td>エンジンカッター (標準)</td>
-                    <td>7.4 [24]</td>
-                    <td>219分</td>
-                    <td><strong>Tier 2 (中)</strong></td>
-                </tr>
-                <tr>
-                    <td>油圧スプレッダー</td>
-                    <td>&lt; 2.5 [30]</td>
-                    <td>1920分</td>
-                    <td><strong>Tier 3 (低)</strong></td>
-                </tr>
-            </tbody>
+            <tr>
+                <th>A(8) の値</th>
+                <th>管理レベル</th>
+                <th>求められる対応</th>
+            </tr>
+            <tr>
+                <td><strong>2.5 m/s² 以下</strong></td>
+                <td>ばく露限界値</td>
+                <td>この値を超えてはならない。作業方法の見直しが必須。</td>
+            </tr>
+            <tr>
+                <td><strong>5.0 m/s²</strong></td>
+                <td>ばく露対策値</td>
+                <td>この値に達したら、ばく露時間短縮などの対策を講じる必要がある。</td>
+            </tr>
         </table>
-        <p class="note">*注: a<sub>hv</sub>は機種により異なります。必ず自部署の機材で確認してください。</p>
-        <div class="footer">31 / 50</div>
+        <p><strong>キーポイント:</strong> <strong>「強い振動を、短時間」</strong>浴びるのも、<strong>「弱い振動を、長時間」</strong>浴びるのも、どちらもリスクになります。重要なのは、その日の総量です。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="7">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            7 / 51
+        </div>
     </div>
 
     <div class="slide">
-        <h2>リスク階層に応じたSOP（標準作業手順）の例</h2>
+        <h2>第3章 振動工具の基礎知識</h2>
+        <h3>振動の強さ：周波数補正振動加速度実効値の3軸合成値</h3>
+        <p>工具の性能を示す重要な指標で、カタログや取扱説明書に記載されています。</p>
         <ul>
-            <li><strong>Tier 1 (高リスク): T<sub>L</sub>が1時間未満</strong>
-                <ul>
-                    <li><strong>SOP例:</strong> 使用は指揮者の許可制。1人連続<strong>15分</strong>上限。必ず交代要員を準備。</li>
-                </ul>
-            </li>
-            <li><strong>Tier 2 (中リスク): T<sub>L</sub>が1時間以上4時間未満</strong>
-                <ul>
-                    <li><strong>SOP例:</strong> 標準的な交代手順（<strong>30分</strong>毎）を適用。</li>
-                </ul>
-            </li>
-            <li><strong>Tier 3 (低リスク): T<sub>L</sub>が4時間以上</strong>
-                <ul>
-                    <li><strong>SOP例:</strong> 標準手順内で使用可。ただし1日の総ばく露は2時間以内。</li>
-                </ul>
-            </li>
-        </ul>
-        <p><strong>これにより、現場指揮官は計算不要で、迅速かつ安全な意思決定が可能になります。</strong></p>
-        <div class="footer">32 / 50</div>
-    </div>
+            <li><strong>単位:</strong> m/s² (メートル毎秒毎秒)</li>
+            <li><strong>意味:</strong> 人体に影響を与えやすい周波数を考慮した、3方向（X, Y, Z軸）の振動の大きさを合成した値。</li>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>振動工具の安全衛生講習</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+        body, html {
+            margin: 0;
 
-    <div class="slide">
-        <h2>第5章 健康管理の徹底</h2>
-        <h3>5.1 早期発見の切り札：特殊健康診断</h3>
-        <ul>
-            <li>振動障害は初期症状が乏しいため、<strong>定期的な健康診断による早期発見</strong>が極めて重要。</li>
-            <li>労働安全衛生法に基づく<strong>事業者の義務</strong>です [31]。</li>
+$0
+            <li><strong>ポイント:</strong> この値が<strong>小さいほど、身体への負担が少ない</strong>工具と言えます。</li>
         </ul>
-        <div class="image-placeholder">【イメージ】医師が問診しているイラスト</div>
-        <div class="footer">33 / 50</div>
+        <div class="image-container">
+            <img src="https://placehold.co/500x350/e8eaf6/303f9f?text=3%E8%BB%B8%E5%90%88%E6%88%90%E5%80%A4%E3%81%AE%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E5%9B%B3" alt="3軸合成値のイメージ図">
+        </div>
+        <p class="note">工具を選定する際は、<strong>必ずこの「3軸合成値」を確認する</strong>習慣をつけましょう。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="8">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            8 / 51
+        </div>
     </div>
-
+    
     <div class="slide">
-        <h2>特殊健康診断の実施時期</h2>
-        <ul>
-            <li><strong>雇入れ時</strong> または <strong>当該業務への配置替えの際</strong> [8, 32]</li>
-            <li><strong>定期健康診断:</strong>
-                <ul>
-                    <li><strong>ピストン打撃工具</strong>（ブレーカー等）を扱う業務
-                        <ul>
-                            <li><strong>6ヶ月以内ごと</strong>に1回（うち1回は冬期） [8, 32]</li>
-                        </ul>
-                    </li>
-                    <li><strong>その他の振動工具</strong>を扱う業務
-                        <ul>
-                            <li><strong>1年以内ごと</strong>に1回（冬期） [8]</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <p><strong>なぜ冬期？</strong> → 寒さでレイノー現象などの症状が出やすいため。</p>
-        <div class="footer">34 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>どんな検査をするのか？（一次健診）</h2>
-        <p><strong>全対象者が受ける基本的な検診です</strong> [33, 34]。</p>
-        <ul>
-            <li><strong>問診:</strong> 自覚症状（しびれ、冷え等）の確認</li>
-            <li><strong>視診・触診:</strong> 手指の状態、関節の動きをチェック</li>
-            <li><strong>運動機能検査:</strong> <strong>握力</strong>の測定 [32]</li>
-            <li><strong>末梢循環機能検査:</strong> 手指の皮膚温、爪圧迫テスト [32, 34]</li>
-            <li><strong>末梢神経機能検査:</strong> 痛覚、<strong>振動覚</strong>の検査 [32, 34]</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】握力測定や振動覚検査の写真</div>
-        <div class="footer">35 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>健診結果に基づく健康管理区分</h2>
-        <p>医師は、健診結果から3つの区分に判定します [35]。</p>
+        <h2>消防活動で使われる主な振動工具</h2>
+        <p>皆さんが現場で遭遇する可能性のある工具と、その振動の大きさの目安です。</p>
         <table>
             <thead>
                 <tr>
-                    <th>区分</th>
-                    <th>状態</th>
+                    <th>工具の種類</th>
+                    <th>主な用途</th>
+                    <th>3軸合成値の目安 (m/s²)</th>
+                    <th>特徴</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>管理A</strong></td>
-                    <td><strong>異常なし。</strong> 通常業務が可能。</td>
+                    <td><strong>コンクリート・ブレーカー</strong></td>
+                    <td>コンクリート、アスファルトの破砕</td>
+                    <td><strong>10 - 20</strong> (非常に高い)</td>
+                    <td>振動レベルが極めて高く、最も注意が必要な工具。</td>
                 </tr>
-                <tr>
-                    <td><strong>管理B</strong></td>
-                    <td><strong>要観察者。</strong> 軽度の異常所見あり。</td>
-                </tr>
-                <tr>
-                    <td><strong>管理C</strong></td>
-                    <td><strong>要治療者。</strong> 明らかな異常所見あり。</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="footer">36 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>診断後の措置（事後措置）</h2>
-        <p>消防機関は、医師の意見に基づき、適切な措置を講じる義務があります [36, 37]。</p>
-        <ul>
-            <li><strong>管理B (要観察者) の場合:</strong>
-                <ul>
-                    <li>振動ばく露時間の短縮</li>
-                    <li>作業内容の転換の検討</li>
-                    <li>治療の勧奨</li>
-                </ul>
-            </li>
-            <li><strong>管理C (要治療者) の場合:</strong>
-                <ul>
-                    <li><strong>原則として振動業務から外す</strong> [31]</li>
-                    <li>専門医による治療を受けさせる</li>
-                </ul>
-            </li>
-        </ul>
-        <p class="note">*措置の決定にあたっては、必ず隊員本人の意見を聴き、十分な話し合いが必要です [37, 38]。</p>
-        <div class="footer">37 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>健康診断個人票の保存</h2>
-        <ul>
-            <li>事業者は、特殊健康診断の結果を記録した<strong>「健康診断個人票」</strong>を作成し、これを<strong>5年間保存</strong>する義務があります [31]。</li>
-        </ul>
-        <p><strong>健康診断データは組織の安全管理体制を見直すための重要な指標にもなります。</strong></p>
-        <div class="footer">38 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第6章 消防救助活動への応用</h2>
-        <h3>6.1 現場での戦略的な工具選択</h3>
-        <p><strong>「最も早く破壊できる工具」が、常に「最適な工具」とは限りません。</strong></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>工具</th>
-                    <th>メリット</th>
-                    <th>デメリット（リスク）</th>
-                </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td><strong>エンジンカッター</strong></td>
-                    <td>速い、パワフル</td>
-                    <td><strong>高振動</strong>、火花、騒音、要救助者への衝撃</td>
+                    <td>コンクリート、鉄骨の切断</td>
+                    <td><strong>5 - 15</strong> (高い)</td>
+                    <td>重量があり、全身で振動を受ける。キックバックの危険も。</td>
                 </tr>
                 <tr>
-                    <td><strong>油圧救助器具</strong></td>
-                    <td><strong>低振動</strong> [39]、静か、精密</td>
-                    <td>作業速度がやや遅い場合がある</td>
+                    <td><strong>削岩機 (ドリル)</strong></td>
+                    <td>コンクリートへの穿孔</td>
+                    <td><strong>8 - 18</strong> (高い)</td>
+                    <td>押し付ける力が必要で、腕への負担が大きい。</td>
+                </tr>
+                <tr>
+                    <td><strong>レシプロソー (セーバーソー)</strong></td>
+                    <td>木材、金属の切断、ドア破壊</td>
+                    <td><strong>5 - 12</strong> (中〜高い)</td>
+                    <td>狭所での活動に有効だが、振動は無視できない。</td>
+                </tr>
+                 <tr>
+                    <td><strong>インパクトレンチ</strong></td>
+                    <td>ボルト・ナットの締緩</td>
+                    <td><strong>3 - 8</strong> (中程度)</td>
+                    <td>短時間作業が多いが、連続使用でリスクが増大。</td>
                 </tr>
             </tbody>
         </table>
-        <h3>指揮官の判断:</h3>
-        <p>「この場面での時間短縮効果は、隊員と要救助者へのリスクを上回るか？」<br><strong>速度、パワー、精密性、安全性のトレードオフ</strong>を常に考慮する。</p>
-        <div class="footer">39 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>二次災害の防止</h2>
-        <p>振動工具の使用は、振動障害以外のリスクも伴います。</p>
-        <ul>
-            <li><strong>火災・爆発:</strong> エンジンカッターの火花が漏洩ガソリンに引火 [40]。</li>
-            <li><strong>構造物の不安定化:</strong> ブレーカーの衝撃で二次崩壊を誘発。</li>
-            <li><strong>要救助者への危害:</strong> 工具の接触、騒音、振動による負傷悪化 [40]。</li>
-        </ul>
-        <h3>対策:</h3>
-        <ul>
-            <li>作業前に可燃物の有無を確認</li>
-            <li>要救助者を保護シート等で確実に防護 [40]</li>
-        </ul>
-        <div class="footer">40 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>緊急時における時間管理</h2>
-        <p><strong>鍵は「事前の計画」と「チームによる管理」です。</strong></p>
-        <ul>
-            <li><strong>高リスク工具（Tier 1）</strong>を使用する際は、活動開始と同時に<strong>交代要員の確保</strong>と<strong>ローテーション計画</strong>を策定する。</li>
-            <li>タイマー等で時間を計測し、規定時間（例: 15分）に達したら、<strong>作業の進捗に関わらず交代を命じる</strong>。</li>
-        </ul>
-        <p><strong>「あと少し」が、取り返しのつかない健康被害に繋がります。</strong></p>
-        <div class="footer">41 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>危険予知訓練（KYT）への応用</h2>
-        <p><strong>訓練に「振動リスク」の視点を組み込みましょう。</strong></p>
-        <h3>KYT設問例（車両事故救助）</h3>
-        <ul>
-            <li><strong>状況:</strong> 雨天の中、隊員がエンジンカッターで車両のピラーを切断している。</li>
-            <li><strong>問い:</strong> 「この状況に潜む、振動障害に関連する危険は何か？」</li>
-        </ul>
-        <div class="image-placeholder">【イメージ】車両事故救助のイラスト</div>
-        <div class="footer">42 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>KYTの解答例と対策</h2>
-        <h3>危険のポイント:</h3>
-        <ol>
-            <li>雨による<strong>体温低下</strong>で、レイノー現象が誘発されやすい。</li>
-            <li>濡れた手袋でグリップ力が落ち、工具を<strong>強く握りしめてしまう</strong>。</li>
-            <li>不自然な姿勢が筋緊張を高め、<strong>血行を阻害</strong>する。</li>
-        </ol>
-        <h3>あなたならどう対策しますか？（グループで討議）</h3>
-        <ul>
-            <li>対策例:
-                <ul>
-                    <li>可能であれば油圧カッターを選択する。</li>
-                    <li>作業時間をより短く設定し、交代を早める。</li>
-                    <li>乾いた手袋に交換させる。</li>
-                </ul>
-            </li>
-        </ul>
-        <div class="footer">43 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>KYT演習（グループワーク）</h2>
-        <p><strong>状況:</strong> 倒壊家屋で、要救助者の上にあるコンクリート塊を破壊する必要がある。</p>
-        <h3>問い:</h3>
-        <ol>
-            <li><strong>コンクリートブレーカー</strong>と<strong>油圧クラッシャー</strong>、どちらを選びますか？</li>
-            <li>その選択に伴う<strong>振動関連のリスク</strong>と<strong>二次災害のリスク</strong>を挙げてください。</li>
-            <li>選択の決め手となる<strong>判断要素</strong>は何ですか？</li>
-        </ol>
-        <p>（5分間、班で討議してください）</p>
-        <div class="footer">44 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>第7章 まとめ</h2>
-        <h3>本日の重要ポイント振り返り</h3>
-        <ol>
-            <li>振動障害は<strong>キャリアを脅かす深刻な職業病</strong>である。</li>
-            <li>予防の基本は<strong>「三大管理（環境・時間・方法）」</strong>の徹底。</li>
-            <li><strong>A(8)</strong> を活用し、<strong>事前のリスク評価</strong>と<strong>SOP策定</strong>を行うことが現実的かつ効果的。</li>
-            <li><strong>特殊健康診断</strong>による早期発見と適切な事後措置が不可欠。</li>
-            <li>現場での工具選択は、<strong>速度と安全性のトレードオフ</strong>を考慮した戦略的判断が求められる。</li>
-        </ol>
-        <div class="footer">45 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>継続的な安全文化の醸成</h2>
-        <p><strong>安全衛生教育は一度きりのイベントではありません。</strong></p>
-        <ul>
-            <li><strong>組織（消防機関）の責務:</strong>
-                <ul>
-                    <li>低振動工具の導入、適切な維持管理</li>
-                    <li>体系的な教育の提供、健康診断の実施</li>
-                </ul>
-            </li>
-            <li><strong>個人（隊員）の責務:</strong>
-                <ul>
-                    <li>教育で得た知識の実践、手順の遵守</li>
-                    <li>工具の正しい使用、身体の異常の早期報告</li>
-                </ul>
-            </li>
-        </ul>
-        <p><strong>組織と個人、双方の取り組みで「セーフティカルチャー」を育てましょう。</strong></p>
-        <div class="footer">46 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>参考資料</h2>
-        <p>より深く学ぶために、これらのテキストの活用も有効です。</p>
-        <ul>
-            <li><strong>建設業労働災害防止協会（建災防）発行:</strong>
-                <ul>
-                    <li>「建設業における振動工具取扱作業の知識（作業者用テキスト）」 [41]</li>
-                    <li>「建設業における振動工具取扱作業の管理（管理者用テキスト）」 [23]</li>
-                </ul>
-            </li>
-            <li><strong>中央労働災害防止協会（中災防）発行:</strong>
-                <ul>
-                    <li>「製造業における振動工具取扱作業の知識」 [42]</li>
-                </ul>
-            </li>
-        </ul>
-        <p class="note">*各消防本部で、これらのテキストを参考に、独自の教材（保有資機材リスト等）を作成することを推奨します。</p>
-        <div class="footer">47 / 50</div>
-    </div>
-
-    <div class="slide">
-        <h2>最後に</h2>
-        <p>国民の生命と財産を守る消防隊員の皆様の安全と健康は、社会全体の基盤です。</p>
-        <p>本日の講習で得た知識を、ぜひ現場で活かしてください。</p>
-        <p><strong>予防対策への投資は、あなた自身の未来、そして組織の未来を守るための、最も重要な投資です。</strong></p>
-        <div class="footer">48 / 50</div>
-    </div>
-
-    <div class="slide">
-        <div class="slide-title">
-            <h2>質疑応答</h2>
-            <p style="font-size: 1.5em;">ご質問のある方は、挙手にてお願いいたします。</p>
+         <p class="note">※上記はあくまで目安です。実際の数値は必ず個別の製品仕様で確認してください。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="9">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                <span class="btn-text">読み上げ</span>
+                <div class="btn-loader"></div>
+            </button>
+            9 / 51
         </div>
-        <div class="footer">49 / 50</div>
     </div>
-
+    
     <div class="slide">
-        <div class="slide-title">
-            <h2>ご清聴いただき、ありがとうございました。</h2>
-            <p style="font-size: 1.5em;">今後の活動における皆様の安全を心より願っております。</p>
-        </div>
-        <div class="footer">50 / 50</div>
-    </div>
-
-</body>
-</html>
+        <h2>1日の許容作業時間 (計算例)</h2>
+        <p>「3軸合成値」が分かれば、ばく露限界値 (A(8)=5.0m/s²) に達するまでのおおよその作業時間が計算できます。</p>
+        <h3>計算式に基づく目安時間</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>工具の3軸合成値 (m/s²)</th>
+                    <th>1日の最大許容作業時間 (目安)</th>
+                    <th>該当する可能性のある工具</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2.5</td>
+                    <td>8時間</td>
+                    <td>(ばく露対策値)</td>
+                </tr>
+                <tr>
+                    <td>5.0</td>
+                    <td>2時間</td>
+                    <td>比較的新しい低振動モデルの工具</td>
+                </tr>
+                <tr>
+                    <td><strong>7.5</strong></td>
+                    <td><strong>約50分</strong></td>
+                    <td>エンジンカッター、レシプロソー等</td>
+                </tr>
+                <tr>
+                    <td><strong>10.0</strong></td>
+                    <td><strong>約30分</strong></td>
+                    <td>削岩機、コンクリート・ブレーカー等</td>
+                </tr>
+                 <tr>
+                    <td><strong>15.0</strong></td>
+                    <td><strong>約13分</strong></td>
+                    <td>旧式の大型ブレーカー等</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>重要な気づき:</strong> 振動の強い工具では、<strong>1日の作業時間は非常に短く制限される</strong>という事実を認識してください。</p>
+        <div class="footer">
+            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="10">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77
