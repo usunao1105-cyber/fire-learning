@@ -131,7 +131,7 @@ lesson3/index.html
             margin-top: 15px;
         }
 
-        /* --- Gemini API Feature Styles --- */
+        /* --- Gemini API Feature Styles (For KYT Generator) --- */
         .gemini-feature-btn {
             background-color: #4A90E2; /* A professional blue */
             color: white;
@@ -210,18 +210,6 @@ lesson3/index.html
             font-size: 1em;
             margin: 0;
         }
-        .footer .read-aloud-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 40px;
-            font-size: 0.9em;
-            padding: 5px 10px;
-        }
-        .read-aloud-btn svg {
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-        }
 
         /* --- Navigation Arrow Styles --- */
         .nav-arrow {
@@ -252,30 +240,7 @@ lesson3/index.html
         .nav-arrow.next {
             right: 20px;
         }
-
-        /* --- Auto-Read Toggle Styles --- */
-        .auto-read-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            font-size: 0.9em;
-            user-select: none;
-        }
-        .auto-read-toggle input {
-            margin-right: 8px;
-            cursor: pointer;
-        }
-        .auto-read-toggle label {
-            cursor: pointer;
-        }
-
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -288,46 +253,26 @@ lesson3/index.html
     <div class="nav-arrow prev" id="prev-btn">‹</div>
     <div class="nav-arrow next" id="next-btn">›</div>
 
-    <!-- Auto-Read Toggle -->
-    <div class="auto-read-toggle">
-        <input type="checkbox" id="auto-read-checkbox">
-        <label for="auto-read-checkbox">自動読み上げ</label>
-    </div>
-
     <!-- Slide 1: Title -->
     <div class="slide active">
         <div class="slide-title">
             <h1>振動工具取扱作業者<br>安全衛生講習</h1>
             <p style="font-size: 1.5em; color: #555;">消防職員向け特別講習</p>
             <p><strong>主催:</strong> okazaki fd</p>
-            <p><strong>講習日時:</strong> 202X年XX月XX日</p>
-            <p><strong>講師:</strong> sakamoto （氏名）</p>
+            <p><strong>講習日時:</strong> 2025年11月11日</p>
+            <p><strong>講師:</strong> sakamoto </p>
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            1 / 51
-        </div>
+        <div class="footer">1 / 51</div>
     </div>
 
     <!-- Slide 2: Introduction -->
     <div class="slide">
         <h2>はじめに - なぜ今、この講習が必要なのか</h2>
         <p>消防職員の皆様は、救助活動において様々な動力工具を使用します。特に、コンクリート・ブレーカーやエンジンカッターなどの<strong>振動工具</strong>は、迅速な救助活動に不可欠です。</p>
-        <p>しかし、その利便性の裏には、<strong>「振動障害」</strong>という深刻な健康リスクが潜んでいます。この障害は一度発症すると完治が難しく、皆様の選手生命、ひいては日常生活にまで影響を及ぼす可能性があります。</p>
+        <p>しかし、その利便性の裏には、<strong>「振動障害」</strong>という深刻な健康リスクが潜んでいます。この障害は一度発症すると完治が難しく、皆様の選手生命、ひいては日常生活にまで影響を及ьす可能性があります。</p>
         <h3>本日のゴール:</h3>
         <p>振動障害のリスクを正しく理解し、<strong>明日からの現場活動で実践できる具体的な予防策</strong>を習得する。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            2 / 51
-        </div>
+        <div class="footer">2 / 51</div>
     </div>
 
     <!-- Slide 3: Agenda -->
@@ -342,14 +287,7 @@ lesson3/index.html
             <li><strong>健康管理と教育</strong> — 早期発見と知識の定着</li>
             <li><strong>まとめ</strong> — 継続的な安全文化の醸成</li>
         </ol>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="3">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            3 / 51
-        </div>
+        <div class="footer">3 / 51</div>
     </div>
 
     <!-- Slide 4 -->
@@ -374,14 +312,7 @@ lesson3/index.html
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            4 / 51
-        </div>
+        <div class="footer">4 / 51</div>
     </div>
 
     <!-- Slide 5 -->
@@ -398,14 +329,7 @@ lesson3/index.html
             <li><strong>末期症状:</strong> 工具の操作が困難に。日常生活にも大きな支障。</li>
         </ul>
         <p><strong>ポイント:</strong> 症状を自覚した時には、すでにある程度進行している可能性があります。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="5">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            5 / 51
-        </div>
+        <div class="footer">5 / 51</div>
     </div>
     
     <!-- Slide 6 -->
@@ -424,14 +348,7 @@ lesson3/index.html
         <h3>消防組織における「事業者」とは？</h3>
         <p>消防長や署長など、組織の管理者が事業者に該当し、隊員の安全衛生を確保する責任を負います。</p>
         <p class="note">これらの法令・指針は、私たち作業者を守るための重要なルールです。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="6">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            6 / 51
-        </div>
+        <div class="footer">6 / 51</div>
     </div>
 
     <!-- Slide 7 -->
@@ -462,14 +379,7 @@ lesson3/index.html
             </tbody>
         </table>
         <p><strong>キーポイント:</strong> <strong>「強い振動を、短時間」</strong>浴びるのも、<strong>「弱い振動を、長時間」</strong>浴びるのも、どちらもリスクになります。重要なのは、その日の総量です。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="7">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            7 / 51
-        </div>
+        <div class="footer">7 / 51</div>
     </div>
 
     <!-- Slide 8 -->
@@ -486,14 +396,7 @@ lesson3/index.html
             <img src="https://placehold.co/500x350/e8eaf6/303f9f?text=3%E8%BB%B8%E5%90%88%E6%88%90%E5%80%A4%E3%81%AE%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E5%9B%B3" alt="3軸合成値のイメージ図">
         </div>
         <p class="note">工具を選定する際は、<strong>必ずこの「3軸合成値」を確認する</strong>習慣をつけましょう。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="8">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            8 / 51
-        </div>
+        <div class="footer">8 / 51</div>
     </div>
     
     <!-- Slide 9 -->
@@ -543,14 +446,7 @@ lesson3/index.html
             </tbody>
         </table>
          <p class="note">※上記はあくまで目安です。実際の数値は必ず個別の製品仕様で確認してください。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="9">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            9 / 51
-        </div>
+        <div class="footer">9 / 51</div>
     </div>
     
     <!-- Slide 10 -->
@@ -595,14 +491,7 @@ lesson3/index.html
             </tbody>
         </table>
         <p><strong>重要な気づき:</strong> 振動の強い工具では、<strong>1日の作業時間は非常に短く制限される</strong>という事実を認識してください。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            10 / 51
-        </div>
+        <div class="footer">10 / 51</div>
     </div>
 
     <!-- Slide 11 -->
@@ -618,14 +507,7 @@ lesson3/index.html
             <li>労働衛生教育の実施</li>
         </ol>
         <p>これらの項目について、次ページから詳しく見ていきます。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="11">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            11 / 51
-        </div>
+        <div class="footer">11 / 51</div>
     </div>
     <!-- Slide 12 -->
     <div class="slide">
@@ -652,14 +534,7 @@ lesson3/index.html
             </li>
         </ul>
         <p><strong>計画段階でリスクを低減する</strong>ことが、管理者の重要な役割です。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="12">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            12 / 51
-        </div>
+        <div class="footer">12 / 51</div>
     </div>
     <!-- Slide 13 -->
     <div class="slide">
@@ -687,14 +562,7 @@ lesson3/index.html
         <div class="image-container">
             <img src="https://placehold.co/600x250/e3f2fd/0d47a1?text=%E4%BD%8E%E6%8C%AF%E5%8B%95%E5%B7%A5%E5%85%B7%E3%81%AE%E導入+%2B+%E5%AE%9A%E6%9C%9F%E7%9A%84%E3%81%AA%E3%83%A1%E3%83%B3%E3%83%86%E3%83%8A%E3%83%B3%E3%82%B9" alt="工具の選定と保守のイメージ">
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="13">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            13 / 51
-        </div>
+        <div class="footer">13 / 51</div>
     </div>
     <!-- Slide 14 -->
     <div class="slide">
@@ -716,14 +584,7 @@ lesson3/index.html
             </li>
         </ul>
         <p class="note">「感覚」に頼るのではなく、<strong>「記録」に基づいて管理する</strong>ことが重要です。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="14">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            14 / 51
-        </div>
+        <div class="footer">14 / 51</div>
     </div>
     <!-- Slide 15 -->
     <div class="slide">
@@ -748,17 +609,9 @@ lesson3/index.html
             </li>
         </ul>
         <p>適切な休憩環境の整備は、効果的なリスク低減策です。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="15">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            15 / 51
-        </div>
+        <div class="footer">15 / 51</div>
     </div>
-    <!-- ... (Continue adding all intermediate slides with correct numbering) ... -->
-     <!-- Slide 16 to 23 -->
+     <!-- Slide 16 -->
     <div class="slide">
         <h2>第5章 具体的な予防対策（作業）</h2>
         <h3>作業者が実践すべきこと</h3>
@@ -770,15 +623,9 @@ lesson3/index.html
             <li>身体の保温と体操</li>
             <li>日常の健康管理</li>
         </ol>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="16">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            16 / 51
-        </div>
+        <div class="footer">16 / 51</div>
     </div>
+    <!-- Slide 17 -->
     <div class="slide">
         <h2>作業対策 1: 作業方法</h2>
         <h3>適切な工具の選択と正しい姿勢</h3>
@@ -791,15 +638,9 @@ lesson3/index.html
         <div class="image-container">
             <img src="https://placehold.co/600x250/fbe9e7/bf360c?text=%E5%BC%B7%E3%81%8F%E6%8F%A1%E3%82%89%E3%81%9A%E3%80%81%E4%BD%93%E9%87%8D%E3%82%92%E4%B9%97%E3%81%9B%E3%82%8B" alt="正しい作業姿勢のイメージ">
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="17">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            17 / 51
-        </div>
+        <div class="footer">17 / 51</div>
     </div>
+    <!-- Slide 18 -->
     <div class="slide">
         <h2>作業対策 2: 連続作業時間と休憩</h2>
         <h3>作業時間管理の徹底</h3>
@@ -812,15 +653,9 @@ lesson3/index.html
             <li>寒い環境では、身体全体が冷えないように防寒対策を徹底する。</li>
         </ul>
         <p class="note"><strong>「あと少しだけ」</strong>が、取り返しのつかない結果に繋がる可能性があります。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="18">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            18 / 51
-        </div>
+        <div class="footer">18 / 51</div>
     </div>
+    <!-- Slide 19 -->
     <div class="slide">
         <h2>作業対策 3: 保護具の着用</h2>
         <h3>防振手袋の正しい選択と使用</h3>
@@ -832,15 +667,9 @@ lesson3/index.html
             <li><strong>定期的な点検:</strong> 破れや防振材の劣化がないか、使用前に必ず確認する。</li>
         </ul>
         <p><strong>注意:</strong> 防振手袋を着用していても、<strong>振動がゼロになるわけではありません。</strong>過信せず、作業時間管理は必ず行ってください。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="19">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            19 / 51
-        </div>
+        <div class="footer">19 / 51</div>
     </div>
+    <!-- Slide 20 -->
     <div class="slide">
         <h2>作業対策 4: 身体の保温と体操</h2>
         <h3>血行促進のための習慣</h3>
@@ -863,15 +692,9 @@ lesson3/index.html
             </div>
         </div>
         <p class="note">これらの小さな習慣の積み重ねが、障害予防に大きな効果をもたらします。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="20">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            20 / 51
-        </div>
+        <div class="footer">20 / 51</div>
     </div>
+    <!-- Slide 21 -->
     <div class="slide">
         <h2>作業対策 5: 日常の健康管理</h2>
         <h3>セルフチェックと生活習慣</h3>
@@ -882,15 +705,9 @@ lesson3/index.html
             <li><strong>症状の早期報告:</strong> 手指のしびれ、冷え、痛みなど、少しでも異常を感じたら、すぐに上司に報告し、健康診断で医師に相談する。</li>
         </ul>
         <p><strong>「自分の身体は自分で守る」という意識が最も重要です。</strong></p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="21">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            21 / 51
-        </div>
+        <div class="footer">21 / 51</div>
     </div>
+    <!-- Slide 22 -->
     <div class="slide">
         <h2>第6章 健康管理と教育</h2>
         <p>予防対策の効果を確実なものにするためには、継続的な健康管理と、知識を定着させるための教育が車の両輪となります。</p>
@@ -906,15 +723,9 @@ lesson3/index.html
                 </ul>
             </li>
         </ul>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="22">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            22 / 51
-        </div>
+        <div class="footer">22 / 51</div>
     </div>
+    <!-- Slide 23 -->
     <div class="slide">
         <h2>健康管理 1: 特殊健康診断</h2>
         <p>振動業務従事者は、法令に基づき、健康診断を受ける義務があります。</p>
@@ -934,15 +745,9 @@ lesson3/index.html
             <li>末梢神経機能検査（痛覚・振動覚検査など）</li>
         </ol>
         <p><strong>重要:</strong> <strong>正直に症状を申告する</strong>ことが、早期発見・早期治療の鍵です。少しの違和感でも、遠慮なく医師に伝えてください。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="23">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            23 / 51
-        </div>
+        <div class="footer">23 / 51</div>
     </div>
+    <!-- Slide 24 -->
     <div class="slide">
         <h2>健康管理 2: 健診結果に基づく事後措置</h2>
         <p>健康診断は、受けるだけで終わりではありません。結果に応じた適切な措置が重要です。</p>
@@ -974,15 +779,9 @@ lesson3/index.html
             </tbody>
         </table>
         <p>管理者は、医師の意見を聴取し、作業内容の変更や就業場所の転換など、適切な措置を講じる義務があります。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="24">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            24 / 51
-        </div>
+        <div class="footer">24 / 51</div>
     </div>
+    <!-- Slide 25 -->
     <div class="slide">
         <h2>教育 1: 安全衛生教育の実施</h2>
         <p>本日のような講習を定期的に実施し、知識を最新の状態に保つことが重要です。</p>
@@ -1001,15 +800,9 @@ lesson3/index.html
                 </ul>
             </li>
         </ul>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="25">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            25 / 51
-        </div>
+        <div class="footer">25 / 51</div>
     </div>
+    <!-- Slide 26 -->
     <div class="slide">
         <h2>教育 2: KYT（危険予知訓練）の実施</h2>
         <p>具体的な作業場面を想定し、潜む危険とその対策を話し合う訓練を日常的に行うことが、危険感受性を高める上で非常に効果的です。</p>
@@ -1021,15 +814,9 @@ lesson3/index.html
             <li><strong>第4ラウンド（目標設定）:</strong> 私たちはこうする！</li>
         </ol>
         <p>次のページで、具体的な事例を見てみましょう。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="26">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            26 / 51
-        </div>
+        <div class="footer">26 / 51</div>
     </div>
+    <!-- Slide 27 -->
     <div class="slide">
         <h2>危険予知訓練(KYT) 事例</h2>
         <p><strong>状況:</strong> 夏場、長時間の倒壊家屋救助活動。汗で濡れた手袋のまま、コンクリート・ブレーカーを使用している。</p>
@@ -1037,16 +824,26 @@ lesson3/index.html
             <img src="https://placehold.co/600x350/ffebee/c62828?text=%E5%80%92%E5%A3%8A%E5%AE%B6%E5%B1%8B%E3%81%A7%E3%81%AE%E6%95%91%E5%8A%A9%E6%B4%BB%E5%8B%95" alt="救助活動のイラスト">
         </div>
         <p><strong>あなたなら、どんな危険を予測し、どう対策しますか？</strong></p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="27">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            27 / 51
-        </div>
+        <div class="footer">27 / 51</div>
     </div>
-    <!-- ... More slides ... -->
+    <!-- Slide 28-44 -->
+    <div class="slide"><h2>事例の解説とグループワーク</h2><p>先ほどの事例について、グループで危険なポイントと対策を話し合ってみましょう。（...グループワーク...）</p><div class="footer">28 / 51</div></div>
+    <div class="slide"><h2>グループワーク発表</h2><p>各グループの発表をお願いします。（...発表...）</p><div class="footer">29 / 51</div></div>
+    <div class="slide"><h2>KYT事例のポイント解説 1</h2><h3>危険のポイント</h3><ul><li>濡れた手袋は振動を伝えやすく、防振効果が著しく低下する。</li><li>長時間の連続作業により、日振動ばく露限界量を超える可能性がある。</li><li>暑さによる疲労と集中力低下で、工具の保持が不確実になり、事故のリスクが高まる。</li></ul><div class="footer">30 / 51</div></div>
+    <div class="slide"><h2>KYT事例のポイント解説 2</h2><h3>対策</h3><ul><li>乾いた予備の防振手袋を準備し、こまめに交換する。</li><li>10分作業したら5分休憩のサイクルを徹底し、作業者間でローテーションを組む。</li><li>休憩中は水分と塩分を補給し、日陰で身体を休める。</li></ul><div class="footer">31 / 51</div></div>
+    <div class="slide"><h2>第5章 まとめ（作業対策）</h2><p>作業者が実践すべき5つのポイントを再確認します。</p><ol><li>適切な作業方法</li><li>連続作業時間と休憩</li><li>保護具の着用</li><li>身体の保温と体操</li><li>日常の健康管理</li></ol><p>これらは全て、自分自身の身体を守るための重要な行動です。</p><div class="footer">32 / 51</div></div>
+    <div class="slide"><h2>第6章 まとめ（健康管理と教育）</h2><p>組織として、継続的に取り組むべき2つの柱です。</p><ul><li><strong>健康管理:</strong> 特殊健康診断を確実に実施し、結果に基づいて適切な事後措置を行う。</li><li><strong>教　　育:</strong> 新規入場時教育と定期的な再教育で、知識の陳腐化を防ぎ、安全意識を高く維持する。</li></ul><div class="footer">33 / 51</div></div>
+    <div class="slide"><h2>法令違反のリスク</h2><h3>事業者に課せられる責任</h3><p>労働安全衛生法に定められた措置を怠り、労働災害を発生させた場合、事業者は以下のような責任を問われる可能性があります。</p><ul><li><strong>行政上の責任:</strong> 是正勧告、作業停止命令など</li><li><strong>刑事上の責任:</strong> 懲役または罰金</li><li><strong>民事上の責任:</strong> 損害賠償請求</li></ul><p>安全配慮義務を果たすことは、組織を守ることにも繋がります。</p><div class="footer">34 / 51</div></div>
+    <div class="slide"><h2>振動レベルの測定について</h2><h3>簡易測定と精密測定</h3><p>カタログ値がない古い工具などは、振動レベルを測定する必要があります。</p><ul><li><strong>簡易測定:</strong> 振動ばく露測定器を用いて、現場で手軽に測定する方法。</li><li><strong>精密測定:</strong> 専門機関に依頼し、JIS規格に沿って正確な値を測定する方法。</li></ul><p>まずは、保有する工具の3軸合成値が不明なものをリストアップすることから始めましょう。</p><div class="footer">35 / 51</div></div>
+    <div class="slide"><h2>複数工具を使用した場合の計算</h2><h3>ばく露時間の合算</h3><p>1日に複数の振動工具を使用した場合、それぞれのばく露時間を単純に足すのではなく、振動の強さを考慮した計算が必要です。</p><p>（計算式を提示し、具体的な計算例を解説）</p><p class="note">詳細は厚生労働省の手引き等をご確認ください。重要なのは、ばく露量が加算されていくという認識です。</p><div class="footer">36 / 51</div></div>
+    <div class="slide"><h2>事故事例の共有 1</h2><h3>事例：レイノー現象の悪化</h3><p>ある作業員は、冬場の解体工事で連日ブレーカーを使用。指のしびれを感じていたが、「冬だから仕方ない」と放置。ある朝、指が真っ白になり感覚が全くなくなる。診断の結果、重度の振動障害（レイノー現象）と判明。振動業務からの永久的な離脱を余儀なくされた。</p><h3>教訓</h3><p>初期症状を軽視しない。早期報告・早期受診が重要。</p><div class="footer">37 / 51</div></div>
+    <div class="slide"><h2>事故事例の共有 2</h2><h3>事例：工具の落下事故</h3><p>削岩機を使用中、突然握力がなくなり、工具を足元に落として負傷。原因は長時間の連続作業による腕の疲労と、振動による末梢神経障害の初期症状。本人は「まだ大丈夫」と思っていた。</p><h3>教訓</h3><p>疲労の自覚がなくても、定められた休憩時間を必ず守る。</p><div class="footer">38 / 51</div></div>
+    <div class="slide"><h2>低振動工具の技術動向</h2><p>近年、メーカー各社から振動を大幅に低減した工具が開発・販売されています。</p><ul><li><strong>アクティブ制振技術(AVT):</strong> 逆位相の振動を発生させて、振動を打ち消す技術。</li><li><strong>防振スプリング・ゴムダンパー:</strong> ハンドル部分と振動発生源を分離する構造。</li></ul><p>工具の更新計画を立てる際は、これらの最新技術を搭載したモデルを積極的に検討することが、最も効果的な予防策の一つです。</p><div class="footer">39 / 51</div></div>
+    <div class="slide"><h2>作業後のセルフケア</h2><h3>血行を促進するマッサージ</h3><p>作業後や入浴中に、簡単なセルフマッサージを行うことも有効です。</p><ul><li>指先から付け根に向かって、一本ずつ揉む。</li><li>手のひら全体を、もう片方の親指で押す。</li><li>手首から肘に向かって、優しくさする。</li></ul><p><strong>注意:</strong> 痛みや強いしびれがある場合は、自己判断でマッサージせず、医師に相談してください。</p><div class="footer">40 / 51</div></div>
+    <div class="slide"><h2>組織としての取り組み事例</h2><h3>A消防本部の事例</h3><ul><li>全振動工具に3軸合成値と1日の許容作業時間を明記したテプラを貼付。</li><li>スマートフォンアプリを導入し、隊員自身が作業時間を簡単に入力・管理できる体制を構築。</li><li>半年に一度の健康診断時に、必ず個人面談を実施し、自覚症状の聞き取りを徹底。</li></ul><p>他組織の良い事例を参考に、自身の職場で何ができるかを考えてみましょう。</p><div class="footer">41 / 51</div></div>
+    <div class="slide"><h2>今後の課題</h2><p>振動障害予防対策は、一度行えば終わりではありません。</p><ul><li>新しい工具の導入に伴う、情報更新と再教育。</li><li>若手隊員への技術と知識の伝承。</li><li>ヒヤリハット事例の積極的な収集と、対策へのフィードバック。</li></ul><p>常に改善を続ける意識が、組織の安全レベルを向上させます。</p><div class="footer">42 / 51</div></div>
+    <div class="slide"><h2>よくある誤解</h2><ul><li><strong>「体力に自信があるから大丈夫」→ NO:</strong> 振動障害は、体力や筋力に関係なく発症します。</li><li><strong>「防振手袋をすれば時間は関係ない」→ NO:</strong> 手袋はあくまで補助です。時間管理が基本です。</li><li><strong>「症状が出たら休めば治る」→ NO:</strong> 一度進行すると、完治は非常に困難です。</li></ul><p>正しい知識を持つことが、誤った判断を防ぎます。</p><div class="footer">43 / 51</div></div>
+    <div class="slide"><h2>メンタルヘルスとの関連</h2><p>振動障害による痛み、しびれ、握力低下は、日常生活にも支障をきたし、大きなストレスや不安感に繋がることがあります。</p><ul><li>趣味の活動が楽しめなくなる。</li><li>将来への不安を感じる。</li></ul><p>身体の健康だけでなく、心の健康を維持するためにも、予防は極めて重要です。一人で抱え込まず、不調は早めに相談しましょう。</p><div class="footer">44 / 51</div></div>
 
     <!-- Slide 45: Interactive KYT with Gemini API -->
     <div class="slide">
@@ -1062,14 +859,7 @@ lesson3/index.html
             <h3>生成されたシナリオ:</h3>
             <pre id="kyt-result-text"></pre>
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="45">
-                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            45 / 51
-        </div>
+        <div class="footer">45 / 51</div>
     </div>
 
     <!-- Slide 46: Conclusion -->
@@ -1083,14 +873,7 @@ lesson3/index.html
             <li>作業時は<strong>「強く握らない」「10分以内で休憩」</strong>を意識する。</li>
             <li><strong>定期的な健康診断</strong>と、正直な症状の申告が早期発見に繋がる。</li>
         </ul>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="46">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            46 / 51
-        </div>
+        <div class="footer">46 / 51</div>
     </div>
     <!-- Slide 47 -->
     <div class="slide">
@@ -1102,14 +885,7 @@ lesson3/index.html
             <li>「これくらい大丈夫だろう」という過信をなくし、不調を感じたらすぐに報告できる職場環境を作る。</li>
         </ul>
         <p><strong>組織と個人、双方の取り組みで「セーフティカルチャー」を育てましょう。</strong></p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="47">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            47 / 51
-        </div>
+        <div class="footer">47 / 51</div>
     </div>
     <!-- Slide 48 -->
     <div class="slide">
@@ -1120,28 +896,14 @@ lesson3/index.html
             <li><strong>「振動工具取扱作業者安全衛生教育用テキスト」</strong>(建設業労働災害防止協会)</li>
         </ul>
         <p class="note">*各消防本部で、これらのテキストを参考に、独自の教材（保有資機材リスト等）を作成することを推奨します。</p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="48">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            48 / 51
-        </div>
+        <div class="footer">48 / 51</div>
     </div>
     <!-- Slide 49 -->
     <div class="slide">
         <h2>最後に</h2>
         <p>国民の生命と財産を守る消防隊員の皆様の安全と健康は、社会全体の基盤です。</p>
         <p><strong>予防対策への投資は、あなた自身の未来、そして組織の未来を守るための、最も重要な投資です。</strong></p>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="49">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            49 / 51
-        </div>
+        <div class="footer">49 / 51</div>
     </div>
     <!-- Slide 50 -->
     <div class="slide">
@@ -1149,14 +911,7 @@ lesson3/index.html
             <h2>質疑応答</h2>
             <p style="font-size: 1.5em;">ご質問のある方は、挙手にてお願いいたします。</p>
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="50">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            50 / 51
-        </div>
+        <div class="footer">50 / 51</div>
     </div>
     <!-- Slide 51 -->
     <div class="slide">
@@ -1164,40 +919,26 @@ lesson3/index.html
             <h2>ご清聴いただき、ありがとうございました。</h2>
             <p style="font-size: 1.5em;">今後の活動における皆様の安全を心より願っております。</p>
         </div>
-        <div class="footer">
-            <button class="gemini-feature-btn read-aloud-btn" data-slide-id="51">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
-                <span class="btn-text">読み上げ</span>
-                <div class="btn-loader"></div>
-            </button>
-            51 / 51
-        </div>
+        <div class="footer">51 / 51</div>
     </div>
 
 <script type="module">
     // --- Global Variables & Constants ---
-    const apiKey = "AIzaSyAM1ZZibznTJZ9nSzWTrdw7zKyyBX8UmVM"; 
+    const apiKey = "AIzaSyAM1ZZibznTJZ9nSzWTrdw7zKyyBX8UmVM"; // This key is for the KYT generator only
     
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
     
-    // --- Gemini API Feature Elements ---
+    // --- Gemini API Feature Elements (For KYT Generator) ---
     const generateKytBtn = document.getElementById('generate-kyt-btn');
     const kytPromptInput = document.getElementById('kyt-prompt');
     const kytResultContainer = document.getElementById('kyt-result-container');
     const kytResultText = document.getElementById('kyt-result-text');
     const kytLoader = document.getElementById('kyt-loader');
-    const readAloudBtns = document.querySelectorAll('.read-aloud-btn');
 
     // --- Navigation Elements ---
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-
-    // --- Auto-Read Checkbox ---
-    const autoReadCheckbox = document.getElementById('auto-read-checkbox');
-
-    // --- Audio Playback State ---
-    let currentAudio = null;
 
     // --- Slide Navigation Functions ---
     function showSlide(index) {
@@ -1207,21 +948,13 @@ lesson3/index.html
     }
 
     function nextSlide() {
-        if (currentAudio) { currentAudio.pause(); } // Stop audio on slide change
         currentSlide = (currentSlide + 1) % slides.length;
         showSlide(currentSlide);
-        if (autoReadCheckbox.checked) {
-            autoReadAloud(currentSlide);
-        }
     }
 
     function prevSlide() {
-        if (currentAudio) { currentAudio.pause(); } // Stop audio on slide change
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         showSlide(currentSlide);
-        if (autoReadCheckbox.checked) {
-            autoReadAloud(currentSlide);
-        }
     }
 
     // --- API Helper with Enhanced Error Logging ---
@@ -1252,104 +985,6 @@ lesson3/index.html
                 await new Promise(resolve => setTimeout(resolve, delay));
                 delay *= 2;
             }
-        }
-    }
-
-    // --- Text-to-Speech (TTS) Feature ---
-    function base64ToArrayBuffer(base64) {
-        const binaryString = atob(base64);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        return bytes.buffer;
-    }
-
-    function pcmToWav(pcmData, sampleRate) {
-        const numChannels = 1;
-        const bitsPerSample = 16;
-        const byteRate = sampleRate * numChannels * bitsPerSample / 8;
-        const blockAlign = numChannels * bitsPerSample / 8;
-        const dataSize = pcmData.length * pcmData.BYTES_PER_ELEMENT;
-        const buffer = new ArrayBuffer(44 + dataSize);
-        const view = new DataView(buffer);
-
-        view.setUint32(0, 0x52494646, false); // "RIFF"
-        view.setUint32(4, 36 + dataSize, true);
-        view.setUint32(8, 0x57415645, false); // "WAVE"
-        view.setUint32(12, 0x666d7420, false); // "fmt "
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true); // PCM
-        view.setUint16(22, numChannels, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, byteRate, true);
-        view.setUint16(32, blockAlign, true);
-        view.setUint16(34, bitsPerSample, true);
-        view.setUint32(36, 0x64617461, false); // "data"
-        view.setUint32(40, dataSize, true);
-        new Int16Array(buffer, 44).set(pcmData);
-
-        return new Blob([view], { type: 'audio/wav' });
-    }
-
-    async function executeTTS(button) {
-        if (!button || button.classList.contains('loading')) return;
-        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
-        const slideId = button.dataset.slideId;
-        const slideElement = slides[parseInt(slideId, 10) - 1];
-        if (!slideElement) return;
-
-        const textElements = slideElement.querySelectorAll('h1, h2, h3, p, li, th, td');
-        let textToRead = Array.from(textElements).map(el => el.textContent.trim()).join('. ');
-        if (!textToRead) return;
-        
-        button.classList.add('loading');
-        try {
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: `Say in a clear and professional tone for a safety briefing: ${textToRead}` }] }],
-                generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } },
-                model: "gemini-2.5-flash-preview-tts"
-            };
-
-            const result = await fetchWithBackoff(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            const part = result?.candidates?.[0]?.content?.parts?.[0];
-            const audioData = part?.inlineData?.data;
-            const mimeType = part?.inlineData?.mimeType;
-
-            if (audioData && mimeType?.startsWith("audio/")) {
-                const rateMatch = mimeType.match(/rate=(\d+)/);
-                if (!rateMatch) throw new Error("Sample rate not found in mimeType");
-                
-                const sampleRate = parseInt(rateMatch[1], 10);
-                const pcmDataBuffer = base64ToArrayBuffer(audioData);
-                const pcm16 = new Int16Array(pcmDataBuffer);
-                const wavBlob = pcmToWav(pcm16, sampleRate);
-                const audioUrl = URL.createObjectURL(wavBlob);
-                
-                currentAudio = new Audio(audioUrl);
-                currentAudio.play();
-                currentAudio.onended = () => { button.classList.remove('loading'); currentAudio = null; };
-                currentAudio.onerror = () => { button.classList.remove('loading'); currentAudio = null; }
-            } else {
-                throw new Error("Invalid or missing audio data in API response.");
-            }
-        } catch (error) {
-            alert("音声の生成中にエラーが発生しました。詳細はブラウザのコンソール（F12キー）をご確認ください。"); 
-            button.classList.remove('loading');
-        }
-    }
-    
-    function handleReadAloudClick(event) {
-        executeTTS(event.currentTarget);
-    }
-
-    function autoReadAloud(slideIndex) {
-        const targetButton = document.querySelector(`.read-aloud-btn[data-slide-id="${slideIndex + 1}"]`);
-        if (targetButton) {
-            executeTTS(targetButton);
         }
     }
 
@@ -1414,7 +1049,6 @@ lesson3/index.html
         if(prevBtn) prevBtn.addEventListener('click', prevSlide);
         if(nextBtn) nextBtn.addEventListener('click', nextSlide);
         if (generateKytBtn) generateKytBtn.addEventListener('click', handleGenerateKyt);
-        readAloudBtns.forEach(btn => btn.addEventListener('click', handleReadAloudClick));
 
         showSlide(0);
     });
