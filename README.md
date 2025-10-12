@@ -115,7 +115,7 @@ e-Learning119
       <div class="lesson-title">新しい教材タイトル</div>
       <a href="lesson4/index.html" target="_blank">学習する</a>
     </div>
-    -->
+
   </main>
 
   <footer>
