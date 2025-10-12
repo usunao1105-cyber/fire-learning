@@ -111,7 +111,6 @@ e-Learning119
     </div>
     
     <!-- 教材を増やすときはこのブロックを複製して編集 -->
-    <!--
     <div class="lesson-card">
       <div class="lesson-title">新しい教材タイトル</div>
       <a href="lesson4/index.html" target="_blank">学習する</a>
