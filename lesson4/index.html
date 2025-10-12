@@ -4,481 +4,163 @@ lesson4/index.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>振動工具安全衛生・インタラクティブダッシュボード</title>
+    <title>振動工具安全衛生・ウェブフラッシュカード</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Calm Slate -->
-    <!-- Application Structure Plan: 報告書の線形的なスライド構造を再設計し、ユーザー中心の対話型ダッシュボードを構築。左側のサイドナビゲーションで主要テーマ（「ダッシュボード」「振動障害について」「予防策」「危険予知訓練」「よくある質問」）に即時アクセス可能。中心的な機能として、最も実用的な「許容作業時間計算ツール」をダッシュボードの最前面に配置し、ユーザーが即座に行動可能な情報を得られるように設計。詳細情報はアコーディオンやタブ形式で整理し、膨大なテキスト量を管理しやすく、探索的に学べる構造とした。この非線形アプローチは、必要な情報への迅速なアクセスを可能にし、受動的な閲覧から能動的な学習体験へと転換させることで、報告書の理解度を最大化することを目的としている。 -->
-    <!-- Visualization & Content Choices: 
-        - 許容作業時間計算ツール: Report Info(各種工具の3軸合成値と許容時間) -> Goal(比較/通知) -> Viz(インタラクティブフォーム + 動的テキスト + Bar Chart) -> Interaction(工具選択/数値入力でグラフと許容時間が即時更新) -> Justification(抽象的な数値を具体的な行動指針に変換し、リスクを視覚的に提示) -> Library(Chart.js)。
-        - 障害の進行プロセス: Report Info(振動障害の進行段階) -> Goal(変化の表示) -> Viz(ステップ形式のインタラクティブ図) -> Interaction(ステップクリックで詳細表示) -> Justification(静的なリストより進行感を直感的に理解可能) -> Library(HTML/CSS/JS)。
-        - 予防策/FAQ: Report Info(膨大なテキストベースの対策・質疑応答) -> Goal(整理/情報提供) -> Viz(検索機能付きアコーディオンリスト) -> Interaction(クリックで展開/検索で絞り込み) -> Justification(情報過多を避け、ユーザーが必要な情報だけを効率的に探し出せるようにする) -> Library(HTML/CSS/JS)。
-        - 全てのチャートと図はCanvasまたはHTML/CSSで実装し、SVG/Mermaidは不使用。 -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body { font-family: 'Noto Sans JP', sans-serif; }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 40vh; }
-        @media (min-width: 768px) { .chart-container { height: 350px; } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        .nav-link.active { background-color: #0d9488; color: white; }
+        /* カードの3Dフリップアニメーション用のスタイル */
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .flashcard-front {
+            background-color: white;
+        }
+        .flashcard-back {
+            background-color: #f0fdfa; /* A light teal */
+            color: #134e4a; /* A dark teal */
+            transform: rotateY(180deg);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-    <div class="flex h-screen">
-        <nav id="sidebar" class="w-64 bg-slate-800 text-white p-4 flex-shrink-0 flex flex-col transition-transform -translate-x-full md:translate-x-0 md:relative absolute z-30 h-full">
-            <h1 class="text-2xl font-bold mb-6 border-b border-slate-600 pb-4">安全衛生ダッシュボード</h1>
-            <ul class="space-y-2 flex-grow">
-                <li><a href="#dashboard" class="nav-link block p-3 rounded-lg hover:bg-slate-700 transition-colors active">ダッシュボード</a></li>
-                <li><a href="#about" class="nav-link block p-3 rounded-lg hover:bg-slate-700 transition-colors">振動障害について</a></li>
-                <li><a href="#prevention" class="nav-link block p-3 rounded-lg hover:bg-slate-700 transition-colors">予防策</a></li>
-                <li><a href="#kyt" class="nav-link block p-3 rounded-lg hover:bg-slate-700 transition-colors">危険予知訓練</a></li>
-                <li><a href="#faq" class="nav-link block p-3 rounded-lg hover:bg-slate-700 transition-colors">よくある質問</a></li>
-            </ul>
-            <div class="text-xs text-slate-400 mt-4">
-                <p>厚生労働省・建設業労働災害防止協会</p>
-                <p>消防職員向け特別講習資料より</p>
-            </div>
-        </nav>
+<body class="bg-slate-100 flex flex-col items-center justify-center min-h-screen p-4 font-sans">
 
-        <div id="main-content" class="flex-1 overflow-y-auto p-4 md:p-8">
-            <button id="menu-toggle" class="md:hidden fixed top-4 left-4 z-40 bg-slate-800 text-white p-2 rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-            <div id="content-container">
+    <div class="w-full max-w-2xl mx-auto">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-slate-800">振動工具の安全衛生</h1>
+            <p class="text-slate-600">フラッシュカードで重要項目をマスターしよう</p>
+        </header>
+
+        <div id="progress-indicator" class="text-center text-slate-500 mb-2 font-medium"></div>
+
+        <div class="flashcard-container h-64 md:h-80 cursor-pointer" id="card-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face flashcard-front">
+                    <p class="text-2xl font-semibold text-slate-700" id="card-front-text"></p>
+                </div>
+                <div class="flashcard-face flashcard-back">
+                    <p class="text-xl font-semibold" id="card-back-text"></p>
+                </div>
             </div>
+        </div>
+
+        <div class="flex justify-center items-center space-x-4 mt-6">
+            <button id="prev-btn" class="bg-white text-slate-700 px-6 py-3 rounded-lg shadow-md hover:bg-slate-200 transition-colors font-bold">
+                前へ
+            </button>
+            <button id="shuffle-btn" class="bg-teal-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-teal-700 transition-colors font-bold">
+                シャッフル
+            </button>
+            <button id="next-btn" class="bg-white text-slate-700 px-6 py-3 rounded-lg shadow-md hover:bg-slate-200 transition-colors font-bold">
+                次へ
+            </button>
         </div>
     </div>
 
 <script>
-const APP_DATA = {
-    tools: [
-        { name: "コンクリート・ブレーカー (代表例)", value: 15.0 },
-        { name: "エンジンカッター (代表例)", value: 10.0 },
-        { name: "削岩機 (ドリル) (代表例)", value: 12.0 },
-        { name: "レシプロソー (代表例)", value: 8.0 },
-        { name: "インパクトレンチ (代表例)", value: 5.0 },
-        { name: "低振動モデル工具 (代表例)", value: 2.5 }
-    ],
-    faq: [
-        { q: "防振手袋は、どの製品を選べば最も効果的ですか？", a: "最も重要なのは、「JIS T 8114」という規格に適合した製品を選ぶことです。その上で、ご自身の手にぴったりと合うサイズのものを選んでください。" },
-        { q: "工具のカタログに「3軸合成値」が見当たりません。どうすればよいですか？", a: "古い工具などでは、記載がない場合があります。メーカーに問い合わせるか、専門機関に依頼して実測する必要があります。" },
-        { q: "緊急の救助現場で、「10分で休憩」という原則を守れない場合はどうすればよいですか？", a: "人命救助が最優先ですが、可能な限り複数人でローテーションを組むことを原則としてください。一人の連続作業時間を最小限に抑える工夫が求められます。" },
-        { q: "発症してしまった振動障害は、本当に治らないのでしょうか？", a: "完治は難しいとされています。しかし、早期に発見し、適切な治療を行えば、症状の進行を食い止め、緩和させることは可能です。" },
-        { q: "喫煙は、具体的にどのくらいリスクを高めるのですか？", a: "ニコチンには血管を強力に収縮させる作用があり、振動による血行障害を著しく悪化させます。振動障害のリスク要因の中で、最も悪影響が大きい生活習慣の一つです。" },
-        { q: "健康診断で「異常なし」でも、指にしびれを感じます。どうすればよいですか？", a: "すぐに上司に報告し、再度、専門医に相談してください。ご自身の感覚が最も重要なサインです。" },
-        { q: "組織の責任（安全配慮義務）とは、具体的に何をすれば果たしたことになりますか？", a: "国の指針に示されている対策（低振動工具の導入、作業時間管理、特殊健康診断、安全衛生教育など）を組織として計画的に実施していることが基本となります。" },
-        { q: "バッテリー式とエンジン式の工具では、振動に差はありますか？", a: "一般的に、バッテリー式の方が振動は少ない傾向にありますが、製品によります。必ず個別の「3軸合成値」を確認してください。" },
-        { q: "暑い夏場でも、身体を温める必要はありますか？", a: "はい。冷房などで末端の血管は収縮し、指先は冷えがちです。休憩中は常温以上の飲み物を摂るなど、末端の血行を意識することが有効です。" },
-        { q: "防振手袋を二重にすれば、効果は上がりますか？", a: "いいえ、お勧めできません。グリップが不安定になり、かえって腕への負担が増加する可能性があります。規格に適合した手袋を一枚、正しく着用してください。" },
-    ],
-    prevention: {
-        management: [
-            { title: "作業計画の策定", content: "場当たり的な作業は避け、事前に低振動の工法やローテーションを計画する。" },
-            { title: "適切な工具の選定と保守点検", content: "可能な限り3軸合成値の小さい工具を選定・導入する。工具の劣化は振動を増大させるため、定期的なメンテナンスが不可欠。" },
-            { title: "作業時間の管理", content: "「誰が、どの工具を、何分使ったか」を記録し、ばく露限界を超えないように管理する。感覚ではなく、記録に基づく管理が鉄則。" },
-            { title: "作業環境の整備", content: "特に冬場は、身体を温められる休憩場所を確保する。濡れた手袋を乾かす設備も有効。" },
-            { title: "労働衛生教育の実施", content: "定期的に教育を実施し、知識の陳腐化を防ぎ、組織全体の安全意識を高く維持する。" }
-        ],
-        worker: [
-            { title: "適切な作業姿勢と工具の保持方法", content: "工具は強く握りすぎず、自重を利用し、無理のない安定した姿勢で作業する。" },
-            { title: "連続作業時間と休憩の遵守", content: "原則として「1回の連続作業は10分以内、作業間には5分以上の休憩」を遵守する。" },
-            { title: "適切な保護具の着用", content: "JIS T 8114に適合した、サイズの合う防振手袋を正しく着用する。濡れた手袋は効果がないため交換する。" },
-            { title: "身体の保温と体操", content: "身体を冷やさないこと、作業前後のストレッチは、血行を促進し障害予防に大きな効果がある。" },
-            { title: "日常の健康管理", content: "特に喫煙はリスクを著しく高めるため禁煙が強く推奨される。少しでも異常を感じたらすぐに報告する。" }
-        ]
-    }
-};
-const contentContainer = document.getElementById('content-container');
-let timeChart = null;
-const pages = {
-    dashboard: `
-        <div class="space-y-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">許容作業時間計算ツール</h2>
-                <p class="text-slate-600">使用する工具の3軸合成値を入力すると、1日の最大許容作業時間が計算されます。このツールは、日々の作業計画を立て、振動ばく露のリスクを管理するための重要な指標となります。</p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-md space-y-4">
-                    <div class="space-y-2">
-                        <label for="tool-select" class="block font-medium text-slate-700">代表的な工具から選択</label>
-                        <select id="tool-select" class="w-full p-3 border border-slate-300 rounded-lg bg-slate-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                            ${APP_DATA.tools.map(tool => `<option value="${tool.value}">${tool.name}</option>`).join('')}
-                            <option value="custom">カスタム入力</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label for="value-input" class="block font-medium text-slate-700">または、3軸合成値を直接入力 (m/s²)</label>
-                        <input type="number" id="value-input" min="0.1" step="0.1" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="例: 10.5">
-                    </div>
-                    <div class="text-center bg-slate-100 p-6 rounded-lg">
-                        <p class="text-lg text-slate-600">1日の最大許容作業時間</p>
-                        <p id="result-time" class="text-5xl font-extrabold text-teal-600">-- 分</p>
-                        <p id="result-message" class="mt-2 text-slate-500 h-10"></p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-xl font-bold mb-4 text-center">作業時間とリスクレベル</h3>
-                    <div class="chart-container">
-                        <canvas id="timeChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-                <div class="bg-amber-100 border-l-4 border-amber-500 p-6 rounded-lg">
-                    <h3 class="font-bold text-xl text-amber-800">ばく露対策値</h3>
-                    <p class="text-4xl font-extrabold text-amber-700 mt-2">2.5 <span class="text-lg">m/s²</span></p>
-                    <p class="text-amber-700 mt-2">この値に達したら、ばく露時間短縮などの対策が必要</p>
-                </div>
-                <div class="bg-red-100 border-l-4 border-red-500 p-6 rounded-lg">
-                    <h3 class="font-bold text-xl text-red-800">ばく露限界値</h3>
-                    <p class="text-4xl font-extrabold text-red-700 mt-2">5.0 <span class="text-lg">m/s²</span></p>
-                    <p class="text-red-700 mt-2">1日のばく露量がこの値を超えてはならない</p>
-                </div>
-            </div>
-        </div>
-    `,
-    about: `
-        <div class="space-y-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">振動障害について</h2>
-                <p class="text-slate-600">振動障害は、振動工具の長時間使用により引き起こされる深刻な健康問題です。見えにくい症状から始まり、徐々に進行するため、正しい知識と早期の対策が不可欠です。このセクションでは、その定義、主な症状、そして進行プロセスを解説します。</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-xl font-bold mb-4 text-teal-700">振動障害とは？</h3>
-                <p>振動工具から発生する振動に、手や腕などを介して長時間ばく露されることによって生じる、末梢循環障害、末梢神経障害、運動器（骨・関節系）障害の総称です。</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-xl font-bold mb-4 text-teal-700">主な症状</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="text-center p-4 bg-slate-50 rounded-lg">
-                        <span class="text-4xl">❄️</span>
-                        <h4 class="font-bold mt-2">レイノー現象</h4>
-                        <p class="text-sm text-slate-600">指が冷えると蒼白化する</p>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-lg">
-                        <span class="text-4xl">🤌</span>
-                        <h4 class="font-bold mt-2">しびれ・感覚鈍化</h4>
-                        <p class="text-sm text-slate-600">指先の感覚が鈍くなる</p>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-lg">
-                        <span class="text-4xl">✊</span>
-                        <h4 class="font-bold mt-2">握力低下</h4>
-                        <p class="text-sm text-slate-600">物を掴む力が弱くなる</p>
-                    </div>
-                    <div class="text-center p-4 bg-slate-50 rounded-lg">
-                        <span class="text-4xl">💪</span>
-                        <h4 class="font-bold mt-2">関節痛・筋肉痛</h4>
-                        <p class="text-sm text-slate-600">肘や手首、肩の痛み</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-xl font-bold mb-4 text-teal-700">障害の進行プロセス</h3>
-                <div id="progression-steps" class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
-                    <div class="progression-step flex-1 text-center cursor-pointer p-2" data-step="0">
-                        <div class="p-4 border-2 border-slate-300 rounded-lg step-indicator active">
-                            <h4 class="font-bold">潜伏期</h4>
-                            <p class="text-sm">自覚症状なし</p>
-                        </div>
-                    </div>
-                    <div class="text-slate-400 text-2xl font-bold hidden md:block">→</div>
-                    <div class="progression-step flex-1 text-center cursor-pointer p-2" data-step="1">
-                        <div class="p-4 border-2 border-slate-300 rounded-lg step-indicator">
-                            <h4 class="font-bold">初期症状</h4>
-                            <p class="text-sm">しびれ・冷え</p>
-                        </div>
-                    </div>
-                    <div class="text-slate-400 text-2xl font-bold hidden md:block">→</div>
-                    <div class="progression-step flex-1 text-center cursor-pointer p-2" data-step="2">
-                        <div class="p-4 border-2 border-slate-300 rounded-lg step-indicator">
-                            <h4 class="font-bold">進行期</h4>
-                             <p class="text-sm">レイノー現象頻発</p>
-                        </div>
-                    </div>
-                    <div class="text-slate-400 text-2xl font-bold hidden md:block">→</div>
-                    <div class="progression-step flex-1 text-center cursor-pointer p-2" data-step="3">
-                        <div class="p-4 border-2 border-slate-300 rounded-lg step-indicator">
-                             <h4 class="font-bold">末期症状</h4>
-                            <p class="text-sm">作業・生活に支障</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="progression-details" class="mt-4 p-4 bg-slate-50 rounded-lg min-h-[80px]"></div>
-            </div>
-        </div>
-    `,
-    prevention: `
-        <div class="space-y-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">予防策</h2>
-                <p class="text-slate-600">振動障害の予防は、個人の努力と組織的な管理体制の両輪で進めることが不可欠です。ここでは、管理者が実施すべき「組織の対策」と、隊員一人ひとりが実践すべき「個人の対策」に分けて、具体的な行動指針を示します。</p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-2xl font-bold mb-4 text-teal-700">🏢 組織の対策 (管理者向け)</h3>
-                    <div id="management-prevention" class="space-y-3"></div>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold mb-4 text-teal-700">👷 個人の対策 (作業者向け)</h3>
-                    <div id="worker-prevention" class="space-y-3"></div>
-                </div>
-            </div>
-        </div>
-    `,
-    kyt: `
-        <div class="space-y-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">危険予知訓練 (KYT)</h2>
-                <p class="text-slate-600">危険予知訓練は、具体的な作業場面を想定し、潜む危険とその対策を事前に話し合うことで、危険感受性を高める効果的な手法です。ここでは、AIを活用して様々な状況に応じた訓練シナリオを生成することができます。</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-xl font-bold mb-4 text-teal-700">インタラクティブKYT演習</h3>
-                <p class="mb-4">訓練したい状況を簡単に入力し、詳細なシナリオを作成させてみましょう。</p>
-                <input type="text" id="kyt-prompt" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="例：雨天の高速道路での多重衝突事故">
-                <button id="generate-kyt-btn" class="w-full mt-4 bg-teal-600 text-white font-bold p-3 rounded-lg hover:bg-teal-700 transition-colors">
-                    <span>KYTシナリオを生成</span>
-                </button>
-                <div id="kyt-result-container" class="mt-4 p-4 bg-slate-50 rounded-lg hidden">
-                    <h4 class="font-bold text-lg mb-2">生成されたシナリオ:</h4>
-                    <pre id="kyt-result-text" class="whitespace-pre-wrap text-slate-700"></pre>
-                </div>
-            </div>
-        </div>
-    `,
-    faq: `
-        <div class="space-y-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-2">よくある質問 (FAQ)</h2>
-                <p class="text-slate-600">振動工具の安全衛生に関して、現場からよく寄せられる質問とその回答をまとめました。キーワードで検索して、疑問点を素早く解消してください。</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                 <input type="text" id="faq-search" class="w-full p-3 mb-6 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="キーワードで質問を検索...">
-                <div id="faq-container" class="space-y-3"></div>
-            </div>
-        </div>
-    `
-};
-const progressionDetails = [
-    "症状はないが、体内では変化が始まっている段階。予防が最も重要。",
-    "しびれ感、冷えなどを感じる。この段階での対策が極めて重要。",
-    "レイノー現象が頻発し、握力が明確に低下する。専門医の診断が必要。",
-    "工具の操作が困難になり、日常生活にも大きな支障をきたす。完治は難しい。"
+const flashcardData = [
+    { front: "振動障害の主な3つの構成要素", back: "末梢循環障害、末梢神経障害、運動器（骨・関節系）障害" },
+    { front: "指が冷えると白くなる、振動障害の代表的な症状", back: "レイノー現象" },
+    { front: "1日の振動ばく露量を表す指標", back: "日振動ばく露量 A(8)" },
+    { front: "日振動ばく露量A(8)で、これを超えてはならない「ばく露限界値」", back: "5.0 m/s²" },
+    { front: "日振動ばく露量A(8)で、対策が必要となる「ばく露対策値」", back: "2.5 m/s²" },
+    { front: "工具の振動の強さを示す、人体への影響を考慮した指標", back: "周波数補正振動加速度実効値の3軸合成値" },
+    { front: "振動工具の連続作業時間の上限（原則）", back: "10分以内" },
+    { front: "防振手袋の性能を定めた日本産業規格（JIS）の番号", back: "JIS T 8114" },
+    { front: "振動による血行障害を著しく悪化させる最大の生活習慣リスク", back: "喫煙" },
+    { front: "振動業務従事者が定期的に受けるべき健康診断", back: "振動業務特殊健康診断" },
+    { front: "作業前に危険を予測し、安全を確保するための訓練", back: "危険予知訓練（KYT）" },
+    { front: "事業者が労働者の健康障害を防止する措置を定めた法律", back: "労働安全衛生法" },
+    { front: "組織が行うべき予防策の例", back: "低振動工具の選定、作業時間の管理、衛生教育の実施など" },
+    { front: "作業者自身が行うべき予防策の例", back: "適切な工具の保持、保護具の着用、身体の保温、体操など" },
+    { front: "振動レベルが極めて高い工具の代表例", back: "コンクリート・ブレーカー、削岩機" },
+    { front: "振動障害の初期症状の具体例", back: "指先のしびれ感、冷えを感じる" },
+    { front: "工具の保守点検が予防策として重要な理由", back: "工具の劣化（ビットの摩耗など）が振動を増大させるため" },
+    { front: "身体の保温が振動障害予防に有効な理由", back: "末梢血管の収縮を防ぎ、血行を良好に保つため" },
+    { front: "濡れた手袋を使用してはいけない理由", back: "防振効果が失われるだけでなく、気化熱で指先が冷えるため" },
+    { front: "工具を強く握りすぎるとどうなるか", back: "身体に伝わる振動が増加し、腕や肩への負担が増える" },
+    { front: "振動障害の症状を自覚した時にすべきこと", back: "速やかに責任者に報告し、医師の診断を受ける" },
+    { front: "3軸合成値が10.0 m/s²の工具の1日最大許容作業時間の目安", back: "約30分" },
+    { front: "振動障害の治療における最も重要なこと", back: "振動ばく露を完全に無くすか、大幅に減らすこと（振動からの離脱）" },
+    { front: "夏場でも注意すべき、振動障害のリスク要因", back: "冷房による身体の冷え" },
+    { front: "指針の正式名称（チェーンソー以外）", back: "チェーンソー以外の振動工具の取扱い業務に係る振動障害予防対策指針" }
 ];
-function initDashboard() {
-    const toolSelect = document.getElementById('tool-select');
-    const valueInput = document.getElementById('value-input');
-    const resultTime = document.getElementById('result-time');
-    const resultMessage = document.getElementById('result-message');
-    const updateCalculation = () => {
-        const value = parseFloat(valueInput.value) || 0;
-        if (value <= 0) {
-            resultTime.textContent = '-- 分';
-            resultMessage.textContent = '3軸合成値を入力してください。';
-            if(timeChart) timeChart.data.datasets[0].data = [0, 240]; timeChart.update();
-            return;
-        }
-        const E_L = 5.0;
-        const T_L = 480;
-        const dailyExposureMinutes = Math.floor((E_L / value) ** 2 * T_L);
-        resultTime.textContent = `${dailyExposureMinutes} 分`;
-        let message = '';
-        if (dailyExposureMinutes >= 240) {
-            message = '比較的安全な作業時間です。';
-        } else if (dailyExposureMinutes > 60) {
-            message = '作業時間の管理を徹底してください。';
-        } else if (dailyExposureMinutes > 10) {
-            message = 'リスクが高い作業です。厳重な時間管理とローテーションが必要です。';
-        } else {
-            message = '極めて危険です。作業方法の根本的な見直しを検討してください。';
-        }
-        resultMessage.textContent = message;
-        if (timeChart) {
-            timeChart.data.datasets[0].data[0] = dailyExposureMinutes;
-            timeChart.update();
-        }
-    };
-    toolSelect.addEventListener('change', () => {
-        if (toolSelect.value === 'custom') {
-            valueInput.value = '';
-            valueInput.focus();
-        } else {
-            valueInput.value = toolSelect.value;
-        }
-        updateCalculation();
-    });
-    valueInput.addEventListener('input', updateCalculation);
-    const ctx = document.getElementById('timeChart').getContext('2d');
-    timeChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['許容作業時間'],
-            datasets: [{
-                label: '作業時間 (分)',
-                data: [0, 480],
-                backgroundColor: (context) => {
-                    const value = context.dataset.data[0];
-                    if (value < 30) return 'rgba(239, 68, 68, 0.6)';
-                    if (value < 120) return 'rgba(245, 158, 11, 0.6)';
-                    return 'rgba(16, 185, 129, 0.6)';
-                },
-                borderColor: (context) => {
-                    const value = context.dataset.data[0];
-                    if (value < 30) return 'rgba(239, 68, 68, 1)';
-                    if (value < 120) return 'rgba(245, 158, 11, 1)';
-                    return 'rgba(16, 185, 129, 1)';
-                },
-                borderWidth: 2,
-                barPercentage: 0.5,
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            maintainAspectRatio: false,
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    max: 480,
-                    title: { display: true, text: '時間 (分)' },
-                    grid: { color: '#e2e8f0' }
-                },
-                y: { grid: { display: false } }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: { label: (context) => `${context.dataset.label}: ${context.raw} 分` }
-                }
-            },
-            animation: {
-                duration: 500,
-                easing: 'easeInOutQuart'
-            }
-        }
-    });
-    toolSelect.dispatchEvent(new Event('change'));
-}
-function initAbout() {
-    const steps = document.querySelectorAll('.progression-step');
-    const detailsDiv = document.getElementById('progression-details');
-    const updateDetails = (index) => {
-        detailsDiv.innerHTML = `<p>${progressionDetails[index]}</p>`;
-        steps.forEach(step => step.querySelector('.step-indicator').classList.remove('active', 'bg-teal-100', 'border-teal-500'));
-        steps[index].querySelector('.step-indicator').classList.add('active', 'bg-teal-100', 'border-teal-500');
-    };
-    steps.forEach(step => {
-        step.addEventListener('click', () => updateDetails(parseInt(step.dataset.step)));
-    });
-    updateDetails(0);
-}
-function createAccordionItem(item, id, isExpanded = false) {
-    return `
-        <div>
-            <button class="accordion-toggle w-full text-left p-4 bg-slate-100 hover:bg-slate-200 rounded-lg font-medium flex justify-between items-center transition-colors" data-target="#${id}">
-                <span>${item.title || item.q}</span>
-                <span class="transform transition-transform ${isExpanded ? 'rotate-180' : ''}">▼</span>
-            </button>
-            <div id="${id}" class="accordion-content p-4 bg-white border-l-2 border-teal-500 mt-1 rounded-b-lg ${isExpanded ? '' : 'hidden'}">
-                <p class="text-slate-600">${item.content || item.a}</p>
-            </div>
-        </div>`;
-}
-function initPrevention() {
-    const managementContainer = document.getElementById('management-prevention');
-    const workerContainer = document.getElementById('worker-prevention');
-    managementContainer.innerHTML = APP_DATA.prevention.management.map((item, i) => createAccordionItem(item, `m-prev-${i}`)).join('');
-    workerContainer.innerHTML = APP_DATA.prevention.worker.map((item, i) => createAccordionItem(item, `w-prev-${i}`)).join('');
-}
-function initFaq() {
-    const container = document.getElementById('faq-container');
-    const searchInput = document.getElementById('faq-search');
-    const renderFaq = (filter = '') => {
-        const filteredFaq = APP_DATA.faq.filter(item => 
-            item.q.toLowerCase().includes(filter.toLowerCase()) || 
-            item.a.toLowerCase().includes(filter.toLowerCase())
-        );
-        container.innerHTML = filteredFaq.map((item, i) => createAccordionItem(item, `faq-${i}`)).join('');
-        if(filteredFaq.length === 0){
-             container.innerHTML = `<p class="text-slate-500 text-center">該当する質問はありません。</p>`;
-        }
-    };
-    searchInput.addEventListener('input', () => renderFaq(searchInput.value));
-    renderFaq();
-}
-function initKyt() {
-    const generateBtn = document.getElementById('generate-kyt-btn');
-    const promptInput = document.getElementById('kyt-prompt');
-    const resultContainer = document.getElementById('kyt-result-container');
-    const resultText = document.getElementById('kyt-result-text');
-    generateBtn.addEventListener('click', () => {
-        const prompt = promptInput.value;
-        if (!prompt) {
-            alert('シナリオの状況を入力してください。');
-            return;
-        }
-        const mockResult = `「${prompt}」の状況における危険予知シナリオ:\n\n【状況】\n雨が降りしきる夜間、高速道路上で複数台の車両が絡む事故が発生。要救助者が車両内に閉じ込められており、ドアを破壊するためにエンジンカッターを使用する必要がある。\n\n【危険のポイント】\n1. (振動工具リスク) 雨で濡れた手袋は防振効果が著しく低下し、短時間で振動障害のリスクが高まる。また、グリップが滑りやすくなる。\n2. 路面が滑りやすく、不安定な足場で重量のあるエンジンカッターを扱うため、転倒やキックバックの危険性が増大する。\n3. 後続車による二次災害の危険性が非常に高い。\n\n【対策案】\n1. 乾いた予備の防振手袋を必ず準備し、濡れたら速やかに交換する。\n2. 作業は必ず複数人で行い、一人が作業中、もう一人は足場や周囲の安全を確保する。\n3. 照明を確実に確保し、後続車への警告と交通規制を徹底する。`;
-        resultText.textContent = mockResult;
-        resultContainer.classList.remove('hidden');
-    });
-}
-function handleNavigation(hash) {
-    hash = hash || '#dashboard';
-    contentContainer.innerHTML = pages[hash.substring(1)] || pages.dashboard;
-    switch (hash) {
-        case '#dashboard': initDashboard(); break;
-        case '#about': initAbout(); break;
-        case '#prevention': initPrevention(); break;
-        case '#faq': initFaq(); break;
-        case '#kyt': initKyt(); break;
-    }
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === hash);
-    });
-}
-document.addEventListener('click', e => {
-    if (e.target.closest('.accordion-toggle')) {
-        const button = e.target.closest('.accordion-toggle');
-        const target = document.querySelector(button.dataset.target);
-        const icon = button.querySelector('span:last-child');
-        if (target) {
-            target.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        }
-    }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menu-toggle');
-    const mainContent = document.getElementById('main-content');
+
+let currentIndex = 0;
+let cards = [...flashcardData];
+
+const cardContainer = document.getElementById('card-container');
+const flashcard = document.getElementById('flashcard');
+const cardFrontText = document.getElementById('card-front-text');
+const cardBackText = document.getElementById('card-back-text');
+const progressIndicator = document.getElementById('progress-indicator');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const shuffleBtn = document.getElementById('shuffle-btn');
+
+function showCard(index) {
+    flashcard.classList.remove('is-flipped');
     
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('-translate-x-full');
-    });
-    mainContent.addEventListener('click', (e) => {
-        if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
-           if (!e.target.closest('#sidebar')) {
-               sidebar.classList.add('-translate-x-full');
-           }
-        }
-    });
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            const hash = e.currentTarget.getAttribute('href');
-            handleNavigation(hash);
-            if (window.innerWidth < 768) {
-                sidebar.classList.add('-translate-x-full');
-            }
-        });
-    });
-    handleNavigation(window.location.hash);
-});
+    // Slight delay to allow the flip back animation to be visible before content changes
+    setTimeout(() => {
+        cardFrontText.textContent = cards[index].front;
+        cardBackText.textContent = cards[index].back;
+        progressIndicator.textContent = `カード ${index + 1} / ${cards.length}`;
+    }, 150);
+}
+
+function flipCard() {
+    flashcard.classList.toggle('is-flipped');
+}
+
+function nextCard() {
+    currentIndex = (currentIndex + 1) % cards.length;
+    showCard(currentIndex);
+}
+
+function prevCard() {
+    currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+    showCard(currentIndex);
+}
+
+function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    currentIndex = 0;
+    showCard(currentIndex);
+}
+
+cardContainer.addEventListener('click', flipCard);
+prevBtn.addEventListener('click', prevCard);
+nextBtn.addEventListener('click', nextCard);
+shuffleBtn.addEventListener('click', shuffleCards);
+
+// Initial load
+shuffleCards(); // Start with a shuffled deck
 </script>
+
 </body>
 </html>
-
