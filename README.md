@@ -100,7 +100,13 @@ e-Learning119
 
     <!-- 教材４ -->
     <div class="lesson-card">
-      <div class="lesson-title">救急活動対策</div>
+      <div class="lesson-title">振動工具　資料編</div>
+      <a href="lesson4/index.html" target="_blank">学習する</a>
+    </div>
+    
+    <!-- 教材５ -->
+    <div class="lesson-card">
+      <div class="lesson-title">振動工具スケジュール</div>
       <a href="lesson4/index.html" target="_blank">学習する</a>
     </div>
     
