@@ -106,7 +106,7 @@ e-Learning119
     
     <!-- 教材５ -->
     <div class="lesson-card">
-      <div class="lesson-title">振動工具スケジュール</div>
+      <div class="lesson-title">振動工具　小テスト</div>
       <a href="lesson4/index.html" target="_blank">学習する</a>
     </div>
     
