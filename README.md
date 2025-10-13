@@ -1,5 +1,3 @@
-# fire-learning
-e-Learning119
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -98,22 +96,16 @@ e-Learning119
       <a href="lesson3/index.html" target="_blank">学習する</a>
     </div>
 
-    <!-- 教材４ -->
+    <!-- 教材4 -->
     <div class="lesson-card">
-      <div class="lesson-title">振動工具　資料編</div>
+      <div class="lesson-title">振動工具 資料編</div>
       <a href="lesson4/index.html" target="_blank">学習する</a>
     </div>
-    
-    <!-- 教材５ -->
+
+    <!-- 教材5 -->
     <div class="lesson-card">
-      <div class="lesson-title">振動工具　小テスト</div>
-      <a href="lesson4/index.html" target="_blank">学習する</a>
-    </div>
-    
-    <!-- 教材を増やすときはこのブロックを複製して編集 -->
-    <div class="lesson-card">
-      <div class="lesson-title">新しい教材タイトル</div>
-      <a href="lesson4/index.html" target="_blank">学習する</a>
+      <div class="lesson-title">振動工具 小テスト</div>
+      <a href="lesson5/index.html" target="_blank">学習する</a>
     </div>
 
   </main>
@@ -122,4 +114,4 @@ e-Learning119
     © 2025 消防eラーニングサポート / 作成：Naoki
   </footer>
 </body>
-</html> 
+</html>
