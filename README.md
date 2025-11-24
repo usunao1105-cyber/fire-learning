@@ -1,117 +1,170 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>消防職員 eラーニングポータル</title>
-  <style>
-    body {
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      background-color: #f5f7fa;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background-color: #b91c1c;
-      color: white;
-      text-align: center;
-      padding: 1rem 0.5rem;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.3rem;
-      letter-spacing: 0.05em;
-    }
-    header p {
-      margin: 0.2rem 0 0;
-      font-size: 0.9rem;
-      color: #ffe4e4;
-    }
-    main {
-      max-width: 600px;
-      margin: 1.5rem auto;
-      padding: 0 1rem;
-    }
-    .lesson-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 1rem;
-      padding: 1rem;
-      text-align: center;
-      transition: transform 0.15s ease;
-    }
-    .lesson-card:hover {
-      transform: scale(1.02);
-    }
-    .lesson-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #b91c1c;
-    }
-    a {
-      display: inline-block;
-      text-decoration: none;
-      background-color: #dc2626;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      transition: background-color 0.2s ease;
-    }
-    a:hover {
-      background-color: #991b1b;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #777;
-      margin: 2rem 0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>消防職員 eラーニング ポータル</h1>
-    <p>安全管理・救助活動・感染防止などを学ぶ教材一覧</p>
-  </header>
+<style>
+  body {
+    background-color: #000;
+    font-family: 'Hiragino Sans','Yu Gothic',sans-serif;
+    color: #d4af37;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .container {
+    padding: 40px 20px;
+  }
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    color: #ff3b3b;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #d4af37, 0 0 40px #ff0000;
+    margin-bottom: 10px;
+  }
+  p.subtitle {
+    font-size: 1.1rem;
+    color: #d4af37;
+    text-shadow: 0 0 5px #b8860b;
+  }
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, #ff0000, #d4af37, #ff0000);
+    width: 80%;
+    margin: 30px auto;
+    border-radius: 2px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: 950px;
+    margin: 0 auto;
+  }
+  .card {
+    background: radial-gradient(circle at 20% 20%, #111 0%, #000 100%);
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    padding: 25px 15px;
+    box-shadow: 0 0 10px rgba(212,175,55,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 50, 50, 0.8), 0 0 50px rgba(212,175,55,0.6);
+  }
+  .lesson-title {
+    color: #ff3b3b;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff0000;
+  }
+  .lesson-desc {
+    color: #d4af37;
+    font-size: 0.95rem;
+    margin: 0.5em 0 1em;
+  }
+  a.button {
+    display: inline-block;
+    color: #000;
+    background: linear-gradient(135deg, #ffd700, #ffcc33);
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  a.button:hover {
+    background: linear-gradient(135deg, #ff4d4d, #d4af37);
+    color: #fff;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #d4af37;
+  }
+  footer {
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 40px;
+  }
+</style>
 
-  <main>
-    <!-- 教材1 -->
-    <div class="lesson-card">
-      <div class="lesson-title">原子力災害をテストする</div>
-      <a href="lesson1/index.html" target="_blank">学習する</a>
+<div class="container">
+  <h1>🚒 消防 eラーニングポータル</h1>
+  <p class="subtitle">現場力を磨く。安全・確実・迅速な行動のために。</p>
+  <div class="divider"></div>
+
+  <div class="grid">
+    <!-- 各Lesson -->
+    <div class="card">
+      <div class="lesson-title">Lesson 1</div>
+      <div class="lesson-desc">火災現場の安全管理</div>
+      <a href="lesson1/index.html" class="button">▶ 学習する</a>
     </div>
-
-    <!-- 教材2 -->
-    <div class="lesson-card">
-      <div class="lesson-title">原子力座学</div>
-      <a href="lesson2/index.html" target="_blank">学習する</a>
+    <div class="card">
+      <div class="lesson-title">Lesson 2</div>
+      <div class="lesson-desc">救助活動の基本</div>
+      <a href="lesson2/index.html" class="button">▶ 学習する</a>
     </div>
-
-    <!-- 教材3 -->
-    <div class="lesson-card">
-      <div class="lesson-title">振動工具 基礎講座</div>
-      <a href="lesson3/index.html" target="_blank">学習する</a>
+    <div class="card">
+      <div class="lesson-title">Lesson 3</div>
+      <div class="lesson-desc">通信管理・無線運用</div>
+      <a href="lesson3/index.html" class="button">▶ 学習する</a>
     </div>
-
-    <!-- 教材4 -->
-    <div class="lesson-card">
-      <div class="lesson-title">振動工具 資料編</div>
-      <a href="lesson4/index.html" target="_blank">学習する</a>
+    <div class="card">
+      <div class="lesson-title">Lesson 4</div>
+      <div class="lesson-desc">車両運用と安全走行</div>
+      <a href="lesson4/index.html" class="button">▶ 学習する</a>
     </div>
-
-    <!-- 教材5 -->
-    <div class="lesson-card">
-      <div class="lesson-title">振動工具 小テスト</div>
-      <a href="lesson5/index.html" target="_blank">学習する</a>
+    <div class="card">
+      <div class="lesson-title">Lesson 5</div>
+      <div class="lesson-desc">機械器具の取扱い</div>
+      <a href="lesson5/index.html" class="button">▶ 学習する</a>
     </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 6</div>
+      <div class="lesson-desc">火災調査と関係法令</div>
+      <a href="lesson6/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 7</div>
+      <div class="lesson-desc">伐木作業（チェーンソー）特別教育</div>
+      <a href="lesson7/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 8</div>
+      <div class="lesson-desc">感染防止対策</div>
+      <a href="lesson8/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 9</div>
+      <div class="lesson-desc">危険物火災対応</div>
+      <a href="lesson9/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 10</div>
+      <div class="lesson-desc">水難救助</div>
+      <a href="lesson10/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 11</div>
+      <div class="lesson-desc">心理対応・住民支援</div>
+      <a href="lesson11/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 12</div>
+      <div class="lesson-desc">無線通信障害対応</div>
+      <a href="lesson12/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 13</div>
+      <div class="lesson-desc">訓練指導法</div>
+      <a href="lesson13/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 14</div>
+      <div class="lesson-desc">機関員教育</div>
+      <a href="lesson14/index.html" class="button">▶ 学習する</a>
+    </div>
+    <div class="card">
+      <div class="lesson-title">Lesson 15</div>
+      <div class="lesson-desc">リーダーシップ</div>
+      <a href="lesson15/index.html" class="button">▶ 学習する</a>
+    </div>
+  </div>
 
-  </main>
-
-  <footer>
-    © 2025 消防eラーニングサポート / 作成：Naoki
-  </footer>
-</body>
-</html>
+  <div class="divider"></div>
+  <footer>© 2025 消防eラーニングサポート / 作成：Naoki</footer>
+</div>
