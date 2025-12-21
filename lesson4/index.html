@@ -1,1 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消防団員（水防）特別教育 e-Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. RESET & BASE STYLES */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            background-color: #0F172A; /* Deep Navy Background */
+            color: #F8FAFC;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 2. TYPOGRAPHY & UTILITIES */
+        h1, h2, h3 {
+            font-family: 'Shippori Mincho', serif;
+            font-weight: 500;
+            color: #F1F5F9;
+        }
+
+        .text-gold { color: #D4AF37; }
+        .text-center { text-align: center; }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 3. HERO SECTION */
+        header.hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.7)), url('http://googleusercontent.com/image_collection/image_retrieval/10534687010382304983');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 120px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .hero-subtitle {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.2rem;
+            color: #D4AF37;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 30px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero-divider {
+            width: 80px;
+            height: 3px;
+            background: #D4AF37;
+            margin: 0 auto 30px;
+        }
+
+        /* 4. CONTENT SECTIONS */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: #D4AF37;
+        }
+
+        /* Intro Layout */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .intro-grid { grid-template-columns: 1fr; }
+        }
+
+        .intro-img {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* 5. QUIZ APP STYLES */
+        #quiz-section {
+            background-color: #1a2333;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Question Items */
+        .question-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #D4AF37;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: rgba(212, 175, 55, 0.15);
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            margin-top: 6px; /* align with text */
+            accent-color: #D4AF37;
+            transform: scale(1.1);
+            flex-shrink: 0;
+        }
+
+        /* Quiz Results */
+        .result-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            display: none;
+        }
+        .result-box.correct { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #6ee7b7; }
+        .result-box.incorrect { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; }
+
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #b49026 100%);
+            color: #0F172A;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+        }
+        .btn-outline:hover { background: rgba(212, 175, 55, 0.1); }
+
+        /* Start/End Screens */
+        .quiz-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .score-display {
+            font-size: 4rem;
+            font-family: 'Shippori Mincho', serif;
+            color: #D4AF37;
+            margin: 20px 0;
+        }
+
+        /* 6. FOOTER */
+        footer {
+            background: #0b1120;
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Hero Header -->
+    <header class="hero">
+        <div class="container">
+            <span class="hero-subtitle">令和時代の水防団教育</span>
+            <h1>消防団員（水防）<br>特別教育 e-Learning</h1>
+            <div class="hero-divider"></div>
+            <p>知識と技術の継承、そして地域の未来へ</p>
+        </div>
+    </header>
+
+    <!-- Introduction Section -->
+    <section>
+        <div class="container">
+            <div class="intro-grid">
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 20px; border-bottom: 2px solid #D4AF37; display: inline-block; padding-bottom: 10px;">本コースの目的</h2>
+                    <p style="margin-bottom: 20px;">近年、激甚化する風水害において、水防団員・消防団員の役割はますます重要性を増しています。</p>
+                    <p style="margin-bottom: 20px;">本e-Learning講座では、水防法に基づく法的根拠から、実践的な工法、そして最新のデジタルツール活用までを体系的に学習します。</p>
+                    <p>単なる知識の暗記ではなく、現場での「判断力」と「安全確保」を最優先としたカリキュラム構成となっています。</p>
+                </div>
+                <div>
+                    <img src="http://googleusercontent.com/image_collection/image_retrieval/15623057380325288930" alt="River embankment" class="intro-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz-section">
+        <div class="container">
+            <h2 class="section-title">実力確認テスト</h2>
+            
+            <div class="quiz-card">
+                <!-- 1. Start Screen -->
+                <div id="start-screen" class="quiz-screen">
+                    <i class="fa-solid fa-book-open-reader" style="font-size: 60px; color: #D4AF37; margin-bottom: 30px;"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 20px;">確認テストを開始</h3>
+                    <p style="margin-bottom: 40px;">全80問のデータベースから、ランダムに10問が出題されます。<br>合格ラインは80点以上です。</p>
+                    <button class="btn btn-gold" onclick="startQuiz()">テストを開始する</button>
+                </div>
+
+                <!-- 2. Quiz Questions -->
+                <div id="quiz-container" style="display: none;">
+                    <div id="quiz-content">
+                        <!-- Questions will be injected here -->
+                    </div>
+                    <!-- Control Buttons -->
+                    <div class="text-center" style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="resetQuiz()">リセット</button>
+                        <button class="btn btn-gold" onclick="gradeQuiz()" id="grade-btn">採点する</button>
+                    </div>
+                </div>
+
+                <!-- 3. Result Screen -->
+                <div id="final-screen" class="quiz-screen" style="display: none;">
+                    <h3 style="font-size: 1.8rem;">テスト結果</h3>
+                    <div class="score-display"><span id="score-val">0</span><span style="font-size: 2rem;">点</span></div>
+                    <p id="feedback-msg" style="margin-bottom: 40px; font-size: 1.1rem;">お疲れ様でした。</p>
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="reviewAnswers()">回答を確認する</button>
+                        <button class="btn btn-gold" onclick="startQuiz()">再度挑戦する</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Closing Section -->
+    <section>
+        <div class="container">
+            <div class="intro-grid">
+                <div>
+                    <img src="http://googleusercontent.com/image_collection/image_retrieval/33413962967118824" alt="Digital tablet map" class="intro-img">
+                </div>
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 20px; border-bottom: 2px solid #D4AF37; display: inline-block; padding-bottom: 10px;">継続的な学習を</h2>
+                    <p style="margin-bottom: 20px;">本日のテストで学習した内容は、実際の災害現場で必ず役に立ちます。特に「タイムライン」の考え方や、情報共有ツールの活用は、現代の水防活動において団員の安全を守る生命線となります。</p>
+                    <p style="font-weight: 700; color: #D4AF37; font-size: 1.2rem; margin-top: 30px;">「自らの地域は自らで守る」</p>
+                    <p>この崇高な精神を胸に、今後も活動にご尽力ください。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Fire Corps Water Defense Training. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. QUIZ DATA (80 Questions) ---
+        const allQuestions = [
+            { id: 1, q: "水防法の目的として、正しいものはどれですか？", opts: ["火災を予防し、国民の生命・身体・財産を保護する。", "洪水、雨水出水、津波、高潮に際し、被害を軽減し公共の安全を保持する。", "地震災害時における応急復旧を迅速に行うための体制を整える。", "地域の防犯活動を強化し、安寧秩序を保持する。"], a: 1, exp: "水防法第1条には、洪水、雨水出水、津波、高潮という四つの水災を対象とし、その被害を警戒、防御、軽減することで公共の安全を保持することが明記されています。" },
+            { id: 2, q: "水防活動と治水施設の関係を表現する言葉として、適切なものはどれですか？", opts: ["矛と盾", "車の両輪", "師弟関係", "表裏一体"], a: 1, exp: "河川管理者が実施する「治水施設の整備」と、市町村や地域住民が実施する「水防活動」が「車の両輪」となって水害被害の拡大を防いでいると説明されています。" },
+            { id: 3, q: "水防管理団体（市町村等）の責任において、水防団員を「出動」させるべきタイミングはいつですか？", opts: ["台風が日本に上陸したとき。", "水防警報が発せられたとき、または水位が氾濫注意水位に達したとき。", "雨が降り始めたとき。", "住民から要望があったとき。"], a: 1, exp: "水防管理者は、水防警報が発せられたとき、または水位が氾濫注意水位（警戒水位）に達したとき、その他必要があると認める時に水防団等を出動させる責任があります。" },
+            { id: 4, q: "水防法の規定により、水防団員等が水防のために緊急の必要がある場合に通行できる場所はどこですか？", opts: ["公道に限られる。", "高速道路のみ。", "一般交通の用に供しない通路、または公共の用に供しない空地・水面。", "鉄道の線路内。"], a: 2, exp: "水防法第19条に基づき、水防団員等は水防のため緊急の必要がある場所に赴く際、私有の田畑や池など一般交通に供しない場所を通行できる権限（緊急通行）を持っています。" },
+            { id: 5, q: "全国で「水防団」を個別の組織として設置しているのは、平成28年時点でいくつの道府県ですか？", opts: ["47都道府県すべて", "8道府県", "20都府県", "15県"], a: 1, exp: "平成28年4月時点で、水防団を個別に設置しているのは、北海道、埼玉県、神奈川県、岐阜県、静岡県、愛知県、京都府、大阪府の8道府県のみです。" },
+            { id: 6, q: "出雲市消防（水防）団の基準において、全団員を招集する「第2号招集」はどのような時に行われますか？", opts: ["注意体制が発令された場合。", "特別警戒体制または非常体制が発令された場合。", "雨が降り始めた直後。", "洪水注意報が発表されたとき。"], a: 1, exp: "出雲市のマニュアルでは、特別警戒体制や非常体制が発令された場合に、団長が全団員を対象とする2号招集（全招集）を行うと定めています。" },
+            { id: 7, q: "水防態勢において、主として情報連絡を行う「警戒配備（注意体制）」の基準として適切なものはどれですか？", opts: ["河川の水位が氾濫危険水位に達したとき。", "現に災害が発生したとき。", "大雨・洪水注意報が発表され、災害発生のおそれが見込まれるとき。", "避難指示が発令されたとき。"], a: 2, exp: "注意体制（警戒配備）は、注意報の発表や水防団待機水位への到達など、災害発生のおそれが見込まれる段階で情報収集を開始する体制です。" },
+            { id: 8, q: "招集指示を受けたが、自らが被災している場合の行動として正しいものはどれですか？", opts: ["どのような状況でも職務を優先し参集する。", "家族を置いて一人で参集場所に赴く。", "無理に参集せず、自ら及び家族の安全確保を最優先する。", "連絡なしに欠席する。"], a: 2, exp: "自らが被災した場合や参集が危険な場合は、無理をせず自己と家族の安全を最優先し、その旨を分団長等へ連絡することが求められています。" },
+            { id: 9, q: "大阪府の水防信号において、「避難のため立ち退くべきこと」を知らせる第4信号の警鐘の鳴らし方はどれですか？", opts: ["2回打ちの繰り返し。", "3回打ちの繰り返し。", "乱打。", "1回打ちを長く続ける。"], a: 2, exp: "大阪府や国土交通省の計画例では、避難のための立ち退きを知らせる第4信号として「乱打」が規定されています。" },
+            { id: 10, q: "水防活動時の「自主的行動（準備体制前の情報収集等）」について、出場報酬の扱いはどうなりますか？", opts: ["通常の出場と同じ報酬が支払われる。", "出場報酬支給の対象ではない。", "倍額の報酬が支払われる。", "食事代のみ支給される。"], a: 1, exp: "出雲市のマニュアル等では、体制発令前の自主的行動は出場報酬の支給対象外であることが明記されています。" },
+            { id: 11, q: "タイムラインの定義として、最も適切なものはどれですか？", opts: ["災害発生後に作成する活動記録。", "災害時の行動を「いつ」「誰が」「何をするか」に着目して時系列に整理した計画。", "過去の災害履歴を地図にまとめたもの。", "消防団員の年間行事予定表。"], a: 1, exp: "タイムラインは、災害の発生を前提に、時系列で防災行動を整理した「防災行動計画」のことです。" },
+            { id: 12, q: "タイムラインにおける「ゼロ・アワー」とは何を指しますか？", opts: ["避難が完了した時刻。", "消防団員が参集場所に到着した時刻。", "気象警報の発表や堤防決壊など、災害発生のトリガーとなる時点。", "タイムラインの作成を開始した時刻。"], a: 2, exp: "台風の上陸や堤防の決壊など、災害発生の起点となる時間を「ゼロ・アワー」と呼び、そこから遡って行動を計画します。" },
+            { id: 13, q: "タイムライン導入による効果として、正しくないものはどれですか？", opts: ["先を見越した早め早めの行動ができる。", "各機関の責任が明確になり、行動の抜け漏れを防げる。", "災害発生を100％阻止できるようになる。", "災害対応の振り返りや改善が容易になる。"], a: 2, exp: "タイムラインは被害軽減や対応の効率化には寄与しますが、インフラの能力を超える自然災害（外力）そのものを完全に阻止するものではありません。" },
+            { id: 14, q: "個人や家族が作成する避難行動計画を何と呼びますか？", opts: ["避難確保計画", "マイ・タイムライン", "BCP（事業継続計画）", "水防計画"], a: 1, exp: "住民一人ひとりが自分自身の防災行動を時系列に整理したものを「マイ・タイムライン」と呼びます。" },
+            { id: 15, q: "タイムライン策定手順のステップ5で推奨されている、情報をグループ化して整理する手法は何ですか？", opts: ["KJ法", "PDCAサイクル", "マインドマップ", "ブレーンストーミング"], a: 0, exp: "抽出された多くの防災行動を類似性ごとにグループ化し、整理する手法として「KJ法」が紹介されています。" },
+            { id: 16, q: "河川堤防の裏法面（住居側）から河川水が湧き出す現象を何と呼びますか？", opts: ["越水", "浸透（漏水）", "洗掘", "亀裂"], a: 1, exp: "水位上昇による水圧で堤防内に水が入り込み、裏法面から湧き出す現象を「浸透（漏水）」と呼びます。" },
+            { id: 17, q: "堤防の「洗掘（せんくつ）」とはどのような状態ですか？", opts: ["堤防の天端から水が溢れ出ること。", "河川水の流勢や波浪により、堤防の斜面が削り取られること。", "堤防に縦や横のひび割れが入ること。", "地盤沈下で堤防が低くなること。"], a: 1, exp: "流水の勢いで堤防が削られる現象を「洗掘」と呼びます。" },
+            { id: 18, q: "水のあふれ（越水）を防止するために、土のうを積み上げる最も基本的な工法は何ですか？", opts: ["木流し工", "月の輪工", "積み土のう工", "シート張り工"], a: 2, exp: "堤防の天端に土のうを積み、越水を防ぐ最も基本的かつ重要な工法が「積み土のう工」です。" },
+            { id: 19, q: "浸透（漏水）対策として、湧き出した水の周囲に土のうを円形状に積み、水圧を調整する工法は何ですか？", opts: ["月の輪工", "釜段工", "木流し工", "五徳縫い"], a: 0, exp: "漏水の周囲に土のうを積んで池を作り、水圧を均衡させて崩壊を防ぐのが「月の輪工」です。" },
+            { id: 20, q: "水防工法で土のうを積む際、下流側からではなく「上流側」から順に重ねる理由は何ですか？", opts: ["上流の方が水がきれいだから。", "土のうの継ぎ目に水が入り込み、めくり上げられるのを防ぐため。", "単なる慣習であり、どちらでもよい。", "下流から積むと重くなるから。"], a: 1, exp: "水の流れに対して逆らわないよう、上流側から重ねることで継ぎ目への浸入を防ぎます。" },
+            { id: 21, q: "水害対応時の服装として、不適切なものはどれですか？", opts: ["ライフジャケット", "ヘルメット（保安帽）", "防火衣", "雨具"], a: 2, exp: "水害活動では、水を含んで重くなり、落水時に危険な「防火衣」は着用しないよう指導されています。" },
+            { id: 22, q: "津波浸水想定区域内での活動における安全確保の原則は何ですか？", opts: ["住民の避難が完了するまで現場を離れない。", "水門の閉鎖を最後まで見届ける。", "活動可能時間を確保できることを確認するまでは、原則として退避を優先する。", "泳いで逃げる準備をしておく。"], a: 2, exp: "危険を伴う水防活動では、隊員の安全確保のため、活動可能時間が確保できない場合は退避を優先します。" },
+            { id: 23, q: "活動中の不測の事態に備え、指揮者が事前に徹底しておくべき事項は何ですか？", opts: ["昼食の場所", "退避方法、退避場所、退避を指示する合図", "本日のニュース内容", "帰宅後の予定"], a: 1, exp: "現場での安全を確保するため、具体的な退避ルール（場所・方法・合図）を事前に共有しておくことが不可欠です。" },
+            { id: 24, q: "水防活動は原則としてどのような体制で行うべきですか？", opts: ["効率を考え、一人ずつ分散して行う。", "複数人で、必要に応じて監視員を配置して行う。", "経験豊富な団員が一人で行う。", "全員一か所に集まって行う。"], a: 1, exp: "安全確保のため、活動は原則複数人で行い、現場状況を把握する監視員を配置することが推奨されています。" },
+            { id: 25, q: "活動が長時間にわたる際、事故防止のために指揮者がとるべき措置はどれですか？", opts: ["完了するまで休憩させない。", "栄養ドリンクを配布する。", "疲労による事故を防ぐため、団員を随時交代させる。", "団員に気合を入れ直させる。"], a: 2, exp: "疲労は事故の原因となるため、適度な交代と休息が必要です。" },
+            { id: 26, q: "水防管理者が指定し、巡視や土のう作成などの後方支援を行う団体を何と呼びますか？", opts: ["消防協力隊", "水防協力団体", "自警団", "ボランティアセンター"], a: 1, exp: "水防法に基づき、NPOや自治会などを「水防協力団体」として指定し、水防活動の支援を依頼できる制度があります。" },
+            { id: 27, q: "水防活動の委任を受けた「民間事業者（建設業者等）」に付与される公的な権限は何ですか？", opts: ["逮捕権", "緊急通行や公用負担の権限", "徴税権", "裁判権"], a: 1, exp: "重機を持つ建設業者等には、水防管理者からの委任により、団員と同様の緊急通行等の権限が付与されます。" },
+            { id: 28, q: "隣接する市町村間で締結される、災害時の相互支援に関する取り決めを何と呼びますか？", opts: ["合併協定", "相互応援協定", "防衛白書", "治安維持協定"], a: 1, exp: "自治体間で結ばれる、災害時の応援に関する協定が「相互応援協定」です。" },
+            { id: 29, q: "要配慮者利用施設（病院・老人ホーム等）の管理者が作成を義務付けられている計画は何ですか？", opts: ["避難確保計画", "地域防災計画", "都市計画", "警備計画"], a: 0, exp: "水防法等の改正により、浸水想定区域内の要配慮者利用施設には「避難確保計画」の作成と訓練の実施が義務付けられました。" },
+            { id: 30, q: "企業のBCP（事業継続計画）において、水害対策として有効なハード対策はどれですか？", opts: ["オフィスの清掃", "止水板の設置や設備機器のかさ上げ", "社内報の発行", "役員会議の増設"], a: 1, exp: "浸水被害を防ぐ物理的な対策として、止水板の設置や重要設備の高所配置が推奨されています。" },
+            { id: 31, q: "デジタル水防の導入により期待できる効果として、適切なものはどれですか？", opts: ["団員の給料が自動的に上がる。", "現場状況を地図上でリアルタイムに共有し、初動を迅速化できる。", "雨が降らなくなる。", "全自動で土のうが積まれる。"], a: 1, exp: "現場写真や位置情報を地図上で共有することで、的確な指示と迅速な活動が可能になります。" },
+            { id: 32, q: "団員の現在位置情報を共有する機能の主な目的は何ですか？", opts: ["団員のサボりを監視するため。", "団員の歩数を競うため。", "迅速な対応の指示や、危険時の退避指示を確実に行うため。", "住所を特定するため。"], a: 2, exp: "本部が団員の位置を把握することで、危険が迫った際、迅速に退避指示を出すことが可能になります。" },
+            { id: 33, q: "多くの自治体で導入されている、手軽に現場写真を共有できるツールは何ですか？", opts: ["電報", "SNS（LINE等）", "有線放送", "手旗信号"], a: 1, exp: "近年、SNS（特にLINE）を用いた情報の迅速な集約・共有が広がっています。" },
+            { id: 34, q: "ICTシステムを構築する際、重要な情報を埋もれさせないための工夫として有効な機能はどれですか？", opts: ["重要度選択機能や新着通知機能", "音楽再生機能", "ゲーム機能", "広告表示機能"], a: 0, exp: "情報過多を防ぐため、情報の優先順位を付けたり、見逃しを防ぐ機能が重要です。" },
+            { id: 35, q: "LGWAN（総合行政ネットワーク）外でシステムを構築するメリットは何ですか？", opts: ["自治体職員しかアクセスできない。", "水防団員などの外部ユーザがスマートフォン等から容易にアクセスできる。", "速度が極めて遅い。", "インターネットに繋がらない。"], a: 1, exp: "インターネット経由でアクセスできる場所に構築することで、現場の団員が各自の端末で情報を活用しやすくなります。" },
+            { id: 36, q: "全国の水防団員・消防団員のうち、被用者（サラリーマン）が占める割合はおよそ何％ですか？", opts: ["約30％", "約50％", "約73％", "約95％"], a: 2, exp: "平成28年時点の統計で、団員全体に占めるサラリーマン等の被用者の割合は73％に達しており、社会情勢の変化に伴い高い割合となっています。" },
+            { id: 37, q: "専任の水防団員における年齢構成で、最も高い割合を占める層はどれですか？", opts: ["20歳代", "30歳代", "50歳代", "60歳以上"], a: 3, exp: "消防団員と比較して水防団員の高齢化は顕著であり、60歳以上が約44％と最も高い割合を占めています。" },
+            { id: 38, q: "水防団員のうち、勤続年数が25年以上のベテラン団員が占める割合は、消防団員と比較してどうなっていますか？", opts: ["消防団員より低い。", "消防団員とほぼ同じ。", "消防団員（10％）に対し、水防団員（19％）と高い。", "消防団員の方が圧倒的に高い。"], a: 2, exp: "水防団は長期間活動を続ける団員の割合が高く、25年以上の勤続者は19％に達し、消防団の10％を上回っています。" },
+            { id: 39, q: "昭和46年当時と比較して、現在の水防団員・消防団員の総数はおよそどの程度減少しましたか？", opts: ["ほとんど変わっていない。", "約10％減少。", "約30％減少。", "約50％減少。"], a: 2, exp: "昭和46年の約122万人に対し、平成28年には約87万人となっており、総数で約3割減少しています。" },
+            { id: 40, q: "水防団員の充足率（定員に対する実員数の割合）の実態として、正しいものはどれですか？", opts: ["すべての道府県で100％を超えている。", "概ね9割以上だが、地域によっては7割に満たないところもある。", "全国一律で5割程度である。", "定員制度そのものが存在しない。"], a: 1, exp: "都道府県別のデータでは、充足率が高い地域がある一方で、定員の7割を切る深刻な人員不足に直面している地域も存在します。" },
+            { id: 41, q: "国土交通省の「DiMAPS（災害情報共有プラットフォーム）」の最大の特徴は何ですか？", opts: ["過去の雨量統計をエクセルでダウンロードできる。", "被災地の空中写真や被害情報がリアルタイムで地図上に集約・表示される。", "団員の給与計算が自動で行われる。", "全国の消防署の電話帳を閲覧できる。"], a: 1, exp: "DiMAPSは被災状況を視覚的に把握するためのツールであり、空中写真や被害情報をリアルタイムで共有できる点が特徴です。" },
+            { id: 42, q: "気象庁が提供する「キキクル（危険度分布）」において、洪水害の危険度が最も高く、避難指示の発令目安となる色はどれですか？", opts: ["黄色", "赤色", "紫（または黒）", "青色"], a: 2, exp: "キキクルでは5段階の色分けがなされており、紫色は「非常に危険」な状態を示し、市町村が避難指示を発令する判断基準の一つとなります。" },
+            { id: 43, q: "想定し得る最大規模の降雨により河川が氾濫した際の浸水範囲や水深を示す図面を何と呼びますか？", opts: ["洪水浸水想定区域図", "雨量グラフ", "水防団待機図", "過去浸水実績図"], a: 0, exp: "水防法第14条に基づき、想定最大規模の降雨による氾濫を予測した図面を「洪水浸水想定区域図」として公表することが義務付けられています。" },
+            { id: 44, q: "浸水想定区域図において、建物が倒壊・流失する危険性が高いとされる区域を特に何と呼びますか？", opts: ["浸水継続区域", "家屋倒壊等氾濫想定区域", "警戒避難区域", "重要巡視点"], a: 1, exp: "激しい氾濫流や河岸侵食により建物そのものが破壊されるリスクがある場所を「家屋倒壊等氾濫想定区域」と定義し、立ち退き避難を強く促しています。" },
+            { id: 45, q: "「浸水ナビ（地点別浸水シミュレーション検索システム）」で確認できる便利な機能はどれですか？", opts: ["団員の出勤管理。", "指定した地点の浸水深が時間とともに変化するアニメーション。", "近隣の飲食店の営業情報。", "土のうのネット注文。"], a: 1, exp: "浸水ナビは、特定の場所で「いつから浸水し、いつ最大深に達するか」をアニメーションで確認できるため、避難計画作成に非常に有効です。" },
+            { id: 46, q: "米国で実践され、日本の水防訓練でも導入が推奨されている事後検証の手法を何と呼びますか？", opts: ["PDCA", "AAR（After Action Review）", "BCP", "KPI"], a: 1, exp: "AARは、活動後に参加者が集まり、課題と改善策を導き出すための体系的な検証手法です。" },
+            { id: 47, q: "AAR（事後検証）において、議論の軸となる「4つの質問」に含まれないものはどれですか？", opts: ["何をしようとしたのか？", "実際には何が起きたのか？", "誰がミスをしたのか？", "次回すべきことは何か？"], a: 2, exp: "AARは個人の過失を追及するものではなく、教訓を導き出して組織全体を改善することを目的としています。" },
+            { id: 48, q: "水防活動の教訓を形式知化し、将来の対応に活かすために積み重ねられる知識の蓄積を何と呼びますか？", opts: ["内部機密", "組織・制度としての記憶（Institutional Memory）", "現場の勘", "伝統芸能"], a: 1, exp: "繰り返し発生する災害対応の課題を記録し、法や制度の見直しに繋げる知識の蓄積を「組織・制度としての記憶」と呼びます。" },
+            { id: 49, q: "水防法等の規定に基づき、指定水防管理団体が避難訓練を実施すべき頻度はどのようになっていますか？", opts: ["3年に1回。", "毎年1回以上。", "災害が発生したときのみ。", "10年に1回。"], a: 1, exp: "水防法第32条の2に基づき、指定水防管理団体は毎年、水防団や消防機関等と連携した訓練を行う義務があります。" },
+            { id: 50, q: "施設や地域の「避難確保計画」が適切かどうかを確認するための最も効果的な手段は何ですか？", opts: ["避難訓練を実施し、計画通りの時間で動けるか検証すること。", "計画書を金庫に保管すること。", "役所に提出して満足すること。", "専門業者に任せきりにすること。"], a: 0, exp: "避難確保計画は「作って終わり」ではなく、訓練を通じて実効性を確認し、PDCAサイクルを回して改善し続けることが不可欠です。" },
+            { id: 51, q: "堤防が削られる「洗掘（せんくつ）」に対し、最も有効な応急対策工法はどれですか？", opts: ["月の輪工", "シート張り工法（または木流し工）", "釜段工", "排水ポンプの設置"], a: 1, exp: "水の流れを直接受ける堤防の表法面を保護するためにシートを張ったり、木を流して流速を弱める工法が有効です。" },
+            { id: 52, q: "漏水（浸透）が発生した際、噴出口を完全に塞ぐのではなく、土のうを積んで「池」を作るのはなぜですか？", opts: ["水を貯めて消火活動に使うため。", "川の水圧との差を縮め、土砂の流出（堤防の崩壊）を防ぐため。", "現場の見た目を良くするため。", "団員の休憩場所にするため。"], a: 1, exp: "噴出口を強引に塞ぐと別の場所から激しく漏水する恐れがあります。池を作って水圧を均衡させるのが「月の輪工」や「釜段工」の理屈です。" },
+            { id: 53, q: "土のうを積む際、土のうの「口」をどちらに向けるのが基本ですか？", opts: ["水の流れが来る方（上流側）。", "水の流れと反対側（下流側）または内側。", "真上。", "特に決まっていない。"], a: 1, exp: "土のうの口を水の流れに向けると、水圧で中身が流れ出やすくなるため、流れと反対側（下流）に向けるのが鉄則です。" },
+            { id: 54, q: "堤防の決壊が切迫していることを示す「前兆現象」として、誤っているものはどれですか？", opts: ["裏法面に大規模な漏水が発生している。", "堤防の天端（てっぺん）が沈下している。", "堤防に急激に拡大する亀裂がある。", "河川の水が透き通ってきれいになった。"], a: 3, exp: "激しい漏水、沈下、亀裂は決壊の予兆であり、これらを発見した場合は直ちに退避判断が必要です。水の透明度は直接の予兆ではありません。" },
+            { id: 55, q: "重機を使用して「大型土のう」を設置するメリットは何ですか？", opts: ["団員の手作業が全く不要になる。", "人力では不可能な高さや流勢に対し、迅速かつ強力な防護線を構築できる。", "コストが非常に安い。", "どこでも誰でも設置できる。"], a: 1, exp: "近年、団員不足を補うため、建設業者と連携して重機による大型土のう積みを行う「機械力」の活用が重要視されています。" },
+            { id: 56, q: "要配慮者利用施設（病院、老人ホーム等）の管理者に作成が義務付けられているのは何ですか？", opts: ["避難確保計画", "消防団入団勧誘計画", "都市開発計画", "財務諸表"], a: 0, exp: "水防法第15条の3に基づき、浸水想定区域内の要配慮者利用施設の所有者等は「避難確保計画」を作成しなければなりません。" },
+            { id: 57, q: "避難確保計画を策定した際、報告しなければならない相手は誰ですか？", opts: ["警察署長", "市町村長", "自衛隊駐屯地司令", "隣の施設の管理者"], a: 1, exp: "計画の作成・変更時には、遅滞なく市町村長へ報告することが法律で定められています。" },
+            { id: 58, q: "避難確保計画において「屋内安全確保（垂直避難）」を選択できる条件として、正しいものはどれですか？", opts: ["建物が1階建てである。", "「家屋倒壊等氾濫想定区域」に含まれておらず、浸水しない上階がある。", "浸水しても水遊びができる程度である。", "泳ぎが得意な職員が配置されている。"], a: 1, exp: "建物そのものが流失する恐れがなく、かつ浸水深以上の高さに避難場所を確保できる場合のみ、屋内待機が選択肢となります。" },
+            { id: 59, q: "要配慮者利用施設において、避難を「開始」すべき最も標準的なタイミングはいつですか？", opts: ["氾濫が発生したとき。", "市町村から「高齢者等避難（警戒レベル3）」が発令されたとき。", "消防車がサイレンを鳴らして通ったとき。", "雨が降り止んだとき。"], a: 1, exp: "移動に時間を要する要配慮者は、警戒レベル3の段階で避難を開始することが原則です。" },
+            { id: 60, q: "避難確保計画を策定しなかった施設に対し、市町村長が行うことができる措置は何ですか？", opts: ["施設の取り壊し命令。", "管理者の逮捕。", "作成の指示、及び従わない場合の施設名の公表。", "罰金の徴収。"], a: 2, exp: "法改正により、義務を果たさない施設に対しては公的な「指示」と「名称公表」というペナルティが設けられました。" },
+            { id: 61, q: "隣接する自治体間で「水防事務の委託」を行う主なメリットは何ですか？", opts: ["相手の自治体の予算を自由に使える。", "専門性の高い技術職員を共同活用し、人材不足を補える。", "自分の自治体の水防団を解散できる。", "責任をすべて相手に押し付けられる。"], a: 1, exp: "2021年の法改正により、小規模自治体でも広域連携を通じて高度な水防対応力を維持できる仕組みが強化されました。" },
+            { id: 62, q: "水防管理者が指定する「水防協力団体」が行う業務に含まれるものはどれですか？", opts: ["犯人の逮捕。", "税金の徴収。", "巡視や避難援助、土のう作成などの後方支援。", "堤防の永久的な改修工事。"], a: 2, exp: "NPOや自治会、企業などが「水防協力団体」として、団員の活動を補完する役割を担います。" },
+            { id: 63, q: "水防管理団体が「民間事業者（建設業者等）」とあらかじめ締結しておくべき最も重要なものはどれですか？", opts: ["忘年会の協賛。", "災害時の資機材供給や応急復旧に関する協定。", "社員の健康診断契約。", "駐車場貸借契約。"], a: 1, exp: "有事に重機や資材を迅速に確保するためには、平時からの「災害時応援協定」の締結が不可欠です。" },
+            { id: 64, q: "水防団員等が緊急の必要がある際、私有地を通行できる権限を何と呼びますか？", opts: ["営業権", "借地権", "緊急通行権", "永小作権"], a: 2, exp: "水防法第19条に基づき、緊急時には一般交通に供しない空地や水面を通行できる権限が付与されています。" },
+            { id: 65, q: "緊急通行や資材の徴用（公用負担）によって、個人の財産に損失を与えた場合の扱いはどうなりますか？", opts: ["ボランティアなので補償されない。", "時価により、通常生ずべき損失が補償される。", "10年後に返却される。", "団員個人が弁償する。"], a: 1, exp: "公共の利益のために財産権を制限した場合は、法に基づき適切な補償が行われることが定められています。" },
+            { id: 66, q: "国土交通省が推進する「スマート水防」の主な目的は何ですか？", opts: ["団員に最新のゲームを提供すること。", "デジタル技術で現場の情報を一斉共有し、活動を効率化・安全化すること。", "全自動で雨を止めること。", "消防車を無人運転にすること。"], a: 1, exp: "団員減少の中でも地域の防衛力を維持するため、ICTを活用した「情報の非対称性の解消」が目指されています。" },
+            { id: 67, q: "エッジAIカメラを水位監視に導入する最大のメリットはどれですか？", opts: ["画質が非常にきれいで映画が撮れる。", "水位の自動判定が可能になり、危険な現場への巡視回数を減らせる。", "カメラが自ら土のうを運ぶ。", "監視映像がSNSでバズる。"], a: 1, exp: "AI解析により遠隔から正確な状況把握ができるため、団員の安全確保と業務負担軽減に直結します。" },
+            { id: 68, q: "水防活動支援システムで、現場写真を投稿する際に「位置情報（GPS）」を付与する理由は何ですか？", opts: ["団員が迷子にならないようにするため。", "本部が地図上で「どこで何が起きているか」を一目で把握できるようにするため。", "スマートフォンの機能を試すため。", "記念写真を撮るため。"], a: 1, exp: "文字や音声だけでなく、地図と連動した写真情報は、迅速かつ的確な指揮判断を下すための強力な材料となります。" },
+            { id: 69, q: "システム上で、気象情報や水位、避難情報を一つにまとめて表示する機能を何と呼びますか？", opts: ["メーリングリスト", "一元的な情報表示（またはCOP）", "ブックマーク", "デスクトップ壁紙"], a: 1, exp: "複数のサイトを見回る手間を省き、情報を重ね合わせることで総合的な判断を可能にする「一元化」が重要です。" },
+            { id: 70, q: "デジタル水防の導入により、これまで音声無線で行っていた「一対一」の伝達がどのように改善されますか？", opts: ["「一対多」の一斉情報共有が可能になり、伝達の遅延が解消される。", "誰も返信しなくて良くなる。", "声を出す必要がなくなるので喉が痛くならない。", "無線機をすべて捨てることができる。"], a: 0, exp: "デジタルツール（SNSやアプリ）は、本部からの指示や現場の状況を全員で同時に把握できるため、情報の「抜け・漏れ」を劇的に減らします。" },
+            { id: 71, q: "「積み土のう工」において、2段目以上の土のうを積む際、下の土のうに対してどのように配置するのが正しいですか？", opts: ["ぴったり同じ位置に重ねる。", "下の土のうの継ぎ目をまたぐように、交互に（千鳥状に）重ねる。", "隙間を空けて並べる。", "重ねずに横に並べる。"], a: 1, exp: "継ぎ目をずらすことで、土のう同士が噛み合い、水圧に対する強度が大幅に向上します。" },
+            { id: 72, q: "土のうの口を縛る際や、杭を固定する際によく使われる、滑りにくく緩みにくい結び方はどれですか？", opts: ["ちょうちょ結び", "いぼ結び（または8の字結び）", "かた結び", "たて結び"], a: 1, exp: "水防現場では、濡れても解けにくく、かつ確実な固定ができる「いぼ結び」などが伝統的に多用されます。" },
+            { id: 73, q: "木流し工で使用する木の枝葉を、あえて「下流」側に向けて設置する理由は何ですか？", opts: ["木をきれいに見せるため。", "水の抵抗を適度にし、浮き上がりを防ぎながら流速を弱めるため。", "魚が隠れやすくするため。", "上流に向けると重くなるから。"], a: 1, exp: "流水に対して枝の向きを適切に管理することで、工法としての効果（消能効果）を最大限に発揮させます。" },
+            { id: 74, q: "土のう袋の材料として、滑りにくく吸水性があるため水防活動に望ましいとされるのはどれですか？", opts: ["ビニール袋", "俵や麻袋", "紙袋", "ナイロン袋"], a: 1, exp: "化学繊維の袋は滑りやすい欠点がありますが、麻などは摩擦が大きく、積み上げた際の安定性に優れています。" },
+            { id: 75, q: "タイムラインの「ステージ0（情報共有準備）」とは、通常どのタイミングを指しますか？", opts: ["堤防が決壊したとき。", "台風上陸の1日半～1日前など、警報が出る前の準備段階。", "訓練の日。", "水防月間。"], a: 1, exp: "災害が現実化する前の「備え」の時間をステージ0とし、関係機関の連絡体制を整えます。" },
+            { id: 76, q: "水防活動における「安全時間」の定義として適切なものはどれですか？", opts: ["休憩時間のこと。", "危険が到達する予想時刻から、退避に要する時間を差し引いた余裕時間。", "雨が降っていない時間。", "団員が談笑している時間。"], a: 1, exp: "「安全時間」を意識した活動停止基準を持つことで、逃げ遅れによる犠牲を防ぎます。" },
+            { id: 77, q: "洪水時の「内水氾濫」と「外水氾濫」の違いについて、正しい説明はどれですか？", opts: ["名前が違うだけで同じ現象。", "外水は雨漏りのこと、内水は洪水の水。", "外水は川から水が溢れること、内水は下水や側溝が溢れること。", "内水は飲み水、外水は川の水。"], a: 2, exp: "川そのものの氾濫（外水）だけでなく、都市部での排水不能による浸水（内水）も水防活動の重要な対象です。" },
+            { id: 78, q: "堤防の異常を発見した際、水防団員が真っ先に行うべき「基本行動」はどれですか？", opts: ["自分で判断して黙々と直す。", "直ちに指揮者へ報告し、周囲の団員と協力して安全を確保する。", "現場から黙って逃げる。", "SNSに動画を投稿して拡散を待つ。"], a: 1, exp: "水防活動の基本は「報告・連絡・相談」と「組織行動」です。独断専行は危険を招きます。" },
+            { id: 79, q: "水防活動における「タイムライン」を、他人に説明する際の例えとして適切なものはどれですか？", opts: ["「いつ、誰が何をするか」を書いた、防災のシナリオ（台本）。", "自由時間の予定表。", "歴史の教科書。", "水の深さを測る物差し。"], a: 0, exp: "時系列で行動を整理した「台本」があることで、パニックにならず冷静な初動が可能になります。" },
+            { id: 80, q: "日本における水防団の精神を象徴する言葉として、最もふさわしいのはどれですか？", opts: ["自己責任", "弱肉強食", "共助（自らの地域は自らで守る）", "他力本願"], a: 2, exp: "水防団は地域住民が連帯して郷土を守る「共助」の究極の形であり、江戸時代からの自衛の精神を引き継いでいます。" }
+        ];
+
+        let currentQuestions = [];
+        let userAnswers = {};
+
+        // --- 2. CORE FUNCTIONS ---
+
+        // Shuffle Array
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize Quiz
+        function startQuiz() {
+            // Reset State
+            userAnswers = {};
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            
+            // Select 10 random questions
+            const shuffled = shuffle([...allQuestions]);
+            currentQuestions = shuffled.slice(0, 10);
+            
+            // Render Questions
+            const contentDiv = document.getElementById('quiz-content');
+            contentDiv.innerHTML = '';
+            
+            currentQuestions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-item';
+                card.innerHTML = `
+                    <div class="question-text">Q${index + 1}. ${q.q}</div>
+                    <div class="options-group">
+                        ${q.opts.map((opt, i) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${q.id}" value="${i}" onchange="recordAnswer(${q.id}, ${i})">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="result-box" id="result-${q.id}"></div>
+                `;
+                contentDiv.appendChild(card);
+            });
+
+            // Show grade button, hide review mode elements if any
+            document.getElementById('grade-btn').style.display = 'inline-block';
+            
+            // Smooth scroll to top of quiz area
+            document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Store Answer
+        function recordAnswer(qId, val) {
+            userAnswers[qId] = val;
+        }
+
+        // Reset Quiz (New Function)
+        function resetQuiz() {
+            if(confirm('現在の進捗は失われます。最初の画面に戻りますか？')) {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('final-screen').style.display = 'none';
+                document.getElementById('start-screen').style.display = 'block';
+                
+                // Clear data
+                userAnswers = {};
+                currentQuestions = [];
+                
+                // Scroll to top of quiz area
+                document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Grade Quiz
+        function gradeQuiz() {
+            let score = 0;
+            // let allAnswered = true; // Optional validation
+
+            currentQuestions.forEach(q => {
+                const resultBox = document.getElementById(`result-${q.id}`);
+                const userAns = userAnswers[q.id];
+                
+                let html = '';
+                if (userAns == q.a) {
+                    score++;
+                    resultBox.className = 'result-box correct';
+                    html = `<strong><i class="fa-solid fa-circle-check"></i> 正解</strong>`;
+                } else {
+                    resultBox.className = 'result-box incorrect';
+                    const userText = userAns !== undefined ? q.opts[userAns] : "未回答";
+                    html = `<strong><i class="fa-solid fa-circle-xmark"></i> 不正解</strong> (あなたの回答: ${userText})<br>正解は: <strong>${q.opts[q.a]}</strong>`;
+                }
+                html += `<div class="explanation"><strong>解説:</strong> ${q.exp}</div>`;
+                
+                resultBox.innerHTML = html;
+                resultBox.style.display = 'block';
+            });
+
+            // Switch Screens
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'block';
+            
+            // Display Score
+            document.getElementById('score-val').innerText = score * 10;
+            
+            // Feedback Message
+            const feedback = document.getElementById('feedback-msg');
+            if(score >= 8) {
+                feedback.innerHTML = '<span style="color: #10b981; font-weight: bold;">大変素晴らしい成績です！</span><br>現場での活躍を期待しています。';
+            } else {
+                feedback.innerHTML = '<span style="color: #fca5a5;">合格ラインまであと少しです。</span><br>回答を見直して、もう一度挑戦しましょう。';
+            }
+        }
+
+        // Review Mode
+        function reviewAnswers() {
+            document.getElementById('final-screen').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('grade-btn').style.display = 'none'; // Hide grade button in review mode
+            
+            // Scroll to top of quiz
+            document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
