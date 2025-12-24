@@ -1,0 +1,537 @@
+import React, { useState, useEffect } from 'react';
+
+// --- Data Source (80 questions) ---
+const questionsData = [
+    // 第1章
+    { id: 1, chapter: "第1章：航空法と災害時の特例", q: "航空法第132条の92（旧第132条の3）の「捜索・救助等のための特例」が適用されるのは、どのような場合ですか？", options: ["趣味でドローンを飛行させ、行方不明者を捜索する場合", "国や地方公共団体、またはそれらから依頼を受けた者が捜索・救助を行う場合", "民間企業が宣伝目的で災害現場を撮影する場合", "航空局への事前申請を済ませた者が訓練を行う場合"], correct: 1, reason: "特例の対象者は「国若しくは地方公共団体又はこれらの者の依頼により捜索若しくは救助を行う者」と定められています。" },
+    { id: 2, chapter: "第1章：航空法と災害時の特例", q: "災害時の特例により、航空法上の許可・承認が免除される飛行方法として「誤っている」ものはどれですか？", options: ["夜間飛行", "目視外飛行", "アルコール又は薬物の影響下での飛行", "物件の投下"], correct: 2, reason: "特例が適用される場合でも、「アルコール又は薬物の影響下での飛行禁止」については適用除外とはなりません。" },
+    { id: 3, chapter: "第1章：航空法と災害時の特例", q: "特例により「人又は物件との距離（30m）」の規制が免除される理由は何ですか？", options: ["消防ドローンの機体は衝突しても壊れないため", "操縦士が全員国家資格を保有している前提があるため", "事故や災害時の捜索・救助等の緊急性および公共性が極めて高いため", "30m以内に人が立ち入ることは想定されないため"], correct: 2, reason: "救助等の迅速化を図るため、緊急性が高く公共性の高い行為については、人命や財産の危難を回避する目的で一部の規定が除外されています。" },
+    { id: 4, chapter: "第1章：航空法と災害時の特例", q: "捜索・救助の特例が適用される飛行であっても、操縦者が自主的に行うべきことは何ですか？", options: ["航空機の航行の安全や、地上・水上の人・物件の安全の確保", "飛行終了後、1時間以内の航空局への電話報告", "飛行中のSNSでのリアルタイムライブ配信", "飛行経路下のすべての土地所有者からの書面による同意取得"], correct: 0, reason: "特例適用者であっても安全確保の責務が解除されるわけではなく、自主的に必要な安全確保を行う必要があるとガイドラインに明記されています。" },
+    { id: 5, chapter: "第1章：航空法と災害時の特例", q: "空港周辺や高度150m以上で特例飛行を行う場合、空港事務所等に対して行うべき手続きは何ですか？", options: ["飛行開始の24時間前までの書面提出", "電話連絡に加え、電子メールまたはファクシミリによる情報の通知（航空情報の発行手続き）", "許可が下りるまで待機し、承認番号を受け取ること", "警察署を経由した口頭での伝達"], correct: 1, reason: "航空機の安全を確保するため、空港等の管理者等と調整した上で、空港事務所に対して目的、範囲、高度等の情報を通知し、航空情報を発行させる必要があります。" },
+    
+    // 第2章
+    { id: 6, chapter: "第2章：緊急用務空域", q: "「緊急用務空域」とは、どのような空域ですか？", options: ["ドローンの練習のために各自治体が指定する空域", "平時から消防署の周辺に設定されている空域", "警察や消防等が捜索・救助等の緊急用務を行う航空機の安全を確保するため、国土交通大臣が指定する空域", "人口集中地区（DID）と同じ範囲の空域"], correct: 2, reason: "消防、警察等の航空機が緊急用務を行う際の安全確保のため、国土交通大臣が指定する空域を指します。" },
+    { id: 7, chapter: "第2章：緊急用務空域", q: "緊急用務空域が指定された際、ドローンの操縦者が飛行前に確認すべき媒体は何ですか？", options: ["各市町村の広報紙", "国土交通省のホームページや公式X（旧Twitter）", "地元のテレビニュース", "気象庁のレーダー画像"], correct: 1, reason: "緊急用務空域は、インターネット（航空局HPやSNS）を通じて迅速に公示されることとなっています。" },
+    { id: 8, chapter: "第2章：緊急用務空域", q: "緊急用務空域において、消防が捜索・救助目的で飛行させる場合の扱いはどうなりますか？", options: ["消防であっても一切飛行できない", "事前に3日以上の猶予を持って申請し、許可を得れば飛行できる", "航空法第132条の92の規定により、飛行禁止の適用除外となる", "機体重量が100g未満の場合に限り、無許可で飛行できる"], correct: 2, reason: "消防、警察、地方公共団体等が捜索・救助を行う場合は、緊急用務空域における飛行禁止の規定も適用除外となります。" },
+    { id: 9, chapter: "第2章：緊急用務空域", q: "緊急用務空域の設定のきっかけとなった事案はどれですか？", options: ["東日本大震災での通信途絶", "令和3年の栃木県足利市での林野火災におけるヘリ活動の中断", "空港周辺での所有者不明ドローンの目撃", "イベント会場でのドローン墜落事故"], correct: 1, reason: "足利市の林野火災で、ドローンの目撃により消防防災ヘリの活動が一時中断したことを受けて、規則が改正されました。" },
+    { id: 10, chapter: "第2章：緊急用務空域", q: "緊急用務空域内を飛行中に有人航空機を確認した場合、操縦者がとるべき適切な措置はどれですか？", options: ["有人機よりも高い高度まで上昇させて回避する", "ドローンを地上に降下させるなど、航空機の航行を妨げないようにする", "有人航空機に対してライトを点滅させて存在を知らせる", "そのままの高度でホバリングし、有人機が通り過ぎるのを待つ"], correct: 1, reason: "有人機の航行の安全が最優先されるため、接近を確認した場合は直ちに降下させる等の適切な措置が必要です。" },
+
+    // 第3章
+    { id: 11, chapter: "第3章：ドローンの登録と機体認証", q: "航空法に基づき、国の登録を受けなければ飛行させることができないのは、重量が何グラム以上の機体ですか？", options: ["200g以上", "100g以上", "500g以上", "1,000g以上"], correct: 1, reason: "令和4年の法改正により、100g以上の無人航空機は登録が義務付けられました。" },
+    { id: 12, chapter: "第3章：ドローンの登録と機体認証", q: "ドローンの機体登録の有効期間は、何年間ですか？", options: ["1年間", "2年間", "3年間", "5年間"], correct: 2, reason: "登録の有効期間は3年と定められています。" },
+    { id: 13, chapter: "第3章：ドローンの登録と機体認証", q: "登録を受けた機体に表示しなければならないものはどれですか？", options: ["操縦者の氏名", "通知された「登録記号」", "消防本部のマーク", "機体の購入金額"], correct: 1, reason: "無人航空機を識別するための登録記号を表示することが義務付けられています。" },
+    { id: 14, chapter: "第3章：ドローンの登録と機体認証", q: "登録制度の目的として「誤っている」ものはどれですか？", options: ["事故発生時における所有者の把握", "事故の原因究明など安全確保上必要な措置の実施", "安全上問題のある機体の登録拒否", "機体メーカーの売上台数を正確に把握するため"], correct: 3, reason: "登録制度の目的は、所有者把握、原因究明、安全確保にあります。" },
+    { id: 15, chapter: "第3章：ドローンの登録と機体認証", q: "機体認証制度における「第一種機体認証」は、どのような飛行に必要ですか？", options: ["趣味の空撮", "夜間の訓練", "カテゴリーIII飛行（立入管理措置を講じない第三者上空飛行）", "建物から30m以内での点検"], correct: 2, reason: "最もリスクの高いカテゴリーIII飛行（レベル4相当）には、第一種機体認証が必要です。" },
+
+    // 第4章
+    { id: 16, chapter: "第4章：運用と安全管理", q: "総務省消防庁が定める、災害対応ドローンの標準的な防水性能は何級以上ですか？", options: ["IPX1以上", "防水性能等級3（IPX3）以上", "完全防水（IPX8）", "防塵のみで防水は不要"], correct: 1, reason: "雨天や放水環境下での活動を想定し、機体およびカメラは防水性能等級3以上を備えることが必須要件とされています。" },
+    { id: 17, chapter: "第4章：運用と安全管理", q: "災害現場でドローンを運用する際の推奨される人員体制は、原則として何名ですか？", options: ["1名（操縦者のみ）", "2名（操縦者と安全管理者）", "3名体制（操縦者、安全管理者等）", "10名以上の専門部隊"], correct: 2, reason: "ガイドラインの記載例では、原則として3名体制（最低限でも2名）での運用が望ましいとされています。" },
+    { id: 18, chapter: "第4章：運用と安全管理", q: "ドローンの安全管理者が監視すべき対象として「誤っている」ものはどれですか？", options: ["ドローン周辺の飛行障害（電線や架線）", "野鳥の飛来", "有人航空機の接近", "地上の交通信号のタイミング"], correct: 3, reason: "安全管理者は飛行状態の異常、障害物、他機との接近などを監視する役割を負います。" },
+    { id: 19, chapter: "第4章：運用と安全管理", q: "大規模な地震発生直後に、GPSを用いた自律飛行を行う際の注意点は何ですか？", options: ["GPSは使えなくなるため、必ず手動で飛ばす", "地殻変動により、事前に取得した緯度経度の計測値がずれている可能性がある", "地震の揺れで人工衛星の軌道が変わるため、高度が制限される", "常に最高高度で飛行させなければならない"], correct: 1, reason: "地殻変動によるGPSデータのズレを考慮し、再度位置を確認する等の対策が必要です。" },
+    { id: 20, chapter: "第4章：運用と安全管理", q: "ドローンの運用を中止すべき気象条件として、一般的な目安はどれですか？", options: ["風速が機体の耐風性の概ね1/2程度を超える場合、または雨天等", "気温が15度以下になった場合", "雲が一つでも現れた場合", "湿度が80%を超えた場合"], correct: 0, reason: "運用マニュアルの記載例として、耐風性に対して余裕のある気象条件（概ね1/2程度以下）が挙げられています。" },
+
+    // 第5章
+    { id: 21, chapter: "第5章：消防・防災分野での活用事例", q: "火災現場におけるドローンの熱画像（赤外線カメラ）の活用用途として適切なものはどれですか？", options: ["火災の原因となった個人の特定", "燻っている火種の特定や、延焼状況の把握", "燃えている物体の成分分析", "火炎の色の美しさを記録するため"], correct: 1, reason: "赤外線カメラは、煙越しの熱源検知や消火後の残火確認に非常に有用です。" },
+    { id: 22, chapter: "第5章：消防・防災分野での活用事例", q: "仙台市が全国に先駆けて導入した、自動飛行ドローンの活用目的は何ですか？", options: ["火災の空中消火", "津波警報発令時の海岸利用者への避難広報", "山岳遭難者の夜間捜索", "災害廃棄物の投棄監視"], correct: 1, reason: "津波警報等のJアラート情報を検知し、海岸線で自動音声放送を行う運用が行われています。" },
+    { id: 23, chapter: "第5章：消防・防災分野での活用事例", q: "熱海市土石流災害において、ドローンが作成し救助活動に役立てられたものはどれですか？", options: ["被災者の名簿", "被災前後の比較による状況地図（ハザードマップ等）", "犯人の追跡ルート", "救援物資の在庫表"], correct: 1, reason: "空撮画像から作成した状況地図や土砂の深度分布が救助活動の技術支援に活用されました。" },
+    { id: 24, chapter: "第5章：消防・防災分野での活用事例", q: "東京消防庁が導入した「災害対応アナウンサードローン」の機能として、正しいものはどれですか？", options: ["火炎を吸引して消火する機能", "最大29カ国語によるAIアナウンス機能", "瓦礫を自動で撤去するマジックハンド", "救急車を空中搬送する機能"], correct: 1, reason: "外国人観光客等への対応も想定し、多言語でのアナウンスが可能な機能が備えられています。" },
+    { id: 25, chapter: "第5章：消防・防災分野での活用事例", q: "山間部での遭難者捜索において、ドローンを先行投入するメリットは何ですか？", options: ["部隊の進入に時間がかかるエリアの情報収集を迅速に行える", "救助犬を空から運べるため", "携帯電話の電波が常に100%安定するため", "遭難者自身がドローンを操縦して帰還できるため"], correct: 0, reason: "部隊がアクセス困難な場所の早期発見や、活動ルートの選定に寄与します。" },
+
+    // 第6章
+    { id: 26, chapter: "第6章：維持管理とリスクマネジメント", q: "ドローンのバッテリー（リチウムポリマー）の取り扱いで、適切なものはどれですか？", options: ["常に満充電（100%）の状態で長期間保管する", "衝撃を加えないよう注意し、膨らみや異常がある場合は使用を控える", "氷点下の環境で急速充電を行う", "水の中に浸して冷却する"], correct: 1, reason: "バッテリーは精密かつデリケートな部品であり、適切な充電・固定状況の確認が必須です。" },
+    { id: 27, chapter: "第6章：維持管理とリスクマネジメント", q: "飛行中に機体を紛失してしまった場合に、直ちに行うべき法的義務は何ですか？", options: ["市役所の受付に届け出る", "国土交通大臣への事故報告（事態の報告）", "翌日の新聞に紛失広告を出す", "保険会社だけに連絡すれば、国への報告は不要"], correct: 1, reason: "無人航空機の紛失や制御不能となった事態は「重大インシデント」等に該当する場合があり、国土交通大臣への報告が義務付けられています。" },
+    { id: 28, chapter: "第6章：維持管理とリスクマネジメント", q: "消防本部がドローンを運用する際、加入を検討すべき保険の種類として適切な組み合わせはどれですか？", options: ["動産保険（機体損害）と施設所有者賠償責任保険（第三者賠償）", "操縦者の生命保険と海外旅行保険", "火災保険と地震保険", "盗難保険と健康保険"], correct: 0, reason: "機体自体の損傷と、第三者の人・物件に対する賠償責任の両方をカバーする保険加入が一般的です。" },
+    { id: 29, chapter: "第6章：維持管理とリスクマネジメント", q: "ドローンの維持管理において、部品交換のタイミングはどう判断すべきですか？", options: ["故障して動かなくなってから交換する", "メーカーが推奨する飛行時間や期間に基づき、定期的に行う", "半年に一度、必ずすべての部品を交換する", "外観が汚れてきたら交換する"], correct: 1, reason: "安全性を確保するため、メーカー推奨の時期・方法によるメンテナンスが必要です。" },
+    { id: 30, chapter: "第6章：維持管理とリスクマネジメント", q: "ドローンの業務利用における「施設所有（管理）者賠償責任保険」がカバーする対象はどれですか？", options: ["操縦士が訓練中に足を挫いた場合の治療費", "業務上の不注意でドローンが第三者の財産を損壊させた場合の損害", "消防署の建物が落雷で破損した際の修理費", "ドローンの機体が経年劣化で動かなくなった際の買い替え費用"], correct: 1, reason: "業務上の不注意により他人に危害を与えたり、財産を損壊したりした場合の賠償責任を負担する保険です。" },
+
+    // 第7章
+    { id: 31, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "多くの消防本部で整備されている、119番通報から出動指令までを支援するシステムは何ですか？", options: ["消防業務システム", "消防指令システム", "安否情報システム", "広域応援システム"], correct: 1, reason: "119番の入電から出動指令までの一連の業務を支援するシステムを指します。" },
+    { id: 32, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "消防庁が進めている「消防指令システムのインターフェイスの標準化」の主な目的は何ですか？", options: ["全国の消防職員の制服のデザインを統一するため", "調達・維持コストの削減や、外部システム・サービスとの接続を容易にするため", "指令員がスマートフォンのアプリで出動できるようにするため", "119番通報をすべてAIに任せて職員をゼロにするため"], correct: 1, reason: "ベンダーロックインの解消や、近年のICT環境の変化に対応することが背景にあります。" },
+    { id: 33, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "講習のオンライン化や電子申請の推進により、期待される効果として適切なものはどれですか？", options: ["消防署の窓口を完全に廃止し、職員の数を半分に減らすこと", "国民や事業者の利便性向上と、消防本部等の事務の効率化", "すべての火災が自動で鎮火するようになること", "インターネットの回線速度が全国的に向上すること"], correct: 1, reason: "窓口へ出向く手間を省き、事務を効率化することがメリットとして挙げられています。" },
+    { id: 34, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "セルフ式ガソリンスタンドにおいて、従業員が行う安全確認を効率化するために活用が期待されている技術は何ですか？", options: ["AI（人工知能）", "ドローンによる空中給油", "ロボットアームによる窓拭き", "VR（バーチャルリアリティ）"], correct: 0, reason: "給油作業の安全確認等にAIを活用することで、業務の効率化が期待されています。" },
+    { id: 35, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "消防指令システムにおけるAIの実証事業として検討されている例はどれですか？", options: ["消防車を自動運転で現場に向かわせる", "緊急通報の音声をAIが文字起こしして表示する", "火災現場の温度を自動で下げる", "市民のSNS投稿をすべて自動で削除する"], correct: 1, reason: "緊急通報の文字起こしや自動応答などがAI実装の例として挙げられています。" },
+    { id: 36, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "マイナンバーカードを活用した「マイナ救急」のメリットはどれですか？", options: ["救急車のガソリン代が無料になる", "傷病者の過去の通院履歴や薬剤情報を正確かつ早期に把握できる", "救急隊員が現場でカードを販売できる", "病院の待ち時間が必ずゼロになる"], correct: 1, reason: "傷病者情報を正確に把握することで、救急業務の迅速化・円滑化につながります。" },
+    { id: 37, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "消防指令・業務システムのクラウド化が推奨される背景にある「課題」はどれですか？", options: ["消防署にサーバーを置くスペースが余りすぎていること", "各本部独自のシステム整備による高コストや、システム更新のピークへの対応", "インターネットが普及しすぎて無線が使えなくなったこと", "紙の資料が一切なくなったこと"], correct: 1, reason: "ベンダーロックインによるコスト高止まりや、令和6年度から迎えるシステム更新のピークへの対応が必要です。" },
+    { id: 38, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "姫路市消防局が交通事故防止のために共同開発した、VRを活用した取組は何ですか？", options: ["VRゲームでの消火体験", "緊急走行時の交通事故を「見える化」し、疑似体験できるVRシステム", "救急隊員が病院の中をVRで下見するシステム", "消防署の建物のVR内覧"], correct: 1, reason: "予行演習が困難な緊急走行時のリスクを疑似体験し、事故防止に役立てることを目的としています。" },
+    { id: 39, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "消防団におけるデジタル技術の活用として、令和8年度概算要求に含まれている内容はどれですか？", options: ["全団員へのスマートフォンの無償配布", "ドローン映像を共有した捜索活動等の講習実施", "消防団車をすべて空飛ぶ車に更新すること", "団員の出席管理を指紋認証にすること"], correct: 1, reason: "消防団の災害対応能力向上を目指し、映像共有を活用した講習が計画されています。" },
+    { id: 40, chapter: "第7章：消防防災分野におけるDXと最新技術", q: "消防研究センターで行われている、土砂災害対策に関する研究開発の内容はどれですか？", options: ["ドローンや3次元空間計測技術を用いた、二次被害の危険箇所分析", "人工衛星から土砂を吸い上げる技術", "山全体をコンクリートで覆うロボットの開発", "雨を降らせないようにする気象操作の研究"], correct: 0, reason: "ドローンやLiDAR（レーザースキャナ）を用いて、二次被害の危険性を評価する技術開発が進められています。" },
+
+    // 第8章とその他
+    { id: 41, chapter: "第8章：財政措置と法的義務の各論", q: "消防本部がドローンを整備する際、令和4年度から新たに利用可能となった地方財政措置はどれですか？", options: ["普通交付税の増額のみ", "緊急防災・減災事業債", "消防団設備整備費補助金の全額充当", "ふるさと納税の強制配分"], correct: 1, reason: "一定の要件を満たした災害対応ドローンの整備が、緊急防災・減災事業債の対象となりました。" },
+    { id: 42, chapter: "第8章：財政措置と法的義務の各論", q: "緊急防災・減災事業債を利用してドローンを購入した場合、実質的な地方自治体の負担率は何％になりますか？", options: ["0%（全額国費）", "30%（70%が地方交付税で措置される）", "50%", "100%"], correct: 1, reason: "地方債充当率100％、交付税措置率70％のため、実質的な負担は30％となります。" },
+    { id: 43, chapter: "第8章：財政措置と法的義務の各論", q: "消防団の力向上モデル事業において、ドローンの操縦者育成にかかる費用の国費負担の上限はいくらですか？", options: ["100万円", "300万円", "500万円", "1,000万円"], correct: 2, reason: "消防団の力向上モデル事業では、全額国費（上限500万円）の措置があります。" },
+    { id: 44, chapter: "第8章：財政措置と法的義務の各論", q: "航空法における「カテゴリーII飛行」とは、どのような飛行を指しますか？", options: ["補助者なしの目視外飛行（レベル4）", "特例が適用されるすべての災害時飛行", "特定飛行のうち、適切なリスク緩和措置を講じることで許可・承認が必要または不要となる飛行", "100g未満の機体のみで行う飛行"], correct: 2, reason: "特定飛行をリスクに応じて分類したもので、消防の通常訓練などが該当し得ます。" },
+    { id: 45, chapter: "第8章：財政措置と法的義務の各論", q: "飛行計画の通報（DIPS等への入力）は、いつ行うべきとされていますか？", options: ["飛行開始の1週間前まで", "飛行終了後、1ヶ月以内", "原則として飛行開始前（困難な場合は事後でも可）", "飛行中、常にリアルタイムで行う"], correct: 2, reason: "特定飛行を行う場合は、あらかじめ飛行計画を通報しなければなりません。ただし、災害時など困難な場合は事後通報が認められています。" },
+    { id: 46, chapter: "第8章：財政措置と法的義務の各論", q: "飛行日誌への記載が義務付けられている事項として「誤っている」ものはどれですか？", options: ["飛行させた者の氏名", "日常点検の結果", "離着陸の場所と時刻", "操縦者の当日の食事内容"], correct: 3, reason: "飛行記録、日常点検記録、点検整備記録が主な記載事項です。" },
+    { id: 47, chapter: "第8章：財政措置と法的義務の各論", q: "小型無人機等飛行禁止法において、飛行が禁止されている「レッド・ゾーン」とはどこのことですか？", options: ["火災が発生している現場の直上", "重要施設の敷地・区域の上空", "高度150m以上の空域", "人口集中地区（DID）の全域"], correct: 1, reason: "重要施設の敷地・区域の上空をレッド・ゾーン、その周囲おおむね300mをイエロー・ゾーンと呼びます。" },
+    { id: 48, chapter: "第8章：財政措置と法的義務の各論", q: "小型無人機等飛行禁止法に関して、航空法と決定的に異なる点は何ですか？", options: ["100g未満の機体なら飛ばしてもよい", "災害時の捜索・救助による「特例」が存在しない", "消防車がいれば自由に飛ばせる", "夜間でも許可なく飛ばせる"], correct: 1, reason: "小型無人機等飛行禁止法には、航空法のような災害時の適用除外規定（特例）が存在しません。" },
+    { id: 49, chapter: "第8章：財政措置と法的義務の各論", q: "重要施設周辺で消防活動のためにドローンを飛ばす必要がある場合、誰の同意が必要ですか？", options: ["近隣の住民", "対象施設の管理者", "機体の製造メーカー", "地元の商工会議所"], correct: 1, reason: "禁止空域であっても、施設の管理者の同意を得た場合や、国・自治体の業務として行う飛行は例外として認められますが、通報義務があります。" },
+    { id: 50, chapter: "第8章：財政措置と法的義務の各論", q: "航空法第157条の5に基づき、緊急用務空域で不適切にドローンを飛行させた場合に科される可能性がある罰金の上限はいくらですか？", options: ["10万円", "30万円", "50万円", "100万円"], correct: 2, reason: "緊急用務空域での違反飛行には、50万円以下の罰金が定められています。" },
+    
+    // 事例・専門知識
+    { id: 51, chapter: "事例・専門知識", q: "プラント等の危険物施設において、ドローンを飛行させる際に留意すべきガイドラインは何ですか？", options: ["「観光庁・ドローン撮影マニュアル」", "「プラントにおけるドローンの安全な運用方法に関するガイドライン」", "「日本道路交通情報センター・飛行規制」", "「全国危険物安全協会・ドローン操縦術」"], correct: 1, reason: "石油コンビナート等のプラントでの安全な活用のために、専用のガイドラインが策定されています。" },
+    { id: 52, chapter: "事例・専門知識", q: "爆発のおそれがある危険物施設内でドローンを使用する際、考慮すべき性能は何ですか？", options: ["飛行速度", "防爆性能や機体の耐熱温度", "音楽再生機能", "イルミネーションの明るさ"], correct: 1, reason: "爆発性雰囲気を生成する可能性があるエリアでは、火花を発しない等の安全配慮が求められます。" },
+    { id: 53, chapter: "事例・専門知識", q: "ドローンで作成する「オルソ画像」とはどのようなものですか？", options: ["操縦士の顔を写した画像", "上空から撮影した複数の写真を繋ぎ合わせ、歪みを補正した地図のような画像", "3Dプリンターで印刷した模型", "赤外線だけで撮影した白黒写真"], correct: 1, reason: "SfM解析等により、被災状況を正確に把握するための歪みのない地図画像を作成できます。" },
+    { id: 54, chapter: "事例・専門知識", q: "消防大学校の「女性活躍推進コース」において、リモート講義と併せて行われる教育形態は何ですか？", options: ["完全自由参加の通信教育", "全寮制の集合教育", "民間企業へのインターンシップ", "海外の消防署への派遣"], correct: 1, reason: "リモート講義に加え、5日間の全寮制集合教育が実施されています。" },
+    { id: 55, chapter: "事例・専門知識", q: "消防職員のドローン技能証明（免許）取得において、一等資格の取得が期待される理由はどれですか？", options: ["操縦が簡単になるため", "将来的なレベル4飛行（第三者上空での目視外飛行）など、より高度な運用を可能にするため", "給料が自動的に倍になるため", "試験が免除されるため"], correct: 1, reason: "高度な運用が可能な人材を育成するため、一等資格の取得支援が進められています。" },
+    { id: 56, chapter: "事例・専門知識", q: "山岳救助事例（奈良県広域消防組合）において、要救助者を発見した際のドローンの装備は何でしたか？", options: ["スピーカー", "光学カメラ（ズームカメラ等）", "ネット発射装置", "散水ノズル"], correct: 1, reason: "小さな滝つぼに浮いている要救助者を光学カメラの映像から発見しました。" },
+    { id: 57, chapter: "事例・専門知識", q: "林野火災におけるドローン運用の課題として「釧路北部消防」の事例で挙げられた点はどれですか？", options: ["操縦者のバッテリーがすぐ切れること", "山間部ではGPSがロストしやすいこと", "煙でドローンが溶けてしまうこと", "鳥に機体を盗まれること"], correct: 1, reason: "山間部での飛行ではGPS信号の捕捉に留意が必要であることが課題として挙げられています。" },
+    { id: 58, chapter: "事例・専門知識", q: "ドローンに搭載する「LiDAR（レーザースキャナ）」の主な役割は何ですか？", options: ["現場を明るく照らす", "地形の微細な変化を3次元点群データとして取得する", "遠くの音を録音する", "火災の炎をレーザーで消す"], correct: 1, reason: "土砂災害現場等において地形を分析し、二次被害の危険性評価に寄与します。" },
+    { id: 59, chapter: "事例・専門知識", q: "消防本部におけるドローンの導入率は、令和3年6月現在でどの程度ですか？", options: ["約10%", "約30%", "約53%（383本部）", "100%"], correct: 2, reason: "令和3年6月時点で全国の消防本部の52.9%が活用しています。" },
+    { id: 60, chapter: "事例・専門知識", q: "ドローンの飛行前チェックリストに含めるべき項目として、適切でないものはどれですか？", options: ["燃料（バッテリー）の残量", "通信（プロポとの接続）状況", "プロペラの損傷の有無", "操縦者の昨夜の睡眠時間（1分単位）"], correct: 3, reason: "機体の状況、空域、気象、燃料残量の確認が航空法等で求められています。" },
+    { id: 61, chapter: "事例・専門知識", q: "大規模災害時に複数のドローンやヘリが活動する場合、調整を行うのはどこですか？", options: ["地元の警察署", "現地災害対策本部の航空運用調整班など", "最寄りの家電量販店", "気象庁の予報官"], correct: 1, reason: "接触や干渉を防ぐため、現地災害対策本部等を通じて飛行の調整を行うことが望ましいとされています。" },
+    { id: 62, chapter: "事例・専門知識", q: "大和市消防本部が行っているドローン運用体制の特徴はどれですか？", options: ["全隊員パイロット体制を目指した育成", "操縦をすべて外部委託している", "1機しか保有していない", "夜間のみ飛行させる"], correct: 0, reason: "独自の養成プログラムにより、全隊員をパイロットとして育成する方針をとっています。" },
+    { id: 63, chapter: "事例・専門知識", q: "消防指令システムにおける「文字起こし機能」が活用される場面はどれですか？", options: ["職員の会議の議事録作成", "119番通報の音声をリアルタイムでテキスト化し、正確な情報把握を支援する", "救急車内での世間話の記録", "消防署のブログ記事作成"], correct: 1, reason: "緊急通報の文字起こしにより、指令業務の精度とスピード向上が図られます。" },
+    { id: 64, chapter: "事例・専門知識", q: "ドローンの「カテゴリーI飛行」において、許可・承認が必要なのはどのような場合ですか？", options: ["人口集中地区（DID）の上空を飛ぶ場合", "カテゴリーI飛行は、原則として許可・承認が不要な飛行である", "夜間に飛ばす場合", "150m以上を飛ぶ場合"], correct: 1, reason: "特定飛行に該当しないリスクの低い飛行がカテゴリーIであり、許可・承認は不要です。" },
+    { id: 65, chapter: "事例・専門知識", q: "ドローンの「リモートID」義務化の目的は何ですか？", options: ["飛行中に音楽を周囲に聴かせるため", "飛行中の機体識別情報を発信し、安全確保や違法飛行の抑止を図るため", "操縦士の現在地を常に家族に知らせるため", "機体の価格を自動で査定するため"], correct: 1, reason: "登録記号等の情報を無線で発信する機能であり、令和4年から義務化されました。" },
+    { id: 66, chapter: "事例・専門知識", q: "消防用ドローンの「物件投下」機能の活用例として、正しいものはどれですか？", options: ["ゴミを空から捨てる", "水難救助における救命浮環（浮き輪）の投下", "消防署のチラシを街中に撒く", "壊れたドローンを空中で捨てる"], correct: 1, reason: "救助活動において、浮き輪や医薬品、通信機器などの緊急輸送・投下に活用されます。" },
+    { id: 67, chapter: "事例・専門知識", q: "国有林野内でドローンを紛失・墜落させた際、連絡すべき相手はどこですか？", options: ["観光案内所", "所管の森林管理署等", "登山用品店", "日本気象協会"], correct: 1, reason: "火災発生のおそれ等があるため、警察・消防に加え森林管理署への連絡が必要です。" },
+    { id: 68, chapter: "事例・専門知識", q: "災害時のドローン活用における「サイバーセキュリティ」の重要性が高まっている理由は何ですか？", options: ["ドローンの色を自由に変えられないようにするため", "情報窃取や機体の乗っ取りなどのリスクを防止し、機密情報を守るため", "ドローンの対戦ゲームを流行らせるため", "電池の持ちが良くなるため"], correct: 1, reason: "救難等の重要業務において、通信の乗っ取りや情報漏洩を防ぐ対策が求められています。" },
+    { id: 69, chapter: "事例・専門知識", q: "ドローン運用の「飛行日誌」において、「日常点検記録」に記載すべき内容はどれですか？", options: ["操縦者のその日の気分", "実施年月日、場所、実施者氏名、点検の結果", "使用したバッテリーの購入価格", "飛行中に目撃した動物の種類"], correct: 1, reason: "日常点検の結果を適切に記録し、維持管理に役立てることが義務付けられています。" },
+    { id: 70, chapter: "事例・専門知識", q: "災害時の「自営BWAシステム」活用のメリットは何ですか？", options: ["通信費が完全に無料になること", "公衆網の輻輳（混雑）に左右されず、安定した映像伝送が可能になること", "誰でも自由に接続できるようになること", "映像が自動的に映画のような画質になること"], correct: 1, reason: "災害時の通信混雑を避け、安定した情報共有を行うために有効です。" },
+    { id: 71, chapter: "事例・専門知識", q: "消防庁が都道府県に配備した「ハイスペックドローン」の主要な機能はどれですか？", options: ["地図画像作成（オルソ画像）、自律制御飛行、防水性能、遠赤外線カメラ", "人を運ぶための巨大な椅子", "火災を凍らせる冷凍ガス放射", "料理を自動で作る機能"], correct: 0, reason: "迅速な状況把握と情報共有を目的とした高度な機能が備えられています。" },
+    { id: 72, chapter: "事例・専門知識", q: "ドローンの操縦において「ATTIモード」での訓練が必要な理由は何ですか？", options: ["スピードが最も速くなるモードだから", "GPSがロストした際の緊急操作技術を習得するため", "自動で着陸してくれる便利なモードだから", "バッテリーが最も長持ちするモードだから"], correct: 1, reason: "GPSに頼らない操作スキルは、電波障害や橋梁下などでの安全運用に不可欠です。" },
+    { id: 73, chapter: "事例・専門知識", q: "災害連携協定（自治体と民間企業）の締結により期待されるメリットは何ですか？", options: ["発災時の迅速な「依頼」が可能となり、航空法の特例をスムーズに適用できること", "民間企業のドローンをすべて没収できること", "民間企業の操縦士を消防職員として即日採用できること", "ドローンの購入代金を民間企業が全額肩代わりしてくれること"], correct: 0, reason: "「依頼を受けた者」として特例を適用させ、初動の迅速化を図ることが可能です。" },
+    { id: 74, chapter: "事例・専門知識", q: "消防活動におけるドローン活用の「特殊災害（NBC）」での意義は何ですか？", options: ["有毒ガスをドローンの風で吹き飛ばすため", "隊員が立ち入る前に、安全な場所から現場の状況やガス濃度等の情報を取得できるため", "ドローンは放射能を完全に無効化できるため", "犯人を網で捕まえるため"], correct: 1, reason: "危険なエリアへの初動調査を無人で行い、隊員の安全確保に寄与します。" },
+    { id: 75, chapter: "事例・専門知識", q: "令和8年度に向けた消防庁の施策で、林野火災対策として配備が検討されているドローンはどれですか？", options: ["薪を運ぶドローン", "夜間監視・熱源探査ドローン", "雨を降らせるための巨大なバケツドローン", "山の木をすべて切るドローン"], correct: 1, reason: "大規模な林野火災を踏まえ、夜間の状況把握を可能にする資機材の整備が推進されています。" },
+    { id: 76, chapter: "事例・専門知識", q: "ドローンのバッテリー管理において、冬期の寒冷地で注意すべき点は何ですか？", options: ["バッテリーが熱くなりすぎるので冷やす", "低温により放電しやすくなるため、予備を多く用意し保温に努める", "寒さで容量が無限に増える", "寒冷地では充電自体が禁止されている"], correct: 1, reason: "低温環境下では飛行時間が短くなるため、予備バッテリーの確保や管理が重要です。" },
+    { id: 77, chapter: "事例・専門知識", q: "航空法における「目視内飛行」の定義として正しいものはどれですか？", options: ["モニター映像だけを見て操縦すること", "操縦者が自分の目で直接、常に機体とその周囲の状況を監視して飛行させること", "望遠鏡を使って機体を見続けること", "補助者が機体を見ていれば、操縦者は見ていなくてよい"], correct: 1, reason: "操縦者本人が目視で監視することが原則であり、モニターのみの場合は「目視外」となります。" },
+    { id: 78, chapter: "事例・専門知識", q: "消防指令センターからスマートグラスへ情報を送信するメリットは何ですか？", options: ["隊員が映画を見ながら活動できる", "ハンズフリーで地図やドローン映像などの情報を視界に表示し、現場活動を支援できる", "隊員の視力が自動的に向上する", "現場の音をすべて遮断できる"], correct: 1, reason: "現場隊員の状況判断を助ける新技術として実装モデル事業が進められています。" },
+    { id: 79, chapter: "事例・専門知識", q: "ドローンの飛行自粛要請空域とは何ですか？", options: ["騒音がうるさいという苦情があったすべての場所", "警備上の観点等から、警察等の要請に基づき、国土交通省が公示する空域", "操縦者が疲れたときに休むための空域", "観光地ですべてのドローンを禁止する恒久的な空域"], correct: 1, reason: "法令とは別に、重要行事等の際に自主的な自粛を求める公示が行われることがあります。" },
+    { id: 80, chapter: "事例・専門知識", q: "消防職員がドローンのeラーニングを受ける最大の目的は何ですか？", options: ["ドローンのゲームで遊ぶため", "法的規制、安全管理、最新の活用事例を正しく理解し、災害現場での実効性を高めるため", "パソコンの操作に慣れるため", "消防白書のページ数を増やすため"], correct: 1, reason: "ドローンは有効な資機材ですが、一定のルールの下に安全を確保しながら飛行させることが不可欠だからです。" }
+];
+
+// --- Utils ---
+function shuffleArray(array) {
+    const newArr = [...array];
+    for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+}
+
+// --- Components ---
+
+// 1. Header Component
+const Header = ({ onReset, showReset }) => (
+    <header className="w-full bg-slate-900 border-b border-amber-600/50 py-6 px-4 shadow-lg sticky top-0 z-50">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+                {/* Simple Emblem SVG */}
+                <div className="w-10 h-10 rounded-full border-2 border-amber-500 flex items-center justify-center bg-slate-800">
+                    <span className="text-amber-500 text-xl font-bold serif-font">消</span>
+                </div>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-100 tracking-wide serif-font">
+                        消防職員 eラーニング
+                    </h1>
+                    <p className="text-xs text-amber-500 uppercase tracking-widest mt-1">
+                        Fire Service Drone Education System
+                    </p>
+                </div>
+            </div>
+            {showReset && (
+                <button 
+                    onClick={onReset}
+                    className="text-xs md:text-sm text-slate-400 hover:text-amber-500 transition-colors border border-slate-700 hover:border-amber-500 px-3 py-1.5 rounded"
+                >
+                    リセット
+                </button>
+            )}
+        </div>
+    </header>
+);
+
+// 2. Timeline Item Component for Introduction
+const TimelineItem = ({ year, title, description }) => (
+    <div className="relative pl-8 md:pl-0 md:w-1/2 md:ml-auto md:odd:ml-0 md:odd:mr-auto md:odd:text-right md:odd:pr-8 md:even:pl-8 pb-12 group timeline-item">
+        
+        {/* Dot */}
+        <div className="absolute left-[6px] md:left-auto md:right-[-9px] md:group-odd:right-[-9px] md:group-even:left-[-9px] top-0 w-5 h-5 rounded-full border-2 border-amber-500 bg-slate-900 z-10 group-hover:bg-amber-500 transition-colors duration-300"></div>
+        
+        <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 shadow-lg hover:border-amber-600/50 transition-all duration-300">
+            <span className="text-amber-500 font-bold text-lg block mb-1 serif-font">{year}</span>
+            <h4 className="text-white font-bold text-lg mb-2">{title}</h4>
+            <p className="text-slate-400 text-sm leading-relaxed">{description}</p>
+        </div>
+    </div>
+);
+
+// 3. Introduction Screen Component
+const IntroductionScreen = ({ onStart }) => {
+    return (
+        <div className="animate-fade-in">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 serif-font">
+                    消防ドローンの歩みと進化
+                </h2>
+                <p className="text-slate-400 max-w-2xl mx-auto">
+                    災害現場における「空からの目」として定着しつつあるドローン。<br/>
+                    その導入の歴史的変遷と、法規制強化の背景にある「安全への誓い」を学びます。
+                </p>
+            </div>
+
+            <div className="relative max-w-4xl mx-auto timeline-line mb-16">
+                <TimelineItem 
+                    year="〜2015年 (黎明期)" 
+                    title="手探りの導入と空撮活用" 
+                    description="一部の先進的な消防本部が試験的に導入を開始。主に広報用や訓練時の空撮として活用されていましたが、明確な運用ルールは未整備な状態でした。"
+                />
+                <TimelineItem 
+                    year="2015年 (平成27年)" 
+                    title="航空法改正と規制の始まり" 
+                    description="首相官邸ドローン落下事件等を契機に航空法が改正。人口集中地区(DID)での飛行禁止など、基本的なルールが制定されました。"
+                />
+                <TimelineItem 
+                    year="2019〜2020年" 
+                    title="運用ガイドラインの整備" 
+                    description="総務省消防庁により「消防防災分野における無人航空機の活用の手引き」等が作成され、組織的な運用体制の構築が進みました。"
+                />
+                <TimelineItem 
+                    year="2021年 (令和3年)" 
+                    title="【転換点】足利市林野火災" 
+                    description="栃木県足利市の林野火災において、一般人のドローン目撃情報により消防防災ヘリの活動が一時中断する事態が発生。「緊急用務空域」設定のきっかけとなりました。"
+                />
+                <TimelineItem 
+                    year="2022年 (令和4年)" 
+                    title="機体登録制度とレベル4飛行" 
+                    description="100g以上の機体登録が義務化。また、有人地帯での目視外飛行(レベル4)が可能となり、より高度な災害対応への期待が高まりました。"
+                />
+                <TimelineItem 
+                    year="現在〜未来" 
+                    title="消防DXとスマート保安" 
+                    description="リアルタイムマッピング、赤外線解析、AIによる要救助者検知など、単なる「空撮」を超えた「情報戦の要」としての活用が進んでいます。"
+                />
+            </div>
+
+            <div className="text-center">
+                <p className="text-slate-300 mb-6 font-bold">
+                    歴史を知り、法を守ることは、<br/>現場の安全と活動の質を守ることにつながります。
+                </p>
+                <button
+                    onClick={onStart}
+                    className="px-12 py-4 rounded-sm gold-bg text-slate-900 font-bold tracking-widest text-xl shadow-lg transition-all transform duration-200 hover:scale-105 hover:shadow-amber-500/20"
+                >
+                    学習を開始する
+                </button>
+            </div>
+        </div>
+    );
+};
+
+// 4. Question Card Component
+const QuestionCard = ({ data, index, selectedOption, onSelect, isSubmitted }) => {
+    return (
+        <div className="bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden mb-8 transform transition-all hover:border-slate-600">
+            <div className="bg-slate-700/50 px-6 py-3 border-b border-slate-700 flex justify-between items-center">
+                <span className="text-amber-500 text-sm font-bold tracking-wider uppercase">
+                    Question {index + 1}
+                </span>
+                <span className="text-slate-400 text-xs">
+                    {data.chapter}
+                </span>
+            </div>
+            
+            <div className="p-6">
+                <h3 className="text-lg text-gray-100 font-medium leading-relaxed mb-6">
+                    {data.q}
+                </h3>
+
+                <div className="space-y-3">
+                    {data.options.map((opt, i) => {
+                        let optionClass = "w-full text-left p-4 rounded border transition-all duration-200 flex items-start ";
+                        
+                        if (isSubmitted) {
+                            if (i === data.correct) {
+                                optionClass += "bg-green-900/40 border-green-500 text-green-100";
+                            } else if (selectedOption === i) {
+                                optionClass += "bg-red-900/30 border-red-500 text-red-200";
+                            } else {
+                                optionClass += "bg-slate-700/30 border-slate-700 text-slate-500 opacity-60";
+                            }
+                        } else {
+                            if (selectedOption === i) {
+                                optionClass += "bg-amber-900/20 border-amber-500 text-amber-100 shadow-[0_0_10px_rgba(212,175,55,0.2)]";
+                            } else {
+                                optionClass += "bg-slate-700/30 border-slate-600 text-slate-300 hover:bg-slate-700 hover:border-slate-500";
+                            }
+                        }
+
+                        return (
+                            <button 
+                                key={i}
+                                onClick={() => !isSubmitted && onSelect(data.id, i)}
+                                disabled={isSubmitted}
+                                className={optionClass}
+                            >
+                                <div className={`w-6 h-6 rounded-full border-2 flex-shrink-0 mr-3 flex items-center justify-center text-xs ${
+                                    isSubmitted && i === data.correct ? "border-green-500 text-green-500" :
+                                    selectedOption === i ? "border-amber-500 text-amber-500" : "border-slate-500 text-slate-500"
+                                }`}>
+                                    {i+1}
+                                </div>
+                                <span>{opt}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Explanation Area - Only visible after submission */}
+                {isSubmitted && (
+                    <div className="mt-6 pt-6 border-t border-slate-700 animation-fade-in">
+                        <div className="flex items-start space-x-2">
+                            <div className="mt-1 w-1 h-full min-h-[3rem] bg-amber-600 rounded-full"></div>
+                            <div>
+                                <p className="text-amber-500 font-bold text-sm mb-1 serif-font">【解説・根拠】</p>
+                                <p className="text-slate-300 text-sm leading-relaxed">
+                                    {data.reason}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+// 5. Main App Component
+const App = () => {
+    const [currentView, setCurrentView] = useState('intro'); // 'intro' or 'quiz'
+    const [currentQuestions, setCurrentQuestions] = useState([]);
+    const [userAnswers, setUserAnswers] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [retryCount, setRetryCount] = useState(0);
+    const [score, setScore] = useState(0);
+
+    // Initialize logic is now in startQuiz
+    
+    // Shuffle helper (if needed inside component, but defined outside)
+    const getShuffledQuestions = () => shuffleArray(questionsData);
+
+    const startQuiz = () => {
+        const initialSet = getShuffledQuestions().slice(0, 10);
+        setCurrentQuestions(initialSet);
+        setCurrentView('quiz');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleSelectAnswer = (qId, optionIndex) => {
+        setUserAnswers(prev => ({
+            ...prev,
+            [qId]: optionIndex
+        }));
+    };
+
+    const handleSubmit = () => {
+        // Calculate Score
+        let newScore = 0;
+        currentQuestions.forEach(q => {
+            if (userAnswers[q.id] === q.correct) {
+                newScore++;
+            }
+        });
+        setScore(newScore);
+        setIsSubmitted(true);
+        
+        // Smooth scroll to top to see result
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleRetry = () => {
+        // Logic: Select 5 random questions for retry
+        const nextSet = getShuffledQuestions().slice(0, 5);
+        setCurrentQuestions(nextSet);
+        setUserAnswers({});
+        setIsSubmitted(false);
+        setScore(0);
+        setRetryCount(prev => prev + 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleBackToIntro = () => {
+        setCurrentView('intro');
+        setUserAnswers({});
+        setIsSubmitted(false);
+        setScore(0);
+        setRetryCount(0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleReset = () => {
+        if (window.confirm("現在の進捗をリセットしてトップ画面に戻りますか？")) {
+            handleBackToIntro();
+        }
+    };
+
+    // Calculate progress for progress bar
+    const answeredCount = Object.keys(userAnswers).length;
+    const totalCount = currentQuestions.length;
+    const progress = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
+
+    return (
+        <div className="min-h-screen bg-slate-900 pb-20 font-sans">
+             {/* Styles Injection */}
+             <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+                
+                body {
+                    font-family: 'Noto Sans JP', sans-serif;
+                    background-color: #0f172a;
+                    color: #334155;
+                }
+                .serif-font {
+                    font-family: 'Shippori Mincho', serif;
+                }
+                .gold-text {
+                    color: #d4af37;
+                }
+                .gold-bg {
+                    background-color: #bfa15f;
+                    background-image: linear-gradient(to bottom right, #d4af37, #aa8c30);
+                }
+                .gold-bg:hover {
+                    background-image: linear-gradient(to bottom right, #ebd578, #bfa15f);
+                }
+                
+                /* Animations */
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animation-fade-in {
+                    animation: fadeIn 0.5s ease-out forwards;
+                }
+                .animate-fade-in-up {
+                    animation: fadeInUp 0.5s ease-out forwards;
+                }
+
+                /* Timeline Line */
+                .timeline-line::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 15px;
+                    width: 2px;
+                    background: #334155;
+                    z-index: 0;
+                }
+                @media (min-width: 768px) {
+                    .timeline-line::before {
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
+                }
+            `}</style>
+
+            <Header onReset={handleReset} showReset={currentView === 'quiz'} />
+
+            <main className="max-w-4xl mx-auto px-4 py-8">
+                
+                {currentView === 'intro' ? (
+                    <IntroductionScreen onStart={startQuiz} />
+                ) : (
+                    <div className="animate-fade-in-up">
+                        {/* Welcome / Status Message */}
+                        <div className="text-center mb-10">
+                            {!isSubmitted ? (
+                                <>
+                                    <h2 className="text-3xl font-bold text-white mb-2 serif-font">
+                                        {retryCount === 0 ? "確認テスト" : "再挑戦テスト"}
+                                    </h2>
+                                    <p className="text-slate-400">
+                                        以下の質問に回答してください。<br/>
+                                        全{totalCount}問中 {answeredCount}問 回答済み
+                                    </p>
+                                    {/* Progress Bar */}
+                                    <div className="w-full bg-slate-800 rounded-full h-2 mt-4 overflow-hidden border border-slate-700">
+                                        <div 
+                                            className="bg-amber-600 h-2 rounded-full transition-all duration-500 ease-out"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="bg-slate-800/80 border border-amber-600/30 p-8 rounded-lg shadow-2xl animate-fade-in-up">
+                                    <p className="text-slate-400 uppercase tracking-widest text-sm mb-2">Result</p>
+                                    <div className="text-5xl font-bold text-white mb-4 serif-font">
+                                        <span className={score === totalCount ? "text-amber-400" : "text-white"}>
+                                            {score}
+                                        </span>
+                                        <span className="text-2xl text-slate-500"> / {totalCount}</span>
+                                    </div>
+                                    <p className="text-lg text-slate-300 mb-6">
+                                        {score === totalCount ? "大変素晴らしい成績です。知識は完璧です。" : 
+                                         score >= totalCount * 0.8 ? "合格圏内です。間違えた箇所を確認しましょう。" :
+                                         "復習が必要です。解説をよく読みましょう。"}
+                                    </p>
+
+                                    <div className="flex justify-center space-x-4">
+                                        <button
+                                            onClick={handleBackToIntro}
+                                            className="px-6 py-3 rounded-sm border border-slate-500 text-slate-300 hover:bg-slate-700 transition-colors"
+                                        >
+                                            教養画面へ戻る
+                                        </button>
+                                        <button
+                                            onClick={handleRetry}
+                                            className="px-6 py-3 rounded-sm gold-bg text-slate-900 font-bold hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            再挑戦する
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Questions List */}
+                        <div className="space-y-6">
+                            {currentQuestions.map((q, index) => (
+                                <QuestionCard 
+                                    key={q.id} 
+                                    data={q} 
+                                    index={index}
+                                    selectedOption={userAnswers[q.id]}
+                                    onSelect={handleSelectAnswer}
+                                    isSubmitted={isSubmitted}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Action Buttons */}
+                        {!isSubmitted && (
+                            <div className="mt-12 text-center">
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={answeredCount < totalCount}
+                                    className={`
+                                        px-12 py-4 rounded-sm font-bold tracking-widest text-lg shadow-lg transition-all transform duration-200
+                                        ${answeredCount < totalCount 
+                                            ? "bg-slate-700 text-slate-500 cursor-not-allowed" 
+                                            : "gold-bg text-slate-900 hover:scale-105 hover:shadow-amber-500/20"
+                                        }
+                                    `}
+                                >
+                                    採点する
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </main>
+
+            {/* Footer */}
+            <footer className="text-center py-8 text-slate-600 text-xs border-t border-slate-800 mt-12">
+                <p>&copy; Fire Service Drone Training Department. All Rights Reserved.</p>
+            </footer>
+        </div>
+    );
+};
+
+export default App;
