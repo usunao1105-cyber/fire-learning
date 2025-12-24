@@ -136,7 +136,7 @@ const Header = ({ onReset, showReset }) => (
                     onClick={onReset}
                     className="text-xs md:text-sm text-slate-400 hover:text-amber-500 transition-colors border border-slate-700 hover:border-amber-500 px-3 py-1.5 rounded"
                 >
-                    リセット
+                    トップに戻る
                 </button>
             )}
         </div>
@@ -296,6 +296,36 @@ const QuestionCard = ({ data, index, selectedOption, onSelect, isSubmitted }) =>
     );
 };
 
+// New ConfirmationModal
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] animation-fade-in px-4">
+            <div className="bg-slate-900 border border-amber-600 p-6 rounded-lg shadow-2xl max-w-sm w-full relative">
+                <h3 className="text-xl font-bold text-white mb-4 serif-font">確認</h3>
+                <p className="text-slate-300 mb-8 leading-relaxed">
+                    現在の学習進捗はリセットされます。<br/>
+                    トップ画面に戻りますか？
+                </p>
+                <div className="flex justify-end space-x-3">
+                    <button 
+                        onClick={onClose}
+                        className="px-4 py-2 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-sm"
+                    >
+                        キャンセル
+                    </button>
+                    <button 
+                        onClick={onConfirm}
+                        className="px-6 py-2 rounded gold-bg text-slate-900 font-bold hover:shadow-lg transition-transform transform hover:scale-105 text-sm"
+                    >
+                        トップに戻る
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // 5. Main App Component
 const App = () => {
     const [currentView, setCurrentView] = useState('intro'); // 'intro' or 'quiz'
@@ -304,10 +334,9 @@ const App = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [retryCount, setRetryCount] = useState(0);
     const [score, setScore] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false); // New state
 
-    // Initialize logic is now in startQuiz
-    
-    // Shuffle helper (if needed inside component, but defined outside)
+    // Shuffle helper
     const getShuffledQuestions = () => shuffleArray(questionsData);
 
     const startQuiz = () => {
@@ -325,7 +354,6 @@ const App = () => {
     };
 
     const handleSubmit = () => {
-        // Calculate Score
         let newScore = 0;
         currentQuestions.forEach(q => {
             if (userAnswers[q.id] === q.correct) {
@@ -334,13 +362,10 @@ const App = () => {
         });
         setScore(newScore);
         setIsSubmitted(true);
-        
-        // Smooth scroll to top to see result
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleRetry = () => {
-        // Logic: Select 5 random questions for retry
         const nextSet = getShuffledQuestions().slice(0, 5);
         setCurrentQuestions(nextSet);
         setUserAnswers({});
@@ -356,22 +381,24 @@ const App = () => {
         setIsSubmitted(false);
         setScore(0);
         setRetryCount(0);
+        setIsModalOpen(false); // Close modal
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleReset = () => {
-        if (window.confirm("現在の進捗をリセットしてトップ画面に戻りますか？")) {
+    const handleResetRequest = () => {
+        if (isSubmitted) {
             handleBackToIntro();
+        } else {
+            setIsModalOpen(true);
         }
     };
 
-    // Calculate progress for progress bar
     const answeredCount = Object.keys(userAnswers).length;
     const totalCount = currentQuestions.length;
     const progress = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
 
     return (
-        <div className="min-h-screen bg-slate-900 pb-20 font-sans">
+        <div className="min-h-screen bg-slate-900 pb-20 font-sans relative">
              {/* Styles Injection */}
              <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
@@ -430,7 +457,7 @@ const App = () => {
                 }
             `}</style>
 
-            <Header onReset={handleReset} showReset={currentView === 'quiz'} />
+            <Header onReset={handleResetRequest} showReset={currentView === 'quiz'} />
 
             <main className="max-w-4xl mx-auto px-4 py-8">
                 
@@ -526,7 +553,12 @@ const App = () => {
                 )}
             </main>
 
-            {/* Footer */}
+            <ConfirmationModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onConfirm={handleBackToIntro} 
+            />
+
             <footer className="text-center py-8 text-slate-600 text-xs border-t border-slate-800 mt-12">
                 <p>&copy; Fire Service Drone Training Department. All Rights Reserved.</p>
             </footer>
