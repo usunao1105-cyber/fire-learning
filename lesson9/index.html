@@ -1,0 +1,789 @@
+import React, { useState, useEffect } from 'react';
+import { AlertTriangle, ShieldAlert, Mic, Camera, Users, Save, RefreshCw, Info, Siren, Flame, FileText, Activity, Lock, Settings, User, UserX, Key, LogOut, Check, Download, Trash2, X, HelpCircle } from 'lucide-react';
+
+// --- Components ---
+
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden ${className}`}>
+    {children}
+  </div>
+);
+
+const Button = ({ onClick, children, variant = "primary", className = "", disabled = false, type = "button" }) => {
+  const baseStyle = "px-4 py-2 rounded-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
+  const variants = {
+    primary: "bg-orange-600 hover:bg-orange-500 text-white shadow-lg shadow-orange-900/50",
+    secondary: "bg-slate-600 hover:bg-slate-500 text-white",
+    danger: "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/50",
+    outline: "border-2 border-slate-500 text-slate-300 hover:bg-slate-700",
+    ghost: "bg-transparent text-slate-400 hover:text-white"
+  };
+  return (
+    <button type={type} onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`} disabled={disabled}>
+      {children}
+    </button>
+  );
+};
+
+const Input = ({ label, value, onChange, placeholder, type = "text" }) => (
+  <div className="mb-3">
+    {label && <label className="block text-xs text-slate-400 mb-1">{label}</label>}
+    <input 
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500 transition-colors text-slate-200"
+    />
+  </div>
+);
+
+const Gauge = ({ value, max, color, label, icon: Icon, description }) => {
+  const percentage = Math.min((value / max) * 100, 100);
+  const isCritical = value >= max;
+  
+  const getColor = () => {
+    if (color === 'red') {
+      return isCritical ? 'text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'text-red-400';
+    }
+    return isCritical ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]' : 'text-slate-400';
+  };
+
+  const barColor = color === 'red' 
+    ? (isCritical ? 'bg-red-600 animate-pulse' : 'bg-gradient-to-r from-orange-500 to-red-600')
+    : (isCritical ? 'bg-yellow-500 animate-pulse' : 'bg-gradient-to-r from-slate-500 to-slate-300');
+
+  return (
+    <div className="w-full p-4 bg-slate-900/50 rounded-lg border border-slate-700 relative overflow-hidden">
+      {isCritical && (
+        <div className="absolute inset-0 bg-red-500/10 z-0 animate-pulse pointer-events-none"></div>
+      )}
+      <div className="flex justify-between items-center mb-2 z-10 relative">
+        <div className="flex items-center gap-2">
+          <Icon className={`w-6 h-6 ${getColor()}`} />
+          <span className="font-bold text-slate-200">{label}</span>
+        </div>
+        <span className={`text-2xl font-black ${getColor()}`}>
+          {value} <span className="text-sm font-normal text-slate-500">/ {max}</span>
+        </span>
+      </div>
+      
+      <div className="h-6 bg-slate-800 rounded-full overflow-hidden border border-slate-600 relative">
+        <div className="absolute inset-0 flex justify-between px-1 items-center z-10">
+          {[...Array(max)].map((_, i) => (
+            <div key={i} className={`w-0.5 h-full ${i % 5 === 0 ? 'bg-slate-900/50' : 'bg-transparent'}`}></div>
+          ))}
+        </div>
+        <div 
+          className={`h-full transition-all duration-500 ease-out ${barColor}`}
+          style={{ width: `${percentage}%` }}
+        ></div>
+      </div>
+      
+      <p className="text-xs text-slate-400 mt-2 h-4 truncate">{description}</p>
+    </div>
+  );
+};
+
+// --- Tutorial Animation Component ---
+const TutorialAnimation = () => (
+  <div className="w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-700 p-4">
+    <svg viewBox="0 0 300 120" className="w-full h-auto">
+      <defs>
+        <style>{`
+          .tut-icon { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+          .tut-lock { stroke: #cbd5e1; animation: anim-lock 4s infinite; transform-origin: 50px 40px; }
+          .tut-shackle { stroke: #cbd5e1; animation: anim-shackle 4s infinite; transform-origin: 50px 30px; }
+          .tut-meter-bg { fill: #334155; }
+          .tut-meter-fill { fill: #f97316; width: 0; animation: anim-meter 4s infinite; }
+          .tut-doc { stroke: #cbd5e1; opacity: 0; animation: anim-doc 4s infinite; transform-origin: 250px 60px; }
+          .tut-text { font-size: 10px; fill: #94a3b8; text-anchor: middle; font-family: sans-serif; font-weight: bold; }
+          .tut-step { opacity: 0.3; transition: opacity 0.5s; }
+          .tut-arrow { stroke: #475569; stroke-width: 2; stroke-dasharray: 4; animation: anim-dash 1s linear infinite; }
+          
+          @keyframes anim-lock { 
+            0%, 25% { transform: scale(1); stroke: #cbd5e1; } 
+            5%, 20% { transform: rotate(-5deg); } 
+            10%, 15% { transform: rotate(5deg); }
+            30% { stroke: #475569; }
+          }
+          @keyframes anim-shackle {
+            0%, 10% { transform: translateY(0); }
+            15%, 25% { transform: translateY(-5px); }
+            30% { transform: translateY(0); }
+          }
+          @keyframes anim-meter {
+            0%, 25% { width: 0; }
+            30% { width: 0; }
+            45% { width: 40px; fill: #f97316; } /* Orange */
+            60% { width: 70px; fill: #ef4444; } /* Red */
+            100% { width: 70px; fill: #ef4444; }
+          }
+          @keyframes anim-doc {
+            0%, 60% { opacity: 0; transform: translateY(10px); }
+            70%, 90% { opacity: 1; transform: translateY(0); stroke: #fff; }
+            100% { opacity: 0; }
+          }
+          @keyframes anim-dash { to { stroke-dashoffset: -8; } }
+          
+          .highlight-1 { animation: h1 4s infinite; }
+          .highlight-2 { animation: h2 4s infinite; }
+          .highlight-3 { animation: h3 4s infinite; }
+          
+          @keyframes h1 { 0%, 25% { opacity: 1; fill: #fff; } 30%, 100% { opacity: 0.3; fill: #94a3b8; } }
+          @keyframes h2 { 0%, 25% { opacity: 0.3; fill: #94a3b8; } 30%, 60% { opacity: 1; fill: #f97316; } 65%, 100% { opacity: 0.3; fill: #94a3b8; } }
+          @keyframes h3 { 0%, 60% { opacity: 0.3; fill: #94a3b8; } 65%, 90% { opacity: 1; fill: #fff; } 100% { opacity: 0.3; fill: #94a3b8; } }
+        `}</style>
+      </defs>
+
+      {/* Step 1: Lock */}
+      <g transform="translate(50, 40)">
+        <path d="M-10 0 H10 V14 H-10 Z" className="tut-icon tut-lock" />
+        <path d="M-7 0 V-7 A7 7 0 0 1 7 -7 V0" className="tut-icon tut-shackle" fill="none" />
+      </g>
+      <text x="50" y="80" className="tut-text highlight-1">1.保護</text>
+
+      {/* Arrow 1 */}
+      <line x1="80" y1="50" x2="120" y2="50" className="tut-arrow" />
+
+      {/* Step 2: Meter */}
+      <g transform="translate(150, 50)">
+        <rect x="-40" y="-10" width="80" height="20" rx="4" className="tut-meter-bg" />
+        <rect x="-40" y="-10" width="0" height="20" rx="4" className="tut-meter-fill" />
+        <path d="M-40 -10 V10" stroke="#1e293b" strokeWidth="1" />
+        <path d="M-20 -10 V10" stroke="#1e293b" strokeWidth="1" />
+        <path d="M0 -10 V10" stroke="#1e293b" strokeWidth="1" />
+        <path d="M20 -10 V10" stroke="#1e293b" strokeWidth="1" />
+      </g>
+      <text x="150" y="80" className="tut-text highlight-2">2.記録・蓄積</text>
+
+      {/* Arrow 2 */}
+      <line x1="200" y1="50" x2="230" y2="50" className="tut-arrow" />
+
+      {/* Step 3: Doc */}
+      <g transform="translate(250, 40)">
+        <path d="M-10 -14 H0 L10 -4 V14 H-10 Z" className="tut-icon tut-doc" />
+        <path d="M-5 -6 H5 M-5 0 H5 M-5 6 H0" className="tut-icon tut-doc" strokeWidth="1" />
+      </g>
+      <text x="250" y="80" className="tut-text highlight-3">3.出力・解決</text>
+
+    </svg>
+  </div>
+);
+
+// --- Custom Modal Component ---
+const Modal = ({ isOpen, title, message, children, type = 'normal', onConfirm, onCancel, showCancel = true, confirmText = "実行する" }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <Card className="w-full max-w-sm p-0 border-2 border-slate-600">
+        <div className={`p-4 border-b ${type === 'danger' ? 'bg-red-900/50 border-red-800' : 'bg-slate-800 border-slate-700'} flex justify-between items-center`}>
+          <h3 className={`font-bold ${type === 'danger' ? 'text-red-100' : 'text-white'}`}>{title}</h3>
+          <button onClick={onCancel} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+        </div>
+        <div className="p-6 bg-slate-900">
+          {children ? children : <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{message}</p>}
+        </div>
+        <div className="p-4 bg-slate-800 border-t border-slate-700 flex gap-3">
+          {showCancel && <Button onClick={onCancel} variant="secondary" className="flex-1">キャンセル</Button>}
+          <Button onClick={onConfirm} variant={type === 'danger' ? 'danger' : 'primary'} className="flex-1">{confirmText}</Button>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// --- Custom Toast Component ---
+const Toast = ({ message, show, onClose }) => {
+  useEffect(() => {
+    if (show) {
+      const timer = setTimeout(onClose, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [show, onClose]);
+
+  if (!show) return null;
+
+  return (
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[110] bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl border border-slate-600 flex items-center gap-2 animate-in slide-in-from-top-5 fade-in">
+      <Check className="w-4 h-4 text-green-400" />
+      <span className="text-sm font-bold">{message}</span>
+    </div>
+  );
+};
+
+// --- Main App Component ---
+
+export default function App() {
+  // --- Global State ---
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasSetup, setHasSetup] = useState(false);
+  const [savedKeyword, setSavedKeyword] = useState(null);
+  
+  // --- Data State ---
+  const [activeTab, setActiveTab] = useState('meter'); // 'meter', 'settings'
+  const [redScore, setRedScore] = useState(0);
+  const [greyScore, setGreyScore] = useState(0);
+  const [logs, setLogs] = useState([]);
+  
+  // --- User Config State ---
+  const [victimName, setVictimName] = useState('');
+  const [perpetrators, setPerpetrators] = useState(['']); 
+
+  // --- Login/Input State ---
+  const [inputKeyword, setInputKeyword] = useState('');
+  const [setupKeyword, setSetupKeyword] = useState('');
+  const [setupError, setSetupError] = useState('');
+  
+  // --- Record Input State ---
+  const [showInput, setShowInput] = useState(false);
+  const [incidentType, setIncidentType] = useState('grey');
+  const [description, setDescription] = useState('');
+  const [intensity, setIntensity] = useState(1);
+  const [selectedPerpetrator, setSelectedPerpetrator] = useState('');
+  const [hasAudio, setHasAudio] = useState(false);
+  const [hasPhoto, setHasPhoto] = useState(false);
+  const [hasWitness, setHasWitness] = useState(false);
+  const [witnessNameInput, setWitnessNameInput] = useState('');
+
+  // --- Modal & Toast State ---
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', message: '', type: 'normal', onConfirm: () => {}, showCancel: true, confirmText: '実行する' });
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [toastConfig, setToastConfig] = useState({ show: false, message: '' });
+
+  // --- Effects ---
+  useEffect(() => {
+    // Load data
+    const loadData = () => {
+      const storedKeyword = localStorage.getItem('fireguard_keyword');
+      const storedLogs = JSON.parse(localStorage.getItem('fireguard_logs') || '[]');
+      const storedRed = Number(localStorage.getItem('fireguard_red') || 0);
+      const storedGrey = Number(localStorage.getItem('fireguard_grey') || 0);
+      const storedVictim = localStorage.getItem('fireguard_victim') || '';
+      const storedPerps = JSON.parse(localStorage.getItem('fireguard_perps') || '[""]');
+
+      if (storedKeyword) {
+        setSavedKeyword(storedKeyword);
+        setHasSetup(true);
+      }
+      
+      setLogs(storedLogs);
+      setRedScore(storedRed);
+      setGreyScore(storedGrey);
+      setVictimName(storedVictim);
+      setPerpetrators(storedPerps);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    // Persist data
+    if (isAuthenticated) {
+      localStorage.setItem('fireguard_logs', JSON.stringify(logs));
+      localStorage.setItem('fireguard_red', redScore);
+      localStorage.setItem('fireguard_grey', greyScore);
+      localStorage.setItem('fireguard_victim', victimName);
+      localStorage.setItem('fireguard_perps', JSON.stringify(perpetrators));
+    }
+  }, [logs, redScore, greyScore, victimName, perpetrators, isAuthenticated]);
+
+  // --- Helpers ---
+  const showToast = (message) => {
+    setToastConfig({ show: true, message });
+  };
+  
+  const closeModal = () => {
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const showConfirm = (title, message, type, onConfirm) => {
+    setModalConfig({
+      isOpen: true,
+      title,
+      message,
+      type,
+      showCancel: true,
+      confirmText: '実行する',
+      onConfirm: () => {
+        onConfirm();
+        closeModal();
+      }
+    });
+  };
+
+  // --- Handlers ---
+  const handleSetup = () => {
+    if (setupKeyword.length < 4) {
+      setSetupError("キーワードは4文字以上で設定してください");
+      return;
+    }
+    localStorage.setItem('fireguard_keyword', setupKeyword);
+    setSavedKeyword(setupKeyword);
+    setHasSetup(true);
+    setIsAuthenticated(true);
+    setActiveTab('settings');
+    // First time? Show tutorial
+    setShowTutorial(true);
+  };
+
+  const handleLogin = () => {
+    if (inputKeyword === savedKeyword) {
+      setIsAuthenticated(true);
+      setInputKeyword('');
+    } else {
+      setSetupError("キーワードが違います");
+      setTimeout(() => setSetupError(""), 2000);
+      const input = document.getElementById('login-input');
+      if(input) {
+        input.classList.add('animate-pulse', 'border-red-500');
+        setTimeout(() => input.classList.remove('animate-pulse', 'border-red-500'), 500);
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setActiveTab('meter');
+  };
+
+  const handleAddPerpetrator = () => {
+    setPerpetrators([...perpetrators, '']);
+  };
+
+  const handlePerpetratorChange = (index, value) => {
+    const newPerps = [...perpetrators];
+    newPerps[index] = value;
+    setPerpetrators(newPerps);
+  };
+
+  const handleRemovePerpetrator = (index) => {
+    const newPerps = perpetrators.filter((_, i) => i !== index);
+    setPerpetrators(newPerps.length ? newPerps : ['']);
+  };
+
+  const handleSubmitLog = () => {
+    const newLog = {
+      id: Date.now(),
+      date: new Date().toLocaleString('ja-JP'),
+      type: incidentType,
+      points: Number(intensity),
+      description,
+      perpetrator: selectedPerpetrator || '不明/未選択',
+      evidence: { hasAudio, hasPhoto, hasWitness, witnessName: witnessNameInput }
+    };
+
+    setLogs([newLog, ...logs]);
+    
+    if (incidentType === 'red') {
+      setRedScore(prev => Math.min(prev + Number(intensity), 10));
+    } else {
+      setGreyScore(prev => Math.min(prev + Number(intensity), 20));
+    }
+
+    setDescription('');
+    setIntensity(1);
+    setSelectedPerpetrator('');
+    setHasAudio(false);
+    setHasPhoto(false);
+    setHasWitness(false);
+    setWitnessNameInput('');
+    setShowInput(false);
+    
+    if (navigator.vibrate) navigator.vibrate(200);
+    showToast("記録を追加しました");
+  };
+
+  const handleResetData = () => {
+    showConfirm(
+      "記録のリセット",
+      "現在の「ハラスメント深度メーター」と「履歴ログ」をリセットしますか？\n\n※名簿設定とログインパスワードは保持されます。",
+      "warning",
+      () => {
+        setRedScore(0);
+        setGreyScore(0);
+        setLogs([]);
+        showToast("記録をリセットしました");
+      }
+    );
+  };
+
+  const handleFactoryReset = () => {
+    showConfirm(
+      "アプリ完全初期化",
+      "【警告】\nアプリを完全に初期化します。\n\n・全記録\n・名簿データ\n・ログインパスワード\n\nこれら全てが削除され、初期設定画面に戻ります。本当によろしいですか？",
+      "danger",
+      () => {
+        setIsAuthenticated(false); 
+        localStorage.removeItem('fireguard_keyword');
+        localStorage.removeItem('fireguard_logs');
+        localStorage.removeItem('fireguard_red');
+        localStorage.removeItem('fireguard_grey');
+        localStorage.removeItem('fireguard_victim');
+        localStorage.removeItem('fireguard_perps');
+
+        setRedScore(0);
+        setGreyScore(0);
+        setLogs([]);
+        setVictimName('');
+        setPerpetrators(['']);
+        setSavedKeyword(null);
+        setHasSetup(false);
+        setInputKeyword('');
+        setSetupKeyword('');
+        
+        showToast("初期化しました");
+      }
+    );
+  };
+
+  const copyReport = () => {
+    const header = `【ハラスメント記録報告書】\n作成日: ${new Date().toLocaleDateString('ja-JP')}\n被害者: ${victimName || '未記入'}\n------------------\n`;
+    const body = logs.map(log => 
+      `[${log.date}] ${log.type === 'red' ? '🔴パワハラ' : '⚪グレー'} (Lv.${log.points})\n加害者: ${log.perpetrator}\n内容: ${log.description}\n証拠: ${log.evidence.hasAudio ? '音声あり ' : ''}${log.evidence.hasPhoto ? '写真あり ' : ''}${log.evidence.hasWitness ? `目撃者(${log.evidence.witnessName})` : ''}`
+    ).join('\n------------------\n');
+    const fullText = header + body;
+
+    const textArea = document.createElement("textarea");
+    textArea.value = fullText;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      showToast("レポートをコピーしました");
+    } catch (err) {
+      showToast("コピーに失敗しました");
+    }
+    document.body.removeChild(textArea);
+  };
+
+  const handleDownloadCSV = () => {
+    if (logs.length === 0) return;
+    const header = ["日時", "種別", "レベル", "加害者", "内容", "音声証拠", "写真証拠", "目撃者"];
+    const rows = logs.map(log => {
+      const escape = (text) => `"${(text || '').replace(/"/g, '""')}"`;
+      return [
+        escape(log.date),
+        log.type === 'red' ? 'RED' : 'GREY',
+        log.points,
+        escape(log.perpetrator),
+        escape(log.description),
+        log.evidence.hasAudio ? 'あり' : '',
+        log.evidence.hasPhoto ? 'あり' : '',
+        escape(log.evidence.witnessName)
+      ].join(',');
+    });
+    const csvContent = "\uFEFF" + [header.join(','), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `FireGuard_Report_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // --- Views ---
+
+  // 1. Setup View
+  if (!hasSetup) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-200 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md p-6 space-y-6">
+          <div className="text-center space-y-2">
+            <ShieldAlert className="w-12 h-12 text-orange-500 mx-auto" />
+            <h1 className="text-2xl font-bold">FireGuard 初期設定</h1>
+            <p className="text-sm text-slate-400">
+              あなたの記録を守るため、<br/>キーワード（合言葉）を設定してください。
+            </p>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-2">秘密のキーワード</label>
+              <input 
+                type="text" 
+                value={setupKeyword}
+                onChange={(e) => setSetupKeyword(e.target.value)}
+                placeholder="例: 今日も一日ご安全に"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 focus:border-orange-500 focus:outline-none"
+              />
+              {setupError && <p className="text-red-400 text-xs mt-1">{setupError}</p>}
+            </div>
+            <div className="bg-slate-900/50 p-3 rounded-lg text-xs text-slate-400 border border-slate-800">
+              <p>※忘れないようにしてください。<br/>※アプリを開くたびに必要になります。</p>
+            </div>
+            <Button onClick={handleSetup} className="w-full py-3">設定して開始する</Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // 2. Lock Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-200 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md p-6 space-y-6">
+          <div className="text-center space-y-2">
+            <Lock className="w-10 h-10 text-slate-500 mx-auto" />
+            <h1 className="text-xl font-bold">ロックされています</h1>
+          </div>
+          <div className="space-y-4">
+            <input 
+              id="login-input"
+              type="password" 
+              value={inputKeyword}
+              onChange={(e) => setInputKeyword(e.target.value)}
+              placeholder="キーワードを入力"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-center tracking-widest focus:border-orange-500 focus:outline-none transition-all"
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            {setupError && <p className="text-center text-red-400 text-xs animate-pulse">{setupError}</p>}
+            <Button onClick={handleLogin} className="w-full">解除</Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // 3. Main App
+  const redAdvice = redScore >= 10 
+    ? "【危険水域】直ちに相談窓口、外部ユニオンへ。身の安全が最優先です。" 
+    : "【警戒】記録を続けてください。";
+  const greyAdvice = greyScore >= 20 
+    ? "【限界突破】「現場の常識」を超えています。法的措置も視野に。" 
+    : "【蓄積中】違和感を記録しましょう。";
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-24">
+      {/* Header */}
+      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div className="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Flame className="text-orange-500 w-6 h-6" />
+            <h1 className="font-bold text-lg tracking-tight">FireGuard</h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setShowTutorial(true)}
+              className="p-2 text-slate-400 hover:text-white"
+            >
+              <HelpCircle className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => setActiveTab(activeTab === 'meter' ? 'settings' : 'meter')} 
+              className={`p-2 rounded-full ${activeTab === 'settings' ? 'bg-orange-900 text-orange-200' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Settings className="w-5 h-5" />
+            </button>
+            <button onClick={handleLogout} className="text-slate-500 hover:text-slate-300">
+              <LogOut className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-md mx-auto p-4 space-y-6">
+        {/* --- SETTINGS TAB --- */}
+        {activeTab === 'settings' && (
+          <div className="space-y-6 animate-in slide-in-from-right duration-300 pb-10">
+            <div className="flex items-center gap-2 text-slate-400 border-b border-slate-800 pb-2">
+              <Settings className="w-5 h-5" />
+              <h2 className="font-bold">名簿・設定シート</h2>
+            </div>
+            {/* Victim Settings */}
+            <section className="space-y-2">
+              <h3 className="text-sm font-bold text-orange-400 flex items-center gap-2">
+                <User className="w-4 h-4" /> 被害者（あなた）
+              </h3>
+              <Card className="p-4 bg-slate-900">
+                <Input label="氏名（レポート出力時に使用されます）" value={victimName} onChange={(e) => setVictimName(e.target.value)} placeholder="消防 太郎" />
+              </Card>
+            </section>
+            {/* Perpetrator Settings */}
+            <section className="space-y-2">
+              <h3 className="text-sm font-bold text-red-400 flex items-center gap-2">
+                <UserX className="w-4 h-4" /> 加害者リスト
+              </h3>
+              <p className="text-xs text-slate-500 mb-2">よく当たる上司や先輩の名前を登録しておくと、記録時に選択できて便利です。</p>
+              <Card className="p-4 bg-slate-900 space-y-3">
+                {perpetrators.map((perp, index) => (
+                  <div key={index} className="flex gap-2">
+                    <input type="text" value={perp} onChange={(e) => handlePerpetratorChange(index, e.target.value)} placeholder={`加害者名 ${index + 1}`} className="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-red-500 focus:outline-none" />
+                    <button onClick={() => handleRemovePerpetrator(index)} className="p-2 text-slate-500 hover:text-red-400">✕</button>
+                  </div>
+                ))}
+                <Button onClick={handleAddPerpetrator} variant="secondary" className="w-full text-xs py-2">+ 加害者を追加</Button>
+              </Card>
+            </section>
+            {/* Reset Zone */}
+            <section className="space-y-2 pt-4 border-t border-slate-800">
+              <h3 className="text-sm font-bold text-slate-400 flex items-center gap-2"><Trash2 className="w-4 h-4" /> データ管理・リセット</h3>
+              <Card className="p-4 bg-slate-900 space-y-3">
+                <Button onClick={handleResetData} variant="secondary" className="w-full justify-start text-xs border border-slate-700">
+                  <RefreshCw className="w-4 h-4" /> 記録とメーターのみリセット
+                  <span className="text-[10px] text-slate-400 ml-auto font-normal">設定は保持されます</span>
+                </Button>
+                <Button onClick={handleFactoryReset} variant="danger" className="w-full justify-start text-xs bg-red-900/50 border border-red-800 hover:bg-red-900">
+                  <AlertTriangle className="w-4 h-4" /> アプリ完全初期化
+                  <span className="text-[10px] text-red-200 ml-auto font-normal">全て削除されます</span>
+                </Button>
+              </Card>
+            </section>
+            <section className="pt-4">
+              <Button onClick={() => setActiveTab('meter')} variant="primary" className="w-full"><Check className="w-4 h-4" /> 設定を保存して戻る</Button>
+            </section>
+          </div>
+        )}
+
+        {/* --- METER & RECORD TAB --- */}
+        {activeTab === 'meter' && (
+          <>
+            <section className="space-y-4">
+              <Gauge value={redScore} max={10} color="red" label="レッドゾーン" icon={Siren} description={redAdvice} />
+              <Gauge value={greyScore} max={20} color="grey" label="グレーゾーン" icon={Activity} description={greyAdvice} />
+            </section>
+
+            {!showInput ? (
+              <Button onClick={() => setShowInput(true)} className="w-full py-4 text-lg shadow-orange-900/20">
+                <FileText className="w-5 h-5" /> 事案を記録する
+              </Button>
+            ) : (
+              <Card className="animate-in slide-in-from-bottom-5 duration-300">
+                <div className="bg-slate-900 p-3 border-b border-slate-700 flex justify-between items-center">
+                  <h3 className="font-bold text-slate-300">新規記録</h3>
+                  <button onClick={() => setShowInput(false)} className="text-slate-400 hover:text-white">✕</button>
+                </div>
+                <div className="p-4 space-y-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => setIncidentType('grey')} className={`p-3 rounded-lg border flex flex-col items-center gap-1 transition-all ${incidentType === 'grey' ? 'bg-slate-700 border-slate-400 text-white' : 'border-slate-800 text-slate-500'}`}><Activity className="w-5 h-5" /><span className="text-xs font-bold">グレー</span></button>
+                    <button onClick={() => setIncidentType('red')} className={`p-3 rounded-lg border flex flex-col items-center gap-1 transition-all ${incidentType === 'red' ? 'bg-red-900/50 border-red-500 text-red-200' : 'border-slate-800 text-slate-500'}`}><Siren className="w-5 h-5" /><span className="text-xs font-bold">レッド</span></button>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-400 mb-1 block">加害者 (設定シートで編集可)</label>
+                    <select value={selectedPerpetrator} onChange={(e) => setSelectedPerpetrator(e.target.value)} className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:border-orange-500 outline-none">
+                      <option value="">選択してください</option>
+                      {perpetrators.map((p, i) => p && <option key={i} value={p}>{p}</option>)}
+                      <option value="その他">その他</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-400 mb-1 block">ダメージ (1-{incidentType === 'red' ? '5' : '3'})</label>
+                    <input type="range" min="1" max={incidentType === 'red' ? 5 : 3} value={intensity} onChange={(e) => setIntensity(e.target.value)} className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                  </div>
+                  <textarea className="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm focus:outline-none focus:border-orange-500 transition-colors" rows="3" placeholder="内容を入力..." value={description} onChange={(e) => setDescription(e.target.value)} />
+                  <div className="grid grid-cols-3 gap-2">
+                    <button onClick={() => setHasAudio(!hasAudio)} className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${hasAudio ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-slate-700 text-slate-600'}`}><Mic className="w-4 h-4 mb-1" /><span className="text-[10px]">音声</span></button>
+                    <button onClick={() => setHasPhoto(!hasPhoto)} className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${hasPhoto ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-slate-700 text-slate-600'}`}><Camera className="w-4 h-4 mb-1" /><span className="text-[10px]">写真</span></button>
+                    <button onClick={() => setHasWitness(!hasWitness)} className={`flex flex-col items-center justify-center p-2 rounded border transition-all ${hasWitness ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-slate-700 text-slate-600'}`}><Users className="w-4 h-4 mb-1" /><span className="text-[10px]">目撃者</span></button>
+                  </div>
+                  {hasWitness && <input type="text" placeholder="目撃者名" value={witnessNameInput} onChange={(e) => setWitnessNameInput(e.target.value)} className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-xs" />}
+                  <Button onClick={handleSubmitLog} className="w-full" disabled={!description}><Save className="w-4 h-4" /> 記録に追加</Button>
+                </div>
+              </Card>
+            )}
+
+            <section>
+              <div className="flex justify-between items-center mb-3 px-1">
+                <h3 className="font-bold text-slate-400 text-sm uppercase tracking-wider">履歴ログ</h3>
+                <div className="flex gap-2">
+                   <button onClick={handleResetData} className="text-xs text-slate-600 hover:text-red-400 flex items-center gap-1">
+                      <Trash2 className="w-3 h-3" /> 削除
+                   </button>
+                   {logs.length > 0 && (
+                    <>
+                      <button onClick={handleDownloadCSV} className="text-xs text-blue-400 flex items-center gap-1 hover:text-blue-300 ml-2">
+                        <Download className="w-3 h-3" /> CSV出力
+                      </button>
+                      <button onClick={copyReport} className="text-xs text-orange-400 flex items-center gap-1 hover:text-orange-300 ml-2">
+                        <FileText className="w-3 h-3" /> 全てコピー
+                      </button>
+                    </>
+                   )}
+                </div>
+              </div>
+              <div className="space-y-3 pb-8">
+                {logs.length === 0 ? (
+                  <div className="text-center py-8 text-slate-600 border-2 border-dashed border-slate-800 rounded-lg"><ShieldAlert className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">記録なし</p></div>
+                ) : (
+                  logs.map(log => (
+                    <Card key={log.id} className="relative">
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${log.type === 'red' ? 'bg-red-600' : 'bg-slate-400'}`}></div>
+                      <div className="p-3 pl-4">
+                        <div className="flex justify-between items-start mb-1">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs font-bold px-2 py-0.5 rounded ${log.type === 'red' ? 'bg-red-900 text-red-200' : 'bg-slate-700 text-slate-300'}`}>{log.type === 'red' ? 'RED' : 'GREY'}</span>
+                            <span className="text-xs text-slate-500">{log.date}</span>
+                          </div>
+                          <span className="text-xs font-bold text-orange-500">Lv.{log.points}</span>
+                        </div>
+                        <div className="flex items-center gap-1 mb-2 text-xs text-slate-400 bg-slate-900/50 p-1 rounded w-fit">
+                          <UserX className="w-3 h-3" /> <span className="font-bold">{log.perpetrator}</span>
+                        </div>
+                        <p className="text-sm text-slate-300 mb-2 whitespace-pre-wrap">{log.description}</p>
+                        <div className="flex gap-2">
+                          {log.evidence.hasAudio && <span className="text-[10px] bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded text-slate-400 flex items-center gap-1"><Mic className="w-3 h-3" />音声</span>}
+                          {log.evidence.hasPhoto && <span className="text-[10px] bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded text-slate-400 flex items-center gap-1"><Camera className="w-3 h-3" />写真</span>}
+                          {log.evidence.hasWitness && <span className="text-[10px] bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded text-slate-400 flex items-center gap-1"><Users className="w-3 h-3" />{log.evidence.witnessName}</span>}
+                        </div>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </section>
+          </>
+        )}
+      </main>
+
+      {/* --- Tutorial Modal --- */}
+      <Modal 
+        isOpen={showTutorial} 
+        title="FireGuardの使い方" 
+        showCancel={false} 
+        confirmText="閉じる"
+        onConfirm={() => setShowTutorial(false)}
+        onCancel={() => setShowTutorial(false)}
+      >
+        <div className="space-y-4">
+          <TutorialAnimation />
+          <div className="text-xs text-slate-400 space-y-2">
+            <p><strong>1. 保護 (Protection)</strong><br/>最初にパスワードを設定し、あなただけの秘密の記録スペースを確保します。</p>
+            <p><strong>2. 記録 (Record)</strong><br/>ハラスメントの種別（レッド/グレー）を選び、詳細を記録。メーターが蓄積されます。</p>
+            <p><strong>3. 解決 (Action)</strong><br/>限界値を超えたらアラートが表示されます。記録をコピーまたはCSV出力して証拠として活用してください。</p>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Global Modals & Overlays */}
+      <Modal 
+        isOpen={modalConfig.isOpen} 
+        title={modalConfig.title} 
+        message={modalConfig.message} 
+        type={modalConfig.type}
+        showCancel={modalConfig.showCancel}
+        confirmText={modalConfig.confirmText}
+        onConfirm={modalConfig.onConfirm}
+        onCancel={closeModal}
+      />
+      <Toast show={toastConfig.show} message={toastConfig.message} onClose={() => setToastConfig(prev => ({ ...prev, show: false }))} />
+
+      {(redScore >= 10 || greyScore >= 20) && (
+        <div className="fixed bottom-0 left-0 right-0 bg-red-900/90 backdrop-blur-sm border-t border-red-500 p-4 z-50 animate-pulse">
+          <div className="max-w-md mx-auto flex items-center gap-4">
+            <AlertTriangle className="w-10 h-10 text-red-100 flex-shrink-0" />
+            <div>
+              <h4 className="font-bold text-white">限界値を超えています</h4>
+              <p className="text-xs text-red-100">一人で抱え込まず、外部機関や信頼できる上司へ相談してください。</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
