@@ -370,7 +370,8 @@
             };
 
             const handleLogin = () => {
-                if (inputKeyword === savedKeyword) {
+                // Modified: Trim input to avoid accidental whitespace issues
+                if (inputKeyword.trim() === savedKeyword) {
                     setIsAuthenticated(true);
                     setInputKeyword('');
                 } else {
@@ -538,6 +539,12 @@
                                 <input id="login-input" type="password" value={inputKeyword} onChange={(e) => setInputKeyword(e.target.value)} placeholder="キーワードを入力" className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-center tracking-widest focus:border-orange-500 focus:outline-none transition-all" onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
                                 {setupError && <p className="text-center text-red-400 text-xs animate-pulse">{setupError}</p>}
                                 <Button onClick={handleLogin} className="w-full">解除</Button>
+                                {/* Added Emergency Reset */}
+                                <div className="mt-4 text-center">
+                                    <button onClick={handleFactoryReset} className="text-xs text-slate-500 underline hover:text-red-400">
+                                        キーワードを忘れた場合 / 初期化
+                                    </button>
+                                </div>
                             </div>
                         </Card>
                         <Modal isOpen={modalConfig.isOpen} title={modalConfig.title} message={modalConfig.message} type={modalConfig.type} onConfirm={modalConfig.onConfirm} onCancel={closeModal} />
@@ -725,11 +732,11 @@
                         )}
                     </main>
                 </div>
-                );
-            }
+            );
+        }
 
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-        </script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
