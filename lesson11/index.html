@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文化財防火 e-Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; }
+        body {
+            background-color: #0f172a; /* Dark Navy Background */
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Noto Sans JP', sans-serif;
+            color: #334155;
+        }
+
+        /* --- APP CONTAINER --- */
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: #f8fafc;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 80vh; /* Minimum height */
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: linear-gradient(90deg, #0b1e3b 0%, #1e3a8a 100%);
+            border-bottom: 3px solid #d4af37; /* Gold Border */
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff;
+        }
+
+        .header-title {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon { color: #d4af37; font-size: 24px; }
+        .sub-title { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        /* --- VIEWS & ANIMATION --- */
+        .view {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        .view.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- START SCREEN DESIGN --- */
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        /* Hero Graphic (CSS Only) */
+        .hero-graphic {
+            width: 120px;
+            height: 120px;
+            background: #1e3a8a;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        .hero-graphic i {
+            font-size: 50px;
+            color: #f8fafc;
+        }
+
+        .start-screen h1 {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 42px;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .start-screen p {
+            font-size: 18px;
+            color: #64748b;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* --- QUIZ SCREEN DESIGN --- */
+        .quiz-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 6px solid #1e3a8a; /* Navy Accent */
+            border-right: 1px solid #e2e8f0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .quiz-card h3 {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 20px;
+            margin: 0 0 20px 0;
+            color: #0f172a;
+            line-height: 1.6;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            accent-color: #1e3a8a;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* --- GRADING STYLES --- */
+        .quiz-card.correct {
+            border-left-color: #10b981; /* Green */
+            background-color: #f0fdf4;
+        }
+        .quiz-card.incorrect {
+            border-left-color: #ef4444; /* Red */
+            background-color: #fef2f2;
+        }
+
+        .option-label.correct-answer {
+            background-color: #dcfce7;
+            border-color: #16a34a;
+            color: #14532d;
+            font-weight: 700;
+        }
+        .option-label.correct-answer::after {
+            content: "（正解）";
+            margin-left: auto;
+            font-size: 0.9em;
+            color: #16a34a;
+        }
+
+        .option-label.wrong-selection {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+        .option-label.wrong-selection::after {
+            content: "（不正解）";
+            margin-left: auto;
+            font-size: 0.9em;
+            color: #ef4444;
+        }
+
+        /* --- EXPLANATION BOX --- */
+        .explanation-box {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #d4af37; /* Gold Accent */
+            border-radius: 4px;
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.7;
+        }
+        .explanation-box strong {
+            display: block;
+            color: #b48a28;
+            margin-bottom: 8px;
+            font-family: 'Shippori Mincho', serif;
+            font-size: 16px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: linear-gradient(135deg, #d4af37 0%, #b48a28 100%);
+            color: #fff;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Noto Sans JP', sans-serif;
+            display: inline-block;
+            min-width: 200px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+        .btn:active { transform: translateY(0); }
+
+        .btn-retry {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+        }
+
+        /* --- SCORE BOARD --- */
+        .score-board {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-top: 6px solid #d4af37;
+            display: none;
+        }
+        .score-board h2 {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 28px;
+            margin: 0;
+            color: #1e3a8a;
+        }
+        .score-value {
+            font-size: 60px;
+            font-weight: 700;
+            color: #d4af37;
+            margin: 15px 0;
+            font-family: 'Shippori Mincho', serif;
+        }
+        .score-message { font-size: 16px; color: #64748b; }
+
+        /* --- FOOTER / ACTION BAR --- */
+        .action-bar {
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .header-title { font-size: 18px; }
+            .start-screen h1 { font-size: 32px; }
+            main { padding: 20px; }
+            .app-container { border-radius: 0; min-height: 100vh; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- HEADER -->
+    <header>
+        <div>
+            <div class="header-title">
+                <i class="fa-solid fa-fire-extinguisher header-icon"></i>
+                <span>文化財防火 特別教養</span>
+            </div>
+            <div class="sub-title">Fire Department e-Learning System</div>
+        </div>
+        <div>
+            <!-- Decorative Icon -->
+            <i class="fa-solid fa-landmark" style="font-size: 32px; opacity: 0.3;"></i>
+        </div>
+    </header>
+
+    <!-- MAIN AREA -->
+    <main>
+        <!-- 1. START SCREEN -->
+        <div id="start-screen" class="view active start-screen">
+            <div class="hero-graphic">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <h1>知識確認テスト</h1>
+            <p>
+                文化財防火デーの歴史、火災統計、防災設備、<br>
+                現場対応、最新政策に関する精選問題。<br>
+                全50問のプールからランダムに10問が出題されます。
+            </p>
+            <button class="btn" onclick="startQuiz()">
+                <i class="fa-solid fa-play" style="margin-right: 10px;"></i>開始する
+            </button>
+        </div>
+
+        <!-- 2. QUIZ SCREEN -->
+        <div id="quiz-screen" class="view">
+            <!-- Score Board (Hidden initially) -->
+            <div id="score-board" class="score-board">
+                <h2>実施結果</h2>
+                <div class="score-value" id="score-display">-- / 10</div>
+                <p class="score-message">解説を確認して知識を定着させましょう。</p>
+            </div>
+
+            <!-- Questions Container -->
+            <div id="questions-container">
+                <!-- Questions injected by JS -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-bar">
+                <button id="submit-btn" class="btn" onclick="submitQuiz()">
+                    採点する
+                </button>
+                <button id="retry-btn" class="btn btn-retry" onclick="retryQuiz()" style="display: none;">
+                    <i class="fa-solid fa-rotate-right" style="margin-right: 8px;"></i>再度挑戦する
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // --- 質問データ (50問) ---
+    const questionPool = [
+        { q: "文化財防火デーが1月26日に定められた直接のきっかけとなった出来事はどれですか。", o: ["金閣寺の放火事件", "法隆寺金堂の火災", "首里城の火災", "ノートルダム大聖堂の火災"], a: 1, e: "昭和24（1949）年1月26日の早朝、法隆寺金堂から出火し、国宝の十二面壁画の大半が焼損したことが契機となりました。" },
+        { q: "法隆寺金堂の火災が発生した当時、どのような状況でしたか。", o: ["観光客による失火", "落雷による自然発火", "昭和の大修理（解体修理）中", "放火による被害"], a: 2, e: "当時は昭和9年から昭和60年にかけて行われた「昭和の大修理」の最中でした。" },
+        { q: "法隆寺の惨事を受けて、翌年の1950（昭和25）年に制定された法律は何ですか。", o: ["消防法", "文化財保護法", "国宝保存法", "文化財防災対策特別措置法"], a: 1, e: "法隆寺金堂壁画の焼損を受け、文化財保護の統括的法律として文化財保護法が制定されました。" },
+        { q: "第1回「文化財防火デー」が実施されたのは西暦何年ですか。", o: ["1949年", "1950年", "1955年", "1960年"], a: 2, e: "1955（昭和30）年に、当時の文化財保護委員会と国家消防本部が1月26日を「文化財防火デー」と定めました。" },
+        { q: "1月26日が防火デーに選ばれた実務的な理由として正しいものはどれですか。", o: ["消防職員の出初式に近いから", "1月と2月が1年のうちで最も火災が発生しやすい時期だから", "予算編成の時期にあたるから", "全国一斉に視察が行いやすいから"], a: 1, e: "法隆寺の火災記念日であることに加え、例年1・2月は空気が乾燥し火災が発生しやすいためです。" },
+        { q: "文化財防火デーの主唱者はどこですか。", o: ["総務省と文部科学省", "京都市消防局と奈良県教育委員会", "文化庁と消防庁", "内閣府と消防庁"], a: 2, e: "文化庁と消防庁が協力して毎年運動を展開しています。" },
+        { q: "2025年（令和7年）1月に実施されたのは第何回の文化財防火デーですか。", o: ["第50回", "第60回", "第70回", "第71回"], a: 3, e: "令和7年1月の文化財防火デーは第71回にあたります。" },
+        { q: "文化財防火デーのポスターにも使われるスローガンとして、東京消防庁が掲げているものはどれですか。", o: ["文化財を火から守る", "育てよう 歴史を守る 防火の心", "みんなで文化財を火災から守ろう", "守ろう！地域の宝"], a: 1, e: "東京消防庁の資料には「育てよう 歴史を守る 防火の心」というスローガンが記載されています。" },
+        { q: "法隆寺が世界文化遺産に登録されたのはいつですか。", o: ["1950年", "1980年", "1993年", "2019年"], a: 2, e: "平成5（1993）年12月に、世界最古の木造建築物として登録されました。" },
+        { q: "日本の文化財が火災に対して特に脆弱である主な理由は何ですか。", o: ["防災設備の設置が禁じられているから", "木や紙などの可燃物で造られているものが多いから", "山奥にあるため消防隊が到着できないから", "スプリンクラーが作動しないから"], a: 1, e: "日本の文化財は木造の建造物が多く、一度火災になると大きな被害を受ける危険性が高いためです。" },
+        { q: "京都市消防局の統計（S23〜H24累計）によると、文化財所有社寺における火災原因の第1位は何ですか。", o: ["たばこ", "こんろ", "放火（疑い含む）", "電気"], a: 2, e: "全148件の火災のうち、半数近い67件（45.3％）が放火によるものです。" },
+        { q: "同統計において、原因の第2位は何ですか。", o: ["電気", "たばこ", "火遊び", "焚き火"], a: 1, e: "放火に次いで「たばこ」が13件（8.8％）となっています。" },
+        { q: "文化財所有社寺での火災発生が最も多い時間帯はいつですか。", o: ["午後1時台", "午後8時台", "午前3時台", "午前10時台"], a: 2, e: "午前3時台の発生が一番多く、そのうち9割が放火によるものです。" },
+        { q: "不審物を発見した際の適切な措置として、誤っているものはどれですか。", o: ["さわらない", "ふまない", "けとばさない", "安全な場所に移動させる"], a: 3, e: "時限式発火物等の可能性があるため、「さわるな」「ふむな」「けとばすな」が鉄則です。" },
+        { q: "文化財火災の月別発生状況で、京都市の累計データにおいて最も件数が多いのは何月ですか。", o: ["1月", "3月", "8月", "12月"], a: 1, e: "京都市の統計では3月が最も多く、次いで4月、6月に多く発生しています。" },
+        { q: "テロ・ゲリラによる火災で、発火物が仕掛けられやすい場所はどこですか。", o: ["本堂の正面", "床下、扁額の裏側、倉庫などの人目につかない場所", "参拝客が通る階段", "防犯カメラの正面"], a: 1, e: "過去の事例では、床下部分や扁額裏側などの隙間に時限式発火物が仕掛けられています。" },
+        { q: "文化財建造物の周囲で防火上制限すべき行為は何ですか。", o: ["写真撮影", "喫煙やたき火等の裸火の使用", "私語", "鐘をつくこと"], a: 1, e: "出火防止のため、平常時から喫煙やたき火等の裸火の使用を制限する必要があります。" },
+        { q: "放火火災防止対策として有効なハード対策は何ですか。", o: ["消火器の増設", "放火監視機器（炎センサー）の設置", "耐震補強", "避雷設備の更新"], a: 1, e: "放火されにくい環境整備として、放火監視機器等の設置が指導されています。" },
+        { q: "重要文化財建造物は、消防法施行令上の用途区分で何項に該当しますか。", o: ["1項（劇場等）", "11項（神社・寺院等）", "17項（重要文化財等）", "16項（複合用途）"], a: 2, e: "消防法上の重要文化財建造物は、用途区分17項に該当します。" },
+        { q: "文化財の火災予防において、消防局が関係者へ特に周知すべき管理事項はどれですか。", o: ["建造物の周囲に木材などの可燃物を置かない", "参拝客の氏名を全員記録する", "24時間門を開放しておく", "毎日放水訓練を行う"], a: 0, e: "放火等につながる可能性を極力取り除くため、可燃物を収納・放置しないことが重要です。" },
+        { q: "木造文化財の屋外軒下など、煙が滞留しにくい場所での早期発見に有効な設備は何ですか。", o: ["煙感知器", "熱感知器", "炎センサー", "ガス漏れ警報器"], a: 2, e: "炎センサーは火炎そのものを検知するため、煙が逃げやすい場所でも有効です。" },
+        { q: "隣接建物からの延焼を防ぐために、屋根面などに水幕を作る設備を何と呼びますか。", o: ["放水銃", "ドレンチャー", "屋外消火栓", "スプリンクラー"], a: 1, e: "ドレンチャー（水幕設備）は、隣接建物からの延焼を防止するために設置されます。" },
+        { q: "大規模木造建造物で、遠隔操作により大容量の放水を可能にする設備は何ですか。", o: ["放水銃", "連結送水管", "動力消防ポンプ", "散水栓"], a: 0, e: "放水銃は、大規模な木造文化財の消火・延焼防止に威力を発揮します。" },
+        { q: "最新の防犯・防災システム（建仁寺の事例）で、AI等の技術を用いて自動的に行われることは何ですか。", o: ["消火器の自動噴射", "不審者の検知・追跡と関係者への自動メール配信", "消防署への自動出動要請", "門の自動閉鎖"], a: 1, e: "既存のカメラを活用し、侵入禁止エリアに入った人物を追跡し、リスク値を算出して自動通知する仕組みが導入されています。" },
+        { q: "消防用設備等の定期点検において、消防職員が所有者に指導すべきことはどれですか。", o: ["消防署員が来るまで点検しないこと", "壊れるまで使い続けること", "点検結果を点検票及び維持台帳に記録し報告すること", "点検業者にすべて任せて内容は把握しなくてよい"], a: 2, e: "消防用設備等の定期点検を励行し、記録を作成・報告することが求められます。" },
+        { q: "消火訓練を実施した後に必ず行うべき復旧作業は何ですか。", o: ["放水した場所を乾燥させる", "防火水槽への水の補給や設備の復旧", "周辺の草刈り", "消防署への報告書の郵送のみ"], a: 1, e: "消火訓練後は、貯水槽への給水や自動火災報知設備の復旧を確実に行い、警戒体制を戻す必要があります。" },
+        { q: "震災時、水道網が寸断された場合を想定して確認しておくべき代替措置は何ですか。", o: ["雨水の利用", "防火水槽の貯水量チェックや可搬ポンプの稼働確認", "避難所の確保", "デジタルアーカイブの確認"], a: 1, e: "公設の消火栓が使えない事態に備え、代替措置の訓練が重要です。" },
+        { q: "文化財建造物に使用される幕やカーテンに施すべき処理は何ですか。", o: ["防水処理", "防炎処理", "撥水処理", "防カビ処理"], a: 1, e: "火災の拡大防止のため、可燃性の幕等には防炎処理を施すことが推奨されます。" },
+        { q: "落雷による火災を防ぐために整備されるべき設備は何ですか。", o: ["自動火災報知設備", "避雷設備", "非常電源設備", "ドレンチャー"], a: 1, e: "高台や山間部にあることが多い文化財を守るため、避雷設備の整備・更新が必要です。" },
+        { q: "火災発生時、消防隊が美術工芸品等の情報を瞬時に把握するために作成されるカードを何と呼びますか。", o: ["文化財防災マニュアル", "文化財セーフティカード（または台帳）", "消防計画書", "被災状況記録票"], a: 1, e: "保管場所、搬出手順、必要な人員等を一覧にしたカードで、消防隊も保持します。" },
+        { q: "文化財防火デーに伴う消防訓練において、人命安全の次に優先されるべき活動は何ですか。", o: ["報道対応", "重要物品（美術工芸品等）の搬出", "募金活動", "警察への通報"], a: 1, e: "人命の安全確保を最優先としつつ、重要物品の搬出や初期消火を行います。" },
+        { q: "有形文化財（美術工芸品等）の搬出訓練を実施する際の留意点は何ですか。", o: ["必ず実物を使用すること", "擬した代替物品（ダミー）を用いること", "一人で運べるものだけに限定すること", "訓練中は梱包を解くこと"], a: 1, e: "文化財を傷つけないよう、訓練には代替物品を使用するのが原則です。" },
+        { q: "搬出訓練において、やむを得ず実物を使用する場合の条件は何ですか。", o: ["消防署の許可を得ること", "当該文化財の性質・構造を熟知した上で慎重に行うこと", "訓練時間を短縮すること", "警察官が立ち会うこと"], a: 1, e: "実物を使用する場合は、その性質を熟知した上で細心の注意を払う必要があります。" },
+        { q: "火災発見時、消防機関への通報と並行して関係者が行うべき初期対応は何ですか。", o: ["財産の整理", "現場確認、初期消火、参拝者の避難誘導", "消防計画の書き換え", "応援部隊の編成"], a: 1, e: "通報とともに、初期消火や避難誘導等の総合的な活動が求められます。" },
+        { q: "観光客や参拝客が多い社寺で、特に重点を置くべき訓練内容はどれですか。", o: ["多言語等を用いた避難誘導訓練", "駐車場整理訓練", "物品の販売訓練", "御朱印の受付訓練"], a: 0, e: "観覧者が多い場所では、避難誘導訓練を併せて行うことが不可欠です。" },
+        { q: "消防隊到着時、文化財所有者が提供すべき最も重要な情報は何ですか。", o: ["拝観料の金額", "火災発生場所、負傷者の有無、重要物品の所在", "寺の歴史", "明日の行事予定"], a: 1, e: "迅速な消火・救助・搬出のため、発災場所や未避難者等の情報を的確に伝えます。" },
+        { q: "京都市が推進している、地域住民と社寺が協力して文化財を守る体制を何と呼びますか。", o: ["自主防災組織", "文化財市民レスキュー体制", "文化財警備団", "防災ボランティア"], a: 1, e: "所有者と地域住民が相互に協力して文化財を守る「文化財市民レスキュー」が構築されています。" },
+        { q: "あらかじめ決められたシナリオに従わず、その場で状況が付与される訓練方式を何と呼びますか。", o: ["定型型訓練", "シナリオ型訓練", "発災型訓練", "展示型訓練"], a: 2, e: "実戦的な対応能力を高めるため、その場で状況が付与される「発災型訓練」が推奨されています。" },
+        { q: "京都市で養成されている、初期消火や応急措置ができる観光ガイド等の資格は何ですか。", o: ["文化財保護委員", "文化財防災マイスター", "観光防災士", "社寺防災員"], a: 1, e: "日常的に社寺を訪れるガイドやタクシー運転手に防火・救急講習を行い、マイスターとして養成しています。" },
+        { q: "昭和23年から寺関係者と地域住民が一体となって活動している先駆的な自警組織は何ですか。", o: ["西本願寺自衛消防隊", "清水寺警備団", "善光寺消防隊", "二条城レスキュー隊"], a: 1, e: "清水寺警備団は、自治体消防の発足より早く結成された先駆的なボランティア団体です。" },
+        { q: "火災で損傷した文化財建造物に対し、二次災害防止のために行う応急処置は何ですか。", o: ["放水し続ける", "ブルーシートで覆う", "立ち入りを一切禁止する（専門家も含む）", "その場で修理を開始する"], a: 1, e: "損壊箇所をブルーシートで覆い、雨水等によるさらなる劣化を防ぎます。" },
+        { q: "重要物品の搬出先として、平常時から定めておくべき場所の条件は何ですか。", o: ["山門の外", "安全かつ、盗難の恐れがない施錠可能な場所", "近くの公園", "消防署の車庫"], a: 1, e: "搬出後の盗難を防ぐため、安全で施錠可能な移動先を予め定めておく必要があります。" },
+        { q: "文化財所有者が台帳（セーフティーカード）を作成する目的として、誤っているものはどれですか。", o: ["被害にあった際に特定できるようにするため", "特徴や寸法を記録するため", "転売の際の価格を決めるため", "消防隊が搬出人員等を把握するため"], a: 2, e: "台帳は被害確認や搬出シミュレーションのために作成されます。" },
+        { q: "冬期の消防訓練において、寒冷地特有の課題となるのはどれですか。", o: ["参拝客の減少", "消防水利の確保及び管理（凍結等）", "日照時間の短さ", "交通渋滞"], a: 1, e: "日光の社寺等の寒冷地では、冬季の消防水利の管理が重要な課題です。" },
+        { q: "消防訓練終了後、一層の改善を図るために行うべきことは何ですか。", o: ["記念撮影", "検討会（検証）の開催", "直会（宴会）", "備品の返却"], a: 1, e: "訓練参加者を中心に結果を検証し、課題を次の防火対策に活かすことが重要です。" },
+        { q: "2026年度（令和8年度）から本格始動する文化財防災の新たな計画名は何ですか。", o: ["世界遺産防火対策計画", "第1次文化財防災対策5か年計画", "日本文化財強靱化計画", "文化財防火10か年計画"], a: 1, e: "2026年度（令和8年度）から2030年度（令和12年度）を期間とする新たな5か年計画が策定されました。" },
+        { q: "新5か年計画において、従来の「建造物の防火」からどのようにスコープが拡大されましたか。", o: ["美術工芸品の購入に特化する", "建造物の耐震対策、史跡等の水害・土砂災害対策等を含む総合的な計画", "国外の文化財保護を主目的とする", "消防署の建て替えに限定する"], a: 1, e: "火災に加え、水害、地震、土砂災害、老朽化対策等を含む総合的な防災計画へと進化しました。" },
+        { q: "新5か年計画の対象として、今回から新たに明記された類型はどれですか。", o: ["国宝建造物", "史跡、埋蔵文化財、無形文化財の保持団体など", "消防署", "地方公共団体の本庁舎"], a: 1, e: "従来の建造物中心から、無形文化財を含むあらゆる類型に対策が広がっています。" },
+        { q: "新5か年計画において、ハード整備と並行して重視されているのは何ですか。", o: ["ソフト面（消防計画の高度化や地域連携等）の具体的な取組", "観光客の増員", "収益事業の拡大", "警察官の増員"], a: 0, e: "防災設備（ハード）だけでなく、訓練や計画策定といったソフト面も重視されています。" },
+        { q: "文化庁が文化財防災のパラダイムシフトを図る契機となった2019年の火災はどこですか。", o: ["ノートルダム大聖堂と首里城", "金閣寺と寂光院", "善光寺と日光東照宮", "ブラジル国立博物館と清水寺"], a: 0, e: "2019年のノートルダム大聖堂と首里城の火災が、防火対策を抜本的に見直す大きな契機となりました。" }
+    ];
+
+    let currentQuestions = [];
+    const QUESTION_COUNT = 10;
+
+    // --- ユーティリティ: 配列をシャッフル ---
+    function shuffleArray(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    // --- アプリケーションロジック ---
+    function startQuiz() {
+        // 1. 全50問からランダムに10問を抽出
+        const shuffled = shuffleArray([...questionPool]);
+        currentQuestions = shuffled.slice(0, QUESTION_COUNT);
+
+        // 2. HTML生成
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+        
+        currentQuestions.forEach((qObj, index) => {
+            const card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.id = `card-${index}`;
+
+            let optionsHTML = '';
+            qObj.o.forEach((opt, optIndex) => {
+                optionsHTML += `
+                    <label class="option-label" id="label-${index}-${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <h3>問${index + 1}. ${qObj.q}</h3>
+                <div class="quiz-options">
+                    ${optionsHTML}
+                </div>
+                <div class="explanation-box" id="exp-${index}">
+                    <strong>【解説】</strong>
+                    ${qObj.e}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // 3. 画面切り替え
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        
+        // 状態リセット
+        document.getElementById('submit-btn').style.display = 'inline-block';
+        document.getElementById('retry-btn').style.display = 'none';
+        document.getElementById('score-board').style.display = 'none';
+        
+        // スクロール位置をトップへ
+        window.scrollTo(0, 0);
+        document.querySelector('main').scrollTop = 0;
+    }
+
+    function submitQuiz() {
+        // 未回答チェック（任意）
+        // ここでは未回答でも採点に進む仕様とします
+
+        let score = 0;
+        
+        currentQuestions.forEach((qObj, index) => {
+            const card = document.getElementById(`card-${index}`);
+            const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
+            const userAns = selectedInput ? parseInt(selectedInput.value) : -1;
+            const correctAns = qObj.a;
+
+            // 解説を表示
+            const expBox = document.getElementById(`exp-${index}`);
+            expBox.style.display = 'block';
+
+            // 判定とスタイル適用
+            if (userAns === correctAns) {
+                score++;
+                card.classList.add('correct');
+                // 正解ラベルをハイライト
+                document.getElementById(`label-${index}-${correctAns}`).classList.add('correct-answer');
+            } else {
+                card.classList.add('incorrect');
+                // 選択した誤答をハイライト
+                if (userAns !== -1) {
+                    document.getElementById(`label-${index}-${userAns}`).classList.add('wrong-selection');
+                }
+                // 本来の正解も表示
+                document.getElementById(`label-${index}-${correctAns}`).classList.add('correct-answer');
+            }
+
+            // 全ての選択肢を無効化
+            const radios = document.querySelectorAll(`input[name="q${index}"]`);
+            radios.forEach(r => r.disabled = true);
+        });
+
+        // 点数表示
+        const scoreDisplay = document.getElementById('score-display');
+        const scoreBoard = document.getElementById('score-board');
+        scoreDisplay.textContent = `${score} / ${QUESTION_COUNT}`;
+        scoreBoard.style.display = 'block';
+
+        // スコアボードまでスクロール
+        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // ボタン切り替え
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('retry-btn').style.display = 'inline-block';
+    }
+
+    function retryQuiz() {
+        startQuiz();
+    }
+</script>
+
+</body>
+</html>
