@@ -30,44 +30,8 @@
 </head>
 <body class="bg-stone-50 text-stone-700 relative min-h-screen">
 
-    <!-- Auth Screen (Login / Setup) -->
-    <div id="authScreen" class="fixed inset-0 z-50 bg-stone-100 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-8 text-center space-y-6">
-            <div class="mx-auto w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center text-teal-600 mb-4">
-                <i data-lucide="lock" class="w-8 h-8"></i>
-            </div>
-            
-            <h2 id="authTitle" class="text-2xl font-bold text-stone-800">ようこそ</h2>
-            <p id="authMessage" class="text-stone-500 text-sm">
-                アンガーログへようこそ。<br>パスワードを設定して始めましょう。
-            </p>
-
-            <form id="authForm" class="space-y-4">
-                <div class="text-left">
-                    <label class="block text-xs font-bold text-stone-400 mb-1 uppercase tracking-wider">Password</label>
-                    <input type="password" id="authPassword" required class="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none bg-stone-50 text-center text-lg tracking-widest" placeholder="••••">
-                </div>
-                <button type="submit" class="w-full bg-teal-600 text-white font-bold py-3 rounded-lg hover:bg-teal-700 transition-colors shadow-md flex items-center justify-center gap-2">
-                    <span id="authBtnText">設定して開始</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
-            </form>
-            
-            <p id="authError" class="text-rose-500 text-sm font-bold hidden flex items-center justify-center gap-1">
-                <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                パスワードが違います
-            </p>
-
-            <div id="restoreLinkContainer" class="hidden pt-4 border-t border-stone-100">
-                <button onclick="openDataManager(true)" class="text-xs text-stone-400 underline hover:text-stone-600">
-                    データを復元する（バックアップがある場合）
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main App Content (Initially Hidden) -->
-    <div id="appContent" class="hidden pb-20">
+    <!-- Main App Content -->
+    <div id="appContent" class="pb-20">
 
         <!-- Toast Notification -->
         <div id="toast" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-teal-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition-opacity duration-300 opacity-0">
@@ -115,7 +79,6 @@
                     <button onclick="switchTab('csv')" id="tab-csv" class="flex-1 min-w-[80px] py-2 text-sm font-bold rounded-md bg-white shadow-sm text-teal-700 transition-all">CSV出力</button>
                     <button onclick="switchTab('backup')" id="tab-backup" class="flex-1 min-w-[80px] py-2 text-sm font-bold rounded-md text-stone-500 hover:bg-white/50 transition-all">バックアップ</button>
                     <button onclick="switchTab('restore')" id="tab-restore" class="flex-1 min-w-[80px] py-2 text-sm font-bold rounded-md text-stone-500 hover:bg-white/50 transition-all">復元</button>
-                    <button onclick="switchTab('source')" id="tab-source" class="flex-1 min-w-[80px] py-2 text-sm font-bold rounded-md text-stone-500 hover:bg-white/50 transition-all">アプリ保存</button>
                 </div>
                 
                 <!-- Tab Contents -->
@@ -168,26 +131,6 @@
                         </div>
                     </div>
 
-                    <!-- Source Code Tab (New) -->
-                    <div id="content-source" class="hidden flex-1 flex flex-col gap-2">
-                         <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-lg mb-2">
-                            <p class="text-xs text-indigo-800 font-bold">
-                                アプリ本体の保存方法
-                            </p>
-                            <p class="text-xs text-indigo-900 mt-1 leading-relaxed">
-                                下記のコードをコピーし、PCのメモ帳などに貼り付けて、ファイル名を <strong>「anger-log.html」</strong> として保存してください。<br>
-                                保存したファイルをブラウザで開くと、アプリとして利用できます。
-                                <span class="block mt-1 text-indigo-500 font-normal">※このコードには、現在のログデータやパスワードは含まれません（安全に配布できます）。</span>
-                            </p>
-                        </div>
-                        <textarea id="sourceArea" class="flex-1 w-full p-4 font-mono text-xs bg-slate-900 text-slate-300 rounded-lg resize-none outline-none focus:ring-2 focus:ring-indigo-500" readonly></textarea>
-                        <div class="flex justify-end pt-2">
-                            <button onclick="copyText('sourceArea')" class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold flex items-center gap-2 hover:bg-indigo-700">
-                                <i data-lucide="file-code" class="w-4 h-4"></i> ソースコードをコピー
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -203,9 +146,6 @@
                     <button onclick="openDataManager()" class="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-800 font-bold bg-teal-50 border border-teal-100 px-3 py-1.5 rounded-lg transition-colors">
                         <i data-lucide="settings" class="w-3 h-3"></i>
                         データ管理
-                    </button>
-                    <button onclick="logout()" class="text-xs text-stone-400 hover:text-stone-600 font-bold border border-stone-200 px-3 py-1.5 rounded-lg transition-colors">
-                        ログアウト
                     </button>
                 </div>
             </div>
@@ -351,7 +291,6 @@
             <section class="space-y-4">
                 <div class="flex items-center justify-between border-b border-stone-200 pb-2">
                     <h2 class="text-xl font-bold text-stone-700">過去の記録</h2>
-                    <!-- Old export button removed, functionality moved to Data Manager -->
                 </div>
                 
                 <div id="logsContainer" class="space-y-4">
@@ -399,7 +338,6 @@
     let logs = [];
     let deleteTargetId = null;
     const STORAGE_KEY_LOGS = 'angerLog_data';
-    const STORAGE_KEY_PASS = 'angerLog_password';
 
     // --- FAQ Data ---
     const faqData = [
@@ -462,15 +400,14 @@
 
     // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-        // Auth Logic
-        initAuth();
-
         // Init Date
         resetFormDate();
         // Init Icons
         lucide.createIcons();
         // Init FAQ
         renderFaq();
+        // Load Logs
+        loadLogs();
         // Init Slider Listener
         const slider = document.getElementById('intensity');
         const label = document.getElementById('intensityLabel');
@@ -483,61 +420,7 @@
         document.getElementById('logForm').addEventListener('submit', handleFormSubmit);
     });
 
-    // --- Auth & Storage Functions ---
-    function initAuth() {
-        const storedPass = localStorage.getItem(STORAGE_KEY_PASS);
-        const title = document.getElementById('authTitle');
-        const msg = document.getElementById('authMessage');
-        const btnText = document.getElementById('authBtnText');
-        const form = document.getElementById('authForm');
-        const restoreLink = document.getElementById('restoreLinkContainer');
-
-        // Always show the restore link on auth screen for emergency
-        restoreLink.classList.remove('hidden');
-
-        if (!storedPass) {
-            // Setup Mode
-            title.textContent = "初期設定";
-            msg.innerHTML = "アンガーログへようこそ。<br>自分だけのパスワードを設定してください。";
-            btnText.textContent = "設定して開始";
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                const pass = document.getElementById('authPassword').value;
-                if(pass.length < 1) return;
-                localStorage.setItem(STORAGE_KEY_PASS, pass);
-                unlockApp();
-            };
-        } else {
-            // Login Mode
-            title.textContent = "ログイン";
-            msg.innerHTML = "おかえりなさい。<br>パスワードを入力してください。";
-            btnText.textContent = "ロック解除";
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                const pass = document.getElementById('authPassword').value;
-                const error = document.getElementById('authError');
-                
-                if (pass === storedPass) {
-                    unlockApp();
-                } else {
-                    error.classList.remove('hidden');
-                }
-            };
-        }
-    }
-
-    function unlockApp() {
-        document.getElementById('authScreen').classList.add('hidden');
-        document.getElementById('appContent').classList.remove('hidden');
-        // Ensure data manager modal is closed if it was opened from auth screen
-        closeModal('dataManagerModal');
-        loadLogs(); 
-    }
-
-    function logout() {
-        window.location.reload();
-    }
-
+    // --- Storage Functions ---
     function saveLogs() {
         // Try to save to local storage
         try {
@@ -693,26 +576,20 @@
     }
 
     // --- Data Manager Logic ---
-    function openDataManager(fromAuth = false) {
+    function openDataManager() {
         // Load data for display
         updateCSVDisplay();
         updateBackupDisplay();
-        updateSourceDisplay(); // NEW: generate source code
 
         const modal = document.getElementById('dataManagerModal');
         modal.classList.remove('hidden');
         
-        // If opened from auth screen, only show restore tab and hide close button if needed (optional UX)
-        if(fromAuth) {
-            switchTab('restore');
-        } else {
-            switchTab('csv');
-        }
+        switchTab('csv');
     }
 
     function switchTab(tabId) {
         // Hide all contents
-        ['csv', 'backup', 'restore', 'source'].forEach(id => {
+        ['csv', 'backup', 'restore'].forEach(id => {
             const el = document.getElementById(`content-${id}`);
             const tab = document.getElementById(`tab-${id}`);
             if(el) el.classList.add('hidden');
@@ -758,45 +635,6 @@
         document.getElementById('backupArea').value = JSON.stringify(logs);
     }
     
-    // NEW: Generate Clean Source Code
-    function updateSourceDisplay() {
-        // Clone the document element to get the whole HTML
-        const docClone = document.documentElement.cloneNode(true);
-        
-        // Reset Visibility of Auth/App screens
-        const auth = docClone.querySelector('#authScreen');
-        const app = docClone.querySelector('#appContent');
-        if(auth) auth.classList.remove('hidden');
-        if(app) app.classList.add('hidden');
-        
-        // Hide all modals & toast in the clone
-        docClone.querySelectorAll('[id$="Modal"]').forEach(el => el.classList.add('hidden'));
-        const toast = docClone.querySelector('#toast');
-        if(toast) {
-            toast.classList.add('hidden');
-            toast.classList.add('opacity-0');
-        }
-        
-        // Clear User Data from clone textareas (CSV, Backup, Restore)
-        docClone.querySelectorAll('textarea').forEach(ta => {
-            ta.textContent = '';
-            ta.value = '';
-        });
-        
-        // Clear Logs Container (Remove generated HTML of logs)
-        const logsContainer = docClone.querySelector('#logsContainer');
-        if(logsContainer) {
-            logsContainer.innerHTML = `
-                <div class="text-center py-10 bg-white rounded-xl border border-stone-200 border-dashed text-stone-400">
-                    読み込み中...
-                </div>`;
-        }
-        
-        // Generate final string
-        const htmlStr = "<!DOCTYPE html>\n" + docClone.outerHTML;
-        document.getElementById('sourceArea').value = htmlStr;
-    }
-
     async function copyText(elementId) {
         const textArea = document.getElementById(elementId);
         textArea.select();
@@ -824,11 +662,6 @@
                     saveLogs();
                     renderLogs();
                     closeModal('dataManagerModal');
-                    
-                    // If restored from Auth screen (emergency mode), we should try to enter the app
-                    if(!document.getElementById('authScreen').classList.contains('hidden')) {
-                         unlockApp();
-                    }
                     showToast();
                 }
             } else {
