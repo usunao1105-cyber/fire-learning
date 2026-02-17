@@ -1,335 +1,404 @@
-import React, { useState, useMemo } from 'react';
-import { Search, BookOpen, Layers, ChevronDown, ChevronUp, RotateCw, AlertTriangle, Scale, Gavel, Flame, ChevronLeft, ChevronRight, GraduationCap } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>放火罪・法的解釈データベース</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (JSX変換用) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-// --- Data Source (50 Questions based on user input) ---
-const faqData = [
-  // 第1章
-  { id: 1, category: "基本定義", q: "放火罪にはどのような種類がありますか？", a: "主に以下の3つに大別されます。\n1. 現住建造物等放火罪（刑法108条）: 人が住んでいる、または人がいる建物等。\n2. 非現住建造物等放火罪（刑法109条）: 人が住んでおらず、かつ人がいない建物等。\n3. 建造物等以外放火罪（刑法110条）: 自動車、バイク、家具など。" },
-  { id: 2, category: "基本定義", q: "なぜ「現住建造物等放火罪」が最も重いのですか？", a: "「公共の危険」に加え、「人の生命・身体への危険」が極めて高いためです。法定刑は死刑、無期懲役、または5年以上の拘禁刑と、殺人罪と同等です。" },
-  { id: 3, category: "基本定義", q: "「現住」とは具体的にどういう状態ですか？", a: "犯人以外の者が「起臥寝食（寝起きや食事）」の場所として日常的に使用している状態です。放火時に不在でも生活実態があれば現住とみなされます。" },
-  { id: 4, category: "基本定義", q: "犯人が一人で住んでいる家に自ら放火した場合は？", a: "犯人のみが居住している場合は「非現住建造物等放火罪（109条）」となります。ただし家族と同居している場合は「現住」となります。" },
-  { id: 5, category: "基本定義", q: "空き家に侵入者がいた場合、「現住」になりますか？", a: "はい。住居として使用されていなくても、放火時に「現に人がいる」場合は108条の対象となります。その場にいる権利の有無は問われません。" },
-  { id: 6, category: "基本定義", q: "「建造物」とはどこまでの範囲を指しますか？", a: "土地に定着し、屋根、柱、壁を有し、人が出入りできる構造のものです。畳や建具などは建造物の一部とはみなされない場合があります。" },
-  { id: 7, category: "基本定義", q: "エレベーターへの放火は「建造物放火」になりますか？", a: "はい。判例ではエレベーターのかごは建造物の重要な構成部分であり、これに放火し燃え上がらせた場合、マンション全体に対する現住建造物等放火罪が成立します。" },
-  { id: 8, category: "基本定義", q: "自分の持ち物（自己所有物）を燃やしても罪になりますか？", a: "原則自由ですが、「公共の危険」を生じさせた場合に限り処罰されます（109条2項、110条2項）。" },
-  { id: 9, category: "基本定義", q: "ローンが残っている自宅を燃やした場合は？", a: "自己所有でも「賃貸中」「保険加入」「抵当権設定（ローン）」がある場合は他人の所有物とみなされ、重い刑罰（109条1項など）が適用されます（刑法115条）。" },
-  { id: 10, category: "基本定義", q: "電車や船への放火は何罪になりますか？", a: "人が乗っている場合は現住建造物等放火罪（108条）。人が乗っていない場合、艦船は非現住（109条）、汽車・電車は建造物等以外（110条）となります。" },
+    <!-- Google Fonts (Noto Sans JP) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  // 第2章
-  { id: 11, category: "公共の危険・焼損", q: "「公共の危険」とは具体的に何ですか？", a: "不特定または多数の人の生命、身体、財産に対する危険です。延焼に限らず、煙や熱による危険も含めて広く解釈されます。" },
-  { id: 12, category: "公共の危険・焼損", q: "「公共の危険」が必要な犯罪と不要な犯罪の違いは？", a: "不要（抽象的危険犯）：現住や他人所有非現住は燃やした時点で成立。\n必要（具体的危険犯）：自己所有物や建造物以外への放火は、実際に公共の危険が発生した証明が必要です。" },
-  { id: 13, category: "公共の危険・焼損", q: "自分の車を広い河川敷で燃やした場合は？", a: "周囲に延焼の恐れや煙害の危険がなければ「公共の危険」がないとされ、放火罪としては不可罰の可能性があります（廃棄物処理法違反等は別）。" },
-  { id: 14, category: "公共の危険・焼損", q: "「焼損（既遂）」のタイミングはいつですか？", a: "「独立燃焼説」により、火が媒介物（マッチ等）を離れ、目的物（柱等）に移って独立して燃え続ける状態になった時点です。" },
-  { id: 15, category: "公共の危険・焼損", q: "コンクリート造の建物はいつ既遂になりますか？", a: "建物と一体化した可燃部分（内装材や建具）が独立して燃焼し始めた時点で既遂とされます。" },
-  { id: 16, category: "公共の危険・焼損", q: "床を少し焦がした程度でも放火罪になりますか？", a: "独立して燃焼継続する状態に至らなければ「未遂」です。" },
-  { id: 17, category: "公共の危険・焼損", q: "燃え広がらずに自然に消えた場合は？", a: "未遂罪となります。自己所有の非現住建造物や建造物以外への放火には未遂罪の規定がないため、処罰されないことがあります。" },
-
-  // 第3章
-  { id: 18, category: "刑罰・量刑", q: "放火罪の刑罰はどれくらい重いですか？", a: "現住建造物等放火罪は死刑、無期懲役、5年以上の拘禁刑で、殺人罪と同等の重さです。" },
-  { id: 19, category: "刑罰・量刑", q: "2025年からの「拘禁刑」とは何ですか？", a: "懲役と禁錮が一本化された刑です。作業義務が一律ではなくなり、特性に応じた更生プログラムや治療教育が柔軟に行えるようになります。" },
-  { id: 20, category: "刑罰・量刑", q: "放火で執行猶予はつきますか？", a: "現住放火は原則つきませんが、酌量減軽や自首減軽により刑期が3年以下となればつく可能性があります。" },
-  { id: 21, category: "刑罰・量刑", q: "放火で人が死んだ場合、どのような罪になりますか？", a: "殺意なし：現住建造物等放火罪（致死の結果も評価）。\n殺意あり：現住建造物等放火罪と殺人罪の観念的競合（最も重い刑で処断）。" },
-  { id: 22, category: "刑罰・量刑", q: "殺害後の証拠隠滅放火はどう扱われますか？", a: "殺人罪と現住（または非現住）建造物等放火罪の併合罪となります。死体があっても直前まで居住していれば現住性が認められる傾向です。" },
-  { id: 23, category: "刑罰・量刑", q: "「延焼罪」とは何ですか？", a: "自己所有物等への放火が、予期せず現住建造物などに燃え移った場合に成立する結果的加重犯です。" },
-  { id: 24, category: "刑罰・量刑", q: "放火の予備（準備）だけで捕まりますか？", a: "はい。現住放火等の目的でガソリン等を用意し現場へ向かうなどの行為は「放火予備罪（113条）」として処罰されます（2年以下の拘禁刑）。" },
-  { id: 25, category: "刑罰・量刑", q: "放火の未遂は処罰されますか？", a: "現住および他人所有非現住放火には未遂罪（112条）があり処罰されます。" },
-
-  // 第4章
-  { id: 26, category: "捜査・裁判", q: "放火事件は裁判員裁判になりますか？", a: "はい。現住建造物等放火罪は重大な犯罪であり、裁判員裁判の対象となります。" },
-  { id: 27, category: "捜査・裁判", q: "裁判員裁判ではどのような傾向がありますか？", a: "公共の危険性が重視されますが、更生可能性や示談成立によっては執行猶予が付くケースも見られます。" },
-  { id: 28, category: "捜査・裁判", q: "放火の時効は何年ですか？", a: "現住建造物等放火罪の公訴時効は25年です（死亡結果で死刑に当たるものは時効なし）。" },
-  { id: 29, category: "捜査・裁判", q: "逮捕された後、どれくらい拘束されますか？", a: "最大23日間（逮捕72時間＋勾留20日）。起訴されれば数ヶ月以上続くのが一般的です。" },
-  { id: 30, category: "捜査・裁判", q: "否認している場合、保釈は難しいですか？", a: "証拠隠滅や再犯の恐れが高いとされるため、特に否認時は保釈のハードルが非常に高いです。" },
-  { id: 31, category: "捜査・裁判", q: "放火事件で実名報道されますか？", a: "公共の危険を伴う重大犯罪のため、逮捕段階で実名報道される可能性が高いです。" },
-  { id: 32, category: "捜査・裁判", q: "微罪処分になることはありますか？", a: "重大犯罪のため微罪処分はまずありません。検察官に送致されます。" },
-  { id: 33, category: "捜査・裁判", q: "略式起訴（罰金刑）で終わることはありますか？", a: "現住・非現住放火には罰金刑がないため略式起訴はできません。公開法廷での裁判となります。" },
-
-  // 第5章
-  { id: 34, category: "過失・失火", q: "不注意で火事を出した場合は？", a: "故意がない場合は「失火罪（116条）」となります。50万円以下の罰金です。" },
-  { id: 35, category: "過失・失火", q: "寝タバコでの火災は重過失になりますか？", a: "わずかな注意で防げたのに漫然と火災を起こした場合、「重過失失火罪」となる可能性があります。" },
-  { id: 36, category: "過失・失火", q: "仕事中の不注意火災は？", a: "業務として火を扱う人が起こした場合は「業務上失火罪」となり、重過失と同様に重く処罰されます。" },
-  { id: 37, category: "過失・失火", q: "子供の火遊びによる火災は？", a: "14歳未満は刑事責任能力がなく処罰されませんが、児相通告等の措置や、親への民事賠償請求が発生します。" },
-  { id: 38, category: "過失・失火", q: "放火か失火か、どう判断されますか？", a: "現場状況、発火源、動機等から判断します。「燃えても構わない（未必の故意）」なら放火罪、単なる不注意なら失火罪です。" },
-
-  // 第6章
-  { id: 39, category: "弁護・更生", q: "放火事件の弁護で重要なことは？", a: "被害者への謝罪・示談、再犯防止策の構築、事実関係（故意、現住性等）の精査です。" },
-  { id: 40, category: "弁護・更生", q: "示談交渉は難しいですか？", a: "処罰感情が強いため本人交渉は困難です。弁護士による交渉が必要です。" },
-  { id: 41, category: "弁護・更生", q: "示談成立の効果は？", a: "執行猶予の可能性や量刑軽減の重要な要素となります。" },
-  { id: 42, category: "弁護・更生", q: "「放火癖」がある場合は？", a: "責任能力の減退を主張可能です。専門機関での治療計画提示が再犯防止のアピールになります。" },
-  { id: 43, category: "弁護・更生", q: "精神鑑定は行われますか？", a: "動機が不可解な場合や放火癖が疑われる場合、責任能力判断のため行われることが多いです。" },
-  { id: 44, category: "弁護・更生", q: "自首の効果は？", a: "発覚前等の自首で刑が減軽される可能性があります。特に現住放火での執行猶予獲得には重要です。" },
-  { id: 45, category: "弁護・更生", q: "冤罪を主張する場合は？", a: "アリバイ証明、目撃証言の弾劾、燃焼実験への反論等、専門的弁護士による徹底的な争いが必要です。" },
-
-  // 第7章
-  { id: 46, category: "その他", q: "消火活動を邪魔したら罪になりますか？", a: "「消火妨害罪（114条）」となり、1年以上10年以下の拘禁刑に処されます。" },
-  { id: 47, category: "その他", q: "ガス漏れをさせただけでも罪になりますか？", a: "「ガス漏出等罪（118条）」が成立します。爆発せずとも危険を生じさせただけで処罰されます。" },
-  { id: 48, category: "その他", q: "火炎瓶を使用した場合は？", a: "「火炎びんの使用等の処罰に関する法律」に加え、延焼させれば放火罪も成立します。" },
-  { id: 49, category: "その他", q: "放火による損害賠償責任は？", a: "故意の場合は「失火責任法」適用外で、全額賠償を求められる可能性が高いです。自己破産でも免責されない場合があります。" },
-  { id: 50, category: "その他", q: "放火の予兆がある家族を止めるには？", a: "医療機関、警察、自治体へ相談し、治療や支援につなげることが重要です。" },
-];
-
-const categories = ["すべて", ...new Set(faqData.map(item => item.category))];
-
-// --- Components ---
-
-const Header = () => (
-  <header className="bg-slate-800 text-white p-6 shadow-lg border-b-4 border-red-600">
-    <div className="max-w-4xl mx-auto">
-      <div className="flex items-center gap-3 mb-2">
-        <Flame className="w-8 h-8 text-red-500" />
-        <h1 className="text-2xl font-bold tracking-wide">放火罪・法的解釈データベース</h1>
-      </div>
-      <p className="text-slate-300 text-sm md:text-base">
-        消防職員・実務者向け 放火犯罪FAQ & 学習アプリ
-      </p>
-    </div>
-  </header>
-);
-
-const SearchBar = ({ searchQuery, setSearchQuery, selectedCategory, setSelectedCategory }) => (
-  <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 mb-6">
-    <div className="flex flex-col md:flex-row gap-4">
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-        <input
-          type="text"
-          placeholder="キーワード検索（例: 現住、寝タバコ、未遂...）"
-          className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-colors"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      <select
-        className="px-4 py-2 border border-slate-300 rounded-md bg-slate-50 text-slate-700 focus:ring-2 focus:ring-red-500 outline-none cursor-pointer"
-        value={selectedCategory}
-        onChange={(e) => setSelectedCategory(e.target.value)}
-      >
-        {categories.map(cat => (
-          <option key={cat} value={cat}>{cat}</option>
-        ))}
-      </select>
-    </div>
-  </div>
-);
-
-const FAQList = ({ data }) => {
-  const [openId, setOpenId] = useState(null);
-
-  const toggleAccordion = (id) => {
-    setOpenId(openId === id ? null : id);
-  };
-
-  if (data.length === 0) {
-    return (
-      <div className="text-center py-10 text-slate-500">
-        <AlertTriangle className="w-10 h-10 mx-auto mb-2 opacity-50" />
-        <p>該当する項目が見つかりませんでした。</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      {data.map((item) => (
-        <div key={item.id} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-          <button
-            onClick={() => toggleAccordion(item.id)}
-            className="w-full px-5 py-4 flex items-start justify-between text-left focus:outline-none bg-slate-50 hover:bg-white transition-colors"
-          >
-            <div className="flex-1 pr-4">
-              <span className={`inline-block px-2 py-1 text-xs font-semibold rounded mb-2 ${
-                item.category.includes("基本") ? "bg-blue-100 text-blue-800" :
-                item.category.includes("刑罰") ? "bg-red-100 text-red-800" :
-                item.category.includes("捜査") ? "bg-purple-100 text-purple-800" :
-                "bg-gray-200 text-gray-800"
-              }`}>
-                {item.category}
-              </span>
-              <h3 className="text-base md:text-lg font-medium text-slate-900 leading-snug">
-                <span className="text-red-600 font-bold mr-2">Q.</span>
-                {item.q}
-              </h3>
-            </div>
-            <div className="mt-1 text-slate-400">
-              {openId === item.id ? <ChevronUp /> : <ChevronDown />}
-            </div>
-          </button>
-          
-          {openId === item.id && (
-            <div className="px-6 py-5 bg-white border-t border-slate-100 animate-fadeIn">
-              <div className="flex items-start">
-                <span className="text-emerald-600 font-bold mr-2 text-lg">A.</span>
-                <p className="text-slate-700 whitespace-pre-line leading-relaxed">{item.a}</p>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const FlashcardMode = ({ data }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  const currentCard = data[currentIndex];
-
-  const handleNext = () => {
-    setIsFlipped(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % data.length);
-    }, 150);
-  };
-
-  const handlePrev = () => {
-    setIsFlipped(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev - 1 + data.length) % data.length);
-    }, 150);
-  };
-
-  const handleFlip = () => setIsFlipped(!isFlipped);
-
-  if (!currentCard) return <div className="text-center p-8">データがありません</div>;
-
-  return (
-    <div className="flex flex-col items-center justify-center py-4">
-      <div className="w-full max-w-2xl mb-4 flex justify-between items-center text-sm text-slate-500">
-        <span>カード: {currentIndex + 1} / {data.length}</span>
-        <span className="bg-slate-200 px-2 py-1 rounded">{currentCard.category}</span>
-      </div>
-
-      <div 
-        className="relative w-full max-w-2xl h-80 perspective-1000 cursor-pointer group"
-        onClick={handleFlip}
-      >
-        <div className={`relative w-full h-full duration-500 transform-style-3d transition-transform shadow-xl rounded-xl border border-slate-300 ${isFlipped ? 'rotate-y-180' : ''}`}>
-          
-          {/* Front (Question) */}
-          <div className="absolute w-full h-full backface-hidden bg-white rounded-xl flex flex-col items-center justify-center p-8 text-center">
-            <h3 className="text-red-600 font-bold text-xl mb-4">Question</h3>
-            <p className="text-xl font-medium text-slate-800 leading-relaxed">{currentCard.q}</p>
-            <div className="absolute bottom-4 text-slate-400 text-sm flex items-center gap-1">
-              <RotateCw className="w-4 h-4" /> クリックして答えを表示
-            </div>
-          </div>
-
-          {/* Back (Answer) */}
-          <div className="absolute w-full h-full backface-hidden bg-slate-800 text-white rounded-xl flex flex-col items-center justify-center p-8 text-center rotate-y-180">
-            <h3 className="text-emerald-400 font-bold text-xl mb-4">Answer</h3>
-            <p className="text-lg leading-relaxed whitespace-pre-line">{currentCard.a}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex gap-4 mt-8">
-        <button onClick={handlePrev} className="flex items-center gap-2 px-6 py-2 bg-white border border-slate-300 rounded-full hover:bg-slate-50 transition-colors">
-          <ChevronLeft className="w-5 h-5" /> 前へ
-        </button>
-        <button onClick={handleNext} className="flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 transition-colors shadow-lg">
-          次へ <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// --- Main App Component ---
-export default function App() {
-  const [activeTab, setActiveTab] = useState('list'); // 'list' or 'study'
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('すべて');
-
-  const filteredData = useMemo(() => {
-    return faqData.filter(item => {
-      const matchesSearch = item.q.includes(searchQuery) || item.a.includes(searchQuery);
-      const matchesCategory = selectedCategory === 'すべて' || item.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchQuery, selectedCategory]);
-
-  return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-800 pb-10">
-      <Header />
-
-      <main className="max-w-4xl mx-auto px-4 py-6">
-        
-        {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-white p-1 rounded-lg shadow-sm mb-6 border border-slate-200">
-          <button
-            onClick={() => setActiveTab('list')}
-            className={`flex-1 flex items-center justify-center py-2.5 text-sm font-medium rounded-md transition-all ${
-              activeTab === 'list' 
-                ? 'bg-slate-800 text-white shadow' 
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            <Layers className="w-4 h-4 mr-2" />
-            一覧・検索
-          </button>
-          <button
-            onClick={() => setActiveTab('study')}
-            className={`flex-1 flex items-center justify-center py-2.5 text-sm font-medium rounded-md transition-all ${
-              activeTab === 'study' 
-                ? 'bg-slate-800 text-white shadow' 
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            <GraduationCap className="w-4 h-4 mr-2" />
-            学習モード（単語帳）
-          </button>
-        </div>
-
-        {/* Content Area */}
-        {activeTab === 'list' ? (
-          <>
-            <div className="mb-4 flex items-center gap-2 text-slate-600 text-sm">
-              <Scale className="w-4 h-4" />
-              <span>全50問の法的解釈・実務FAQ</span>
-            </div>
-            <SearchBar 
-              searchQuery={searchQuery} 
-              setSearchQuery={setSearchQuery}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
-            <FAQList data={filteredData} />
-          </>
-        ) : (
-          <div className="animate-fadeIn">
-            <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-md mb-6 text-sm flex items-center gap-2">
-              <BookOpen className="w-5 h-5 flex-shrink-0" />
-              <div>
-                <span className="font-bold">学習モード:</span> カードをクリックして裏返し、答えを確認してください。
-                {searchQuery && <span className="ml-2 text-blue-600">※現在の検索条件（{filteredData.length}件）で出題中</span>}
-              </div>
-            </div>
-            <FlashcardMode data={filteredData} />
-          </div>
-        )}
-
-      </main>
-
-      <footer className="text-center text-slate-400 text-xs py-6 mt-10 border-t border-slate-200">
-        <p>※本アプリは学習用です。個別の事案については専門家（弁護士等）にご相談ください。</p>
-        <div className="flex justify-center items-center gap-2 mt-2">
-          <Gavel className="w-3 h-3" />
-          <span>Fire Safety & Legal Compliance Support</span>
-        </div>
-      </footer>
-      
-      <style>{`
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
-      `}</style>
-    </div>
-  );
-}
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // --- Icons (Lucide React Replacements for Standalone HTML) ---
+        const IconBase = ({ d, className, ...props }) => (
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={className} 
+                {...props}
+            >
+                {d}
+            </svg>
+        );
+
+        // Fixed: Wrapped multiple path elements in fragments <>...</>
+        const Search = (props) => <IconBase {...props} d={<><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>} />;
+        const BookOpen = (props) => <IconBase {...props} d={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+        const Layers = (props) => <IconBase {...props} d={<><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></>} />;
+        const ChevronDown = (props) => <IconBase {...props} d={<path d="m6 9 6 6 6-6"/>} />;
+        const ChevronUp = (props) => <IconBase {...props} d={<path d="m18 15-6-6-6 6"/>} />;
+        
+        // Fixed below icons
+        const RotateCw = (props) => <IconBase {...props} d={<><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></>} />;
+        const AlertTriangle = (props) => <IconBase {...props} d={<><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></>} />;
+        const Scale = (props) => <IconBase {...props} d={<><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></>} />;
+        const Gavel = (props) => <IconBase {...props} d={<><path d="m14 13-7.5 7.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L11 10"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></>} />;
+        const Flame = (props) => <IconBase {...props} d={<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3a9 9 0 0 0 .9 2.8z"/>} />;
+        const ChevronLeft = (props) => <IconBase {...props} d={<path d="m15 18-6-6 6-6"/>} />;
+        const ChevronRight = (props) => <IconBase {...props} d={<path d="m9 18 6-6-6-6"/>} />;
+        const GraduationCap = (props) => <IconBase {...props} d={<><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></>} />;
+
+        // --- Data Source ---
+        const faqData = [
+          // 第1章
+          { id: 1, category: "基本定義", q: "放火罪にはどのような種類がありますか？", a: "主に以下の3つに大別されます。\n1. 現住建造物等放火罪（刑法108条）: 人が住んでいる、または人がいる建物等。\n2. 非現住建造物等放火罪（刑法109条）: 人が住んでおらず、かつ人がいない建物等。\n3. 建造物等以外放火罪（刑法110条）: 自動車、バイク、家具など。" },
+          { id: 2, category: "基本定義", q: "なぜ「現住建造物等放火罪」が最も重いのですか？", a: "「公共の危険」に加え、「人の生命・身体への危険」が極めて高いためです。法定刑は死刑、無期懲役、または5年以上の拘禁刑と、殺人罪と同等です。" },
+          { id: 3, category: "基本定義", q: "「現住」とは具体的にどういう状態ですか？", a: "犯人以外の者が「起臥寝食（寝起きや食事）」の場所として日常的に使用している状態です。放火時に不在でも生活実態があれば現住とみなされます。" },
+          { id: 4, category: "基本定義", q: "犯人が一人で住んでいる家に自ら放火した場合は？", a: "犯人のみが居住している場合は「非現住建造物等放火罪（109条）」となります。ただし家族と同居している場合は「現住」となります。" },
+          { id: 5, category: "基本定義", q: "空き家に侵入者がいた場合、「現住」になりますか？", a: "はい。住居として使用されていなくても、放火時に「現に人がいる」場合は108条の対象となります。その場にいる権利の有無は問われません。" },
+          { id: 6, category: "基本定義", q: "「建造物」とはどこまでの範囲を指しますか？", a: "土地に定着し、屋根、柱、壁を有し、人が出入りできる構造のものです。畳や建具などは建造物の一部とはみなされない場合があります。" },
+          { id: 7, category: "基本定義", q: "エレベーターへの放火は「建造物放火」になりますか？", a: "はい。判例ではエレベーターのかごは建造物の重要な構成部分であり、これに放火し燃え上がらせた場合、マンション全体に対する現住建造物等放火罪が成立します。" },
+          { id: 8, category: "基本定義", q: "自分の持ち物（自己所有物）を燃やしても罪になりますか？", a: "原則自由ですが、「公共の危険」を生じさせた場合に限り処罰されます（109条2項、110条2項）。" },
+          { id: 9, category: "基本定義", q: "ローンが残っている自宅を燃やした場合は？", a: "自己所有でも「賃貸中」「保険加入」「抵当権設定（ローン）」がある場合は他人の所有物とみなされ、重い刑罰（109条1項など）が適用されます（刑法115条）。" },
+          { id: 10, category: "基本定義", q: "電車や船への放火は何罪になりますか？", a: "人が乗っている場合は現住建造物等放火罪（108条）。人が乗っていない場合、艦船は非現住（109条）、汽車・電車は建造物等以外（110条）となります。" },
+
+          // 第2章
+          { id: 11, category: "公共の危険・焼損", q: "「公共の危険」とは具体的に何ですか？", a: "不特定または多数の人の生命、身体、財産に対する危険です。延焼に限らず、煙や熱による危険も含めて広く解釈されます。" },
+          { id: 12, category: "公共の危険・焼損", q: "「公共の危険」が必要な犯罪と不要な犯罪の違いは？", a: "不要（抽象的危険犯）：現住や他人所有非現住は燃やした時点で成立。\n必要（具体的危険犯）：自己所有物や建造物以外への放火は、実際に公共の危険が発生した証明が必要です。" },
+          { id: 13, category: "公共の危険・焼損", q: "自分の車を広い河川敷で燃やした場合は？", a: "周囲に延焼の恐れや煙害の危険がなければ「公共の危険」がないとされ、放火罪としては不可罰の可能性があります（廃棄物処理法違反等は別）。" },
+          { id: 14, category: "公共の危険・焼損", q: "「焼損（既遂）」のタイミングはいつですか？", a: "「独立燃焼説」により、火が媒介物（マッチ等）を離れ、目的物（柱等）に移って独立して燃え続ける状態になった時点です。" },
+          { id: 15, category: "公共の危険・焼損", q: "コンクリート造の建物はいつ既遂になりますか？", a: "建物と一体化した可燃部分（内装材や建具）が独立して燃焼し始めた時点で既遂とされます。" },
+          { id: 16, category: "公共の危険・焼損", q: "床を少し焦がした程度でも放火罪になりますか？", a: "独立して燃焼継続する状態に至らなければ「未遂」です。" },
+          { id: 17, category: "公共の危険・焼損", q: "燃え広がらずに自然に消えた場合は？", a: "未遂罪となります。自己所有の非現住建造物や建造物以外への放火には未遂罪の規定がないため、処罰されないことがあります。" },
+
+          // 第3章
+          { id: 18, category: "刑罰・量刑", q: "放火罪の刑罰はどれくらい重いですか？", a: "現住建造物等放火罪は死刑、無期懲役、5年以上の拘禁刑で、殺人罪と同等の重さです。" },
+          { id: 19, category: "刑罰・量刑", q: "2025年からの「拘禁刑」とは何ですか？", a: "懲役と禁錮が一本化された刑です。作業義務が一律ではなくなり、特性に応じた更生プログラムや治療教育が柔軟に行えるようになります。" },
+          { id: 20, category: "刑罰・量刑", q: "放火で執行猶予はつきますか？", a: "現住放火は原則つきませんが、酌量減軽や自首減軽により刑期が3年以下となればつく可能性があります。" },
+          { id: 21, category: "刑罰・量刑", q: "放火で人が死んだ場合、どのような罪になりますか？", a: "殺意なし：現住建造物等放火罪（致死の結果も評価）。\n殺意あり：現住建造物等放火罪と殺人罪の観念的競合（最も重い刑で処断）。" },
+          { id: 22, category: "刑罰・量刑", q: "殺害後の証拠隠滅放火はどう扱われますか？", a: "殺人罪と現住（または非現住）建造物等放火罪の併合罪となります。死体があっても直前まで居住していれば現住性が認められる傾向です。" },
+          { id: 23, category: "刑罰・量刑", q: "「延焼罪」とは何ですか？", a: "自己所有物等への放火が、予期せず現住建造物などに燃え移った場合に成立する結果的加重犯です。" },
+          { id: 24, category: "刑罰・量刑", q: "放火の予備（準備）だけで捕まりますか？", a: "はい。現住放火等の目的でガソリン等を用意し現場へ向かうなどの行為は「放火予備罪（113条）」として処罰されます（2年以下の拘禁刑）。" },
+          { id: 25, category: "刑罰・量刑", q: "放火の未遂は処罰されますか？", a: "現住および他人所有非現住放火には未遂罪（112条）があり処罰されます。" },
+
+          // 第4章
+          { id: 26, category: "捜査・裁判", q: "放火事件は裁判員裁判になりますか？", a: "はい。現住建造物等放火罪は重大な犯罪であり、裁判員裁判の対象となります。" },
+          { id: 27, category: "捜査・裁判", q: "裁判員裁判ではどのような傾向がありますか？", a: "公共の危険性が重視されますが、更生可能性や示談成立によっては執行猶予が付くケースも見られます。" },
+          { id: 28, category: "捜査・裁判", q: "放火の時効は何年ですか？", a: "現住建造物等放火罪の公訴時効は25年です（死亡結果で死刑に当たるものは時効なし）。" },
+          { id: 29, category: "捜査・裁判", q: "逮捕された後、どれくらい拘束されますか？", a: "最大23日間（逮捕72時間＋勾留20日）。起訴されれば数ヶ月以上続くのが一般的です。" },
+          { id: 30, category: "捜査・裁判", q: "否認している場合、保釈は難しいですか？", a: "証拠隠滅や再犯の恐れが高いとされるため、特に否認時は保釈のハードルが非常に高いです。" },
+          { id: 31, category: "捜査・裁判", q: "放火事件で実名報道されますか？", a: "公共の危険を伴う重大犯罪のため、逮捕段階で実名報道される可能性が高いです。" },
+          { id: 32, category: "捜査・裁判", q: "微罪処分になることはありますか？", a: "重大犯罪のため微罪処分はまずありません。検察官に送致されます。" },
+          { id: 33, category: "捜査・裁判", q: "略式起訴（罰金刑）で終わることはありますか？", a: "現住・非現住放火には罰金刑がないため略式起訴はできません。公開法廷での裁判となります。" },
+
+          // 第5章
+          { id: 34, category: "過失・失火", q: "不注意で火事を出した場合は？", a: "故意がない場合は「失火罪（116条）」となります。50万円以下の罰金です。" },
+          { id: 35, category: "過失・失火", q: "寝タバコでの火災は重過失になりますか？", a: "わずかな注意で防げたのに漫然と火災を起こした場合、「重過失失火罪」となる可能性があります。" },
+          { id: 36, category: "過失・失火", q: "仕事中の不注意火災は？", a: "業務として火を扱う人が起こした場合は「業務上失火罪」となり、重過失と同様に重く処罰されます。" },
+          { id: 37, category: "過失・失火", q: "子供の火遊びによる火災は？", a: "14歳未満は刑事責任能力がなく処罰されませんが、児相通告等の措置や、親への民事賠償請求が発生します。" },
+          { id: 38, category: "過失・失火", q: "放火か失火か、どう判断されますか？", a: "現場状況、発火源、動機等から判断します。「燃えても構わない（未必の故意）」なら放火罪、単なる不注意なら失火罪です。" },
+
+          // 第6章
+          { id: 39, category: "弁護・更生", q: "放火事件の弁護で重要なことは？", a: "被害者への謝罪・示談、再犯防止策の構築、事実関係（故意、現住性等）の精査です。" },
+          { id: 40, category: "弁護・更生", q: "示談交渉は難しいですか？", a: "処罰感情が強いため本人交渉は困難です。弁護士による交渉が必要です。" },
+          { id: 41, category: "弁護・更生", q: "示談成立の効果は？", a: "執行猶予の可能性や量刑軽減の重要な要素となります。" },
+          { id: 42, category: "弁護・更生", q: "「放火癖」がある場合は？", a: "責任能力の減退を主張可能です。専門機関での治療計画提示が再犯防止のアピールになります。" },
+          { id: 43, category: "弁護・更生", q: "精神鑑定は行われますか？", a: "動機が不可解な場合や放火癖が疑われる場合、責任能力判断のため行われることが多いです。" },
+          { id: 44, category: "弁護・更生", q: "自首の効果は？", a: "発覚前等の自首で刑が減軽される可能性があります。特に現住放火での執行猶予獲得には重要です。" },
+          { id: 45, category: "弁護・更生", q: "冤罪を主張する場合は？", a: "アリバイ証明、目撃証言の弾劾、燃焼実験への反論等、専門的弁護士による徹底的な争いが必要です。" },
+
+          // 第7章
+          { id: 46, category: "その他", q: "消火活動を邪魔したら罪になりますか？", a: "「消火妨害罪（114条）」となり、1年以上10年以下の拘禁刑に処されます。" },
+          { id: 47, category: "その他", q: "ガス漏れをさせただけでも罪になりますか？", a: "「ガス漏出等罪（118条）」が成立します。爆発せずとも危険を生じさせただけで処罰されます。" },
+          { id: 48, category: "その他", q: "火炎瓶を使用した場合は？", a: "「火炎びんの使用等の処罰に関する法律」に加え、延焼させれば放火罪も成立します。" },
+          { id: 49, category: "その他", q: "放火による損害賠償責任は？", a: "故意の場合は「失火責任法」適用外で、全額賠償を求められる可能性が高いです。自己破産でも免責されない場合があります。" },
+          { id: 50, category: "その他", q: "放火の予兆がある家族を止めるには？", a: "医療機関、警察、自治体へ相談し、治療や支援につなげることが重要です。" },
+        ];
+
+        const categories = ["すべて", ...new Set(faqData.map(item => item.category))];
+
+        // --- Components ---
+
+        const Header = () => (
+          <header className="bg-slate-800 text-white p-6 shadow-lg border-b-4 border-red-600">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-3 mb-2">
+                <Flame className="w-8 h-8 text-red-500" />
+                <h1 className="text-2xl font-bold tracking-wide">放火罪・法的解釈データベース</h1>
+              </div>
+              <p className="text-slate-300 text-sm md:text-base">
+                消防職員・実務者向け 放火犯罪FAQ & 学習アプリ
+              </p>
+            </div>
+          </header>
+        );
+
+        const SearchBar = ({ searchQuery, setSearchQuery, selectedCategory, setSelectedCategory }) => (
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400">
+                  <Search className="w-5 h-5" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="キーワード検索（例: 現住、寝タバコ、未遂...）"
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-colors"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select
+                className="px-4 py-2 border border-slate-300 rounded-md bg-slate-50 text-slate-700 focus:ring-2 focus:ring-red-500 outline-none cursor-pointer"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        );
+
+        const FAQList = ({ data }) => {
+          const [openId, setOpenId] = useState(null);
+
+          const toggleAccordion = (id) => {
+            setOpenId(openId === id ? null : id);
+          };
+
+          if (data.length === 0) {
+            return (
+              <div className="text-center py-10 text-slate-500">
+                <div className="flex justify-center mb-2 opacity-50"><AlertTriangle className="w-10 h-10" /></div>
+                <p>該当する項目が見つかりませんでした。</p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="space-y-3">
+              {data.map((item) => (
+                <div key={item.id} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <button
+                    onClick={() => toggleAccordion(item.id)}
+                    className="w-full px-5 py-4 flex items-start justify-between text-left focus:outline-none bg-slate-50 hover:bg-white transition-colors"
+                  >
+                    <div className="flex-1 pr-4">
+                      <span className={`inline-block px-2 py-1 text-xs font-semibold rounded mb-2 ${
+                        item.category.includes("基本") ? "bg-blue-100 text-blue-800" :
+                        item.category.includes("刑罰") ? "bg-red-100 text-red-800" :
+                        item.category.includes("捜査") ? "bg-purple-100 text-purple-800" :
+                        "bg-gray-200 text-gray-800"
+                      }`}>
+                        {item.category}
+                      </span>
+                      <h3 className="text-base md:text-lg font-medium text-slate-900 leading-snug">
+                        <span className="text-red-600 font-bold mr-2">Q.</span>
+                        {item.q}
+                      </h3>
+                    </div>
+                    <div className="mt-1 text-slate-400">
+                      {openId === item.id ? <ChevronUp /> : <ChevronDown />}
+                    </div>
+                  </button>
+                  
+                  {openId === item.id && (
+                    <div className="px-6 py-5 bg-white border-t border-slate-100 animate-fadeIn">
+                      <div className="flex items-start">
+                        <span className="text-emerald-600 font-bold mr-2 text-lg">A.</span>
+                        <p className="text-slate-700 whitespace-pre-line leading-relaxed">{item.a}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+        };
+
+        const FlashcardMode = ({ data }) => {
+          const [currentIndex, setCurrentIndex] = useState(0);
+          const [isFlipped, setIsFlipped] = useState(false);
+
+          const currentCard = data[currentIndex];
+
+          const handleNext = () => {
+            setIsFlipped(false);
+            setTimeout(() => {
+              setCurrentIndex((prev) => (prev + 1) % data.length);
+            }, 150);
+          };
+
+          const handlePrev = () => {
+            setIsFlipped(false);
+            setTimeout(() => {
+              setCurrentIndex((prev) => (prev - 1 + data.length) % data.length);
+            }, 150);
+          };
+
+          const handleFlip = () => setIsFlipped(!isFlipped);
+
+          if (!currentCard) return <div className="text-center p-8">データがありません</div>;
+
+          return (
+            <div className="flex flex-col items-center justify-center py-4">
+              <div className="w-full max-w-2xl mb-4 flex justify-between items-center text-sm text-slate-500">
+                <span>カード: {currentIndex + 1} / {data.length}</span>
+                <span className="bg-slate-200 px-2 py-1 rounded">{currentCard.category}</span>
+              </div>
+
+              <div 
+                className="relative w-full max-w-2xl h-80 perspective-1000 cursor-pointer group"
+                onClick={handleFlip}
+              >
+                <div className={`relative w-full h-full duration-500 transform-style-3d transition-transform shadow-xl rounded-xl border border-slate-300 ${isFlipped ? 'rotate-y-180' : ''}`}>
+                  
+                  {/* Front (Question) */}
+                  <div className="absolute w-full h-full backface-hidden bg-white rounded-xl flex flex-col items-center justify-center p-8 text-center">
+                    <h3 className="text-red-600 font-bold text-xl mb-4">Question</h3>
+                    <p className="text-xl font-medium text-slate-800 leading-relaxed">{currentCard.q}</p>
+                    <div className="absolute bottom-4 text-slate-400 text-sm flex items-center gap-1">
+                      <RotateCw className="w-4 h-4" /> クリックして答えを表示
+                    </div>
+                  </div>
+
+                  {/* Back (Answer) */}
+                  <div className="absolute w-full h-full backface-hidden bg-slate-800 text-white rounded-xl flex flex-col items-center justify-center p-8 text-center rotate-y-180">
+                    <h3 className="text-emerald-400 font-bold text-xl mb-4">Answer</h3>
+                    <p className="text-lg leading-relaxed whitespace-pre-line">{currentCard.a}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 mt-8">
+                <button onClick={handlePrev} className="flex items-center gap-2 px-6 py-2 bg-white border border-slate-300 rounded-full hover:bg-slate-50 transition-colors">
+                  <ChevronLeft className="w-5 h-5" /> 前へ
+                </button>
+                <button onClick={handleNext} className="flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 transition-colors shadow-lg">
+                  次へ <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          );
+        };
+
+        // --- Main App Component ---
+        const App = () => {
+          const [activeTab, setActiveTab] = useState('list'); // 'list' or 'study'
+          const [searchQuery, setSearchQuery] = useState('');
+          const [selectedCategory, setSelectedCategory] = useState('すべて');
+
+          const filteredData = useMemo(() => {
+            return faqData.filter(item => {
+              const matchesSearch = item.q.includes(searchQuery) || item.a.includes(searchQuery);
+              const matchesCategory = selectedCategory === 'すべて' || item.category === selectedCategory;
+              return matchesSearch && matchesCategory;
+            });
+          }, [searchQuery, selectedCategory]);
+
+          return (
+            <div className="min-h-screen bg-slate-100 pb-10">
+              <Header />
+
+              <main className="max-w-4xl mx-auto px-4 py-6">
+                
+                {/* Tab Navigation */}
+                <div className="flex space-x-1 bg-white p-1 rounded-lg shadow-sm mb-6 border border-slate-200">
+                  <button
+                    onClick={() => setActiveTab('list')}
+                    className={`flex-1 flex items-center justify-center py-2.5 text-sm font-medium rounded-md transition-all ${
+                      activeTab === 'list' 
+                        ? 'bg-slate-800 text-white shadow' 
+                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Layers className="w-4 h-4 mr-2" />
+                    一覧・検索
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('study')}
+                    className={`flex-1 flex items-center justify-center py-2.5 text-sm font-medium rounded-md transition-all ${
+                      activeTab === 'study' 
+                        ? 'bg-slate-800 text-white shadow' 
+                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <GraduationCap className="w-4 h-4 mr-2" />
+                    学習モード（単語帳）
+                  </button>
+                </div>
+
+                {/* Content Area */}
+                {activeTab === 'list' ? (
+                  <React.Fragment>
+                    <div className="mb-4 flex items-center gap-2 text-slate-600 text-sm">
+                      <Scale className="w-4 h-4" />
+                      <span>全50問の法的解釈・実務FAQ</span>
+                    </div>
+                    <SearchBar 
+                      searchQuery={searchQuery} 
+                      setSearchQuery={setSearchQuery}
+                      selectedCategory={selectedCategory}
+                      setSelectedCategory={setSelectedCategory}
+                    />
+                    <FAQList data={filteredData} />
+                  </React.Fragment>
+                ) : (
+                  <div className="animate-fadeIn">
+                    <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-md mb-6 text-sm flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 flex-shrink-0" />
+                      <div>
+                        <span className="font-bold">学習モード:</span> カードをクリックして裏返し、答えを確認してください。
+                        {searchQuery && <span className="ml-2 text-blue-600">※現在の検索条件（{filteredData.length}件）で出題中</span>}
+                      </div>
+                    </div>
+                    <FlashcardMode data={filteredData} />
+                  </div>
+                )}
+
+              </main>
+
+              <footer className="text-center text-slate-400 text-xs py-6 mt-10 border-t border-slate-200">
+                <p>※本アプリは学習用です。個別の事案については専門家（弁護士等）にご相談ください。</p>
+                <div className="flex justify-center items-center gap-2 mt-2">
+                  <Gavel className="w-3 h-3" />
+                  <span>Fire Safety & Legal Compliance Support</span>
+                </div>
+              </footer>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
