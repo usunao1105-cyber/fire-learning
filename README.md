@@ -95,7 +95,7 @@
     </div>
     <div class="card">
       <div class="lesson-title">Lesson 2</div>
-      <div class="lesson-desc">救助活動の基本</div>
+      <div class="lesson-desc">空き</div>
       <a href="lesson2/index.html" class="button">▶ 学習する</a>
     </div>
     <div class="card">
@@ -155,7 +155,7 @@
     </div>
     <div class="card">
       <div class="lesson-title">Lesson 14</div>
-      <div class="lesson-desc">機関員教育</div>
+      <div class="lesson-desc">空き</div>
       <a href="lesson14/index.html" class="button">▶ 学習する</a>
     </div>
     <div class="card">
