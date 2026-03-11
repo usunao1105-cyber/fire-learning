@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>装備＆活動記録アプリ</title>
     
+    <!-- === ▼PWA用の追加コード ここから▼ === -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000080">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <!-- === ▲PWA用の追加コード ここまで▲ === -->
+
+    <!-- Tailwind CSS (デザイン用) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Babel (ブラウザでReactを動かすため) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- Import Map -->
     <script type="importmap">
     {
       "imports": {
@@ -59,14 +69,15 @@
 
         // ==========================================
         // 【重要】Firebase設定エリア
+        // 以下の { } の中をご自身のプロジェクト設定に書き換えてください。
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyDdp0ELCqMqoAAsCvW-TxMJHw3nvuREm_k",
-  authDomain: "fire-report-app-3e6d7.firebaseapp.com",
-  projectId: "fire-report-app-3e6d7",
-  storageBucket: "fire-report-app-3e6d7.firebasestorage.app",
-  messagingSenderId: "918018696612",
-  appId: "1:918018696612:web:5461507c049dde4e71cd31"
+  　　　　　　authDomain: "fire-report-app-3e6d7.firebaseapp.com",
+  　　　　　　projectId: "fire-report-app-3e6d7",
+  　　　　　　storageBucket: "fire-report-app-3e6d7.firebasestorage.app",
+  　　　　　　messagingSenderId: "918018696612",
+  　　　　　　appId: "1:918018696612:web:5461507c049dde4e71cd31"
         };
         // ==========================================
 
@@ -150,7 +161,7 @@
                 guideType = "auth";
             } else if (error && error.code === 'permission-denied') {
                 title = "3. データベースの権限設定";
-                message = "Firestoreのセキュリティルールによりアクセスが拒否されました。テストモードに変更してください。";
+                message = "Firestoreのセキュリティルールによりアクセスが拒否されました。";
                 guideType = "firestore";
             } else if (error) {
                 title = "エラーが発生しました";
@@ -192,6 +203,8 @@
         const GuideScene3 = () => <GuideScene1 />;
 
         const ActivityMaintenanceApp = () => {
+            if (configStatus !== "valid") return <SetupGuide />;
+
             const [user, setUser] = useState(null);
             const [authError, setAuthError] = useState(null); 
             const [dbError, setDbError] = useState(null);     
@@ -226,7 +239,6 @@
             const [editUserName, setEditUserName] = useState('');
             const [manualPage, setManualPage] = useState(0);
 
-            // Auth Initialization
             useEffect(() => {
                 if (configStatus !== "valid") return;
 
@@ -242,7 +254,6 @@
                 return () => unsubscribeAuth();
             }, []);
 
-            // Data Fetching
             useEffect(() => {
                 if (!user) return;
 
@@ -290,9 +301,7 @@
                 return () => { unsubLogs(); unsubEquip(); };
             }, [user]);
 
-            if (configStatus === "default" || authError || dbError) {
-                return <SetupGuide error={authError || dbError} />;
-            }
+            if (authError || dbError) return <SetupGuide error={authError || dbError} />;
 
             // --- Handlers ---
             const handleAddLog = async () => {
@@ -720,5 +729,21 @@
         const root = createRoot(document.getElementById('root'));
         root.render(<ActivityMaintenanceApp />);
     </script>
+    
+    <!-- === ▼PWA Service Worker 登録コード ここから▼ === -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker の登録に成功しました。スコープ:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker の登録に失敗しました:', error);
+                    });
+            });
+        }
+    </script>
+    <!-- === ▲PWA Service Worker 登録コード ここまで▲ === -->
 </body>
 </html>
