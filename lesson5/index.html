@@ -8,7 +8,7 @@
     <!-- === ▼PWA用の追加コード ここから▼ === -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000080">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <!-- === ▲PWA用の追加コード ここまで▲ === -->
 
     <!-- Tailwind CSS (デザイン用) -->
@@ -84,20 +84,24 @@
         const APP_IDENTIFIER = 'activity-maintenance-app';
 
         let app, auth, db;
+        let isConfigured = false;
         let configStatus = "default";
 
         // 設定チェック
         if (firebaseConfig.apiKey === "YOUR_API_KEY_HERE") {
             configStatus = "default";
+            isConfigured = false;
         } else {
             try {
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
                 configStatus = "valid";
+                isConfigured = true;
             } catch (e) {
                 console.error("Firebase Init Error:", e);
                 configStatus = "invalid";
+                isConfigured = false;
             }
         }
 
@@ -203,7 +207,7 @@
         const GuideScene3 = () => <GuideScene1 />;
 
         const ActivityMaintenanceApp = () => {
-            if (configStatus !== "valid") return <SetupGuide />;
+            if (!isConfigured || configStatus !== "valid") return <SetupGuide />;
 
             const [user, setUser] = useState(null);
             const [authError, setAuthError] = useState(null); 
